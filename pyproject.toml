@@ -24,12 +24,17 @@ classifiers = [
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
-dependencies = []
+dependencies = [
+  "click",
+]
 
 [project.urls]
 Documentation = "https://gitlab.com/technical-study/chronovoyage/-/blob/main/README.md"
 Issues = "https://gitlab.com/technical-study/chronovoyage/-/issues"
 Source = "https://gitlab.com/technical-study/chronovoyage"
+
+[project.scripts]
+chronovoyage = "chronovoyage.cli:chronovoyage"
 
 [tool.hatch.version]
 path = "src/chronovoyage/__about__.py"
