@@ -27,9 +27,9 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Documentation = "https://github.com/Noritaka IZUMI/chronovoyage#readme"
-Issues = "https://github.com/Noritaka IZUMI/chronovoyage/issues"
-Source = "https://github.com/Noritaka IZUMI/chronovoyage"
+Documentation = "https://gitlab.com/technical-study/chronovoyage/-/blob/main/README.md"
+Issues = "https://gitlab.com/technical-study/chronovoyage/-/issues"
+Source = "https://gitlab.com/technical-study/chronovoyage"
 
 [tool.hatch.version]
 path = "src/chronovoyage/__about__.py"
