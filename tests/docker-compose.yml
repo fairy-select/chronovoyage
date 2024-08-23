@@ -1,0 +1,15 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
+      MARIADB_USER: mariadb
+      MARIADB_PASSWORD: password
+    ports:
+      - "${MARIADB_PORT:-3306}:3306"
+    healthcheck:
+      test: mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e "SELECT 1;"
+      start_period: 3s
+      interval: 2s
+      retries: 10
