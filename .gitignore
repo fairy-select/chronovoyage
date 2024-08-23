@@ -1,0 +1,5 @@
+# python environment
+/.venv
+
+# asdf tool version info
+.tool-versions
