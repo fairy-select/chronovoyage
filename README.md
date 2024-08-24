@@ -3,6 +3,8 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/chronovoyage.svg)](https://pypi.org/project/chronovoyage)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chronovoyage.svg)](https://pypi.org/project/chronovoyage)
 
+![logo](assets/images/logo.jpeg)
+
 -----
 
 ## Motivation
