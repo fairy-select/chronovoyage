@@ -1,7 +1,8 @@
-import os
+import pytest
 
-from dotenv import dotenv_values
+from helper.database import DatabaseHelper
 
-TESTS_DIR = os.path.dirname(__file__)
 
-DEFAULT_TEST_ENV = dotenv_values(f"{TESTS_DIR}/test.env")
+@pytest.fixture
+def database_helper() -> DatabaseHelper:
+    return DatabaseHelper()

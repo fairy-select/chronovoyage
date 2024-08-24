@@ -2,7 +2,7 @@ import sys
 
 import mariadb
 
-from conftest import DEFAULT_TEST_ENV
+from helper import DEFAULT_TEST_ENV
 
 
 class TestConnection:
