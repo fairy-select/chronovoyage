@@ -1,6 +1,6 @@
 import pytest
 
-from chronovoyage.database.connection import DatabaseConnector, ConnectionInfo
+from chronovoyage.database.connection import ConnectionInfo, DatabaseConnector
 from chronovoyage.exception.database import DatabaseUnknownVendorError
 
 

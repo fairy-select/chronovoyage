@@ -1,5 +1,6 @@
-from chronovoyage.database.connection import DatabaseVendor, DatabaseConnector, ConnectionInfo
 from helper import DEFAULT_TEST_ENV
+
+from chronovoyage.database.connection import ConnectionInfo, DatabaseConnector, DatabaseVendor
 
 
 class DatabaseHelper:
