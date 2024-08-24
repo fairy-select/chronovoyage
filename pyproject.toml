@@ -27,6 +27,7 @@ classifiers = [
 dependencies = [
   "click",
   "mariadb",
+  "python-dotenv",
 ]
 
 [project.urls]

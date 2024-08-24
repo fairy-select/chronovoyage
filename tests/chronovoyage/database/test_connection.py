@@ -2,13 +2,15 @@ import sys
 
 import mariadb
 
+from conftest import DEFAULT_TEST_ENV
+
 
 class TestConnection:
     def test_connect_to_mariadb(self) -> None:
         try:
             conn = mariadb.connect(
-                user="mariadb",
-                password="password",
+                user=DEFAULT_TEST_ENV["MARIADB_USER"],
+                password=DEFAULT_TEST_ENV["MARIADB_PASSWORD"],
                 host="127.0.0.1",
                 port=3306,
             )
