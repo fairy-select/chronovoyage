@@ -35,3 +35,32 @@ sudo apt install libmariadb-dev
 ## License
 
 `chronovoyage` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
+
+## Roadmap
+
+- Support for Python
+    - [x] 3.8
+    - [ ] 3.9 or later
+- Database support
+    - [ ] MySQL
+    - [x] MariaDB
+    - [ ] PostgreSQL
+- Migration file support
+    - [ ] SQL (.sql)
+    - [ ] Shell script (.sh)
+- Commands
+    - generate
+        - [ ] create migration files from template
+    - migrate
+        - [ ] to latest
+        - [ ] to specific version
+        - --dry-run
+            - [ ] show executing SQL
+        - [ ] detect ddl or dml
+    - status
+        - [ ] show current migration status
+    - rollback
+        - [ ] to version
+    - test
+        - [ ] check if every "migrate -> rollback" operation means do nothing for schema
+        - [ ] if dml, the operation means do nothing for data (including autoincrement num)
