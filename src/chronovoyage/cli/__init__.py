@@ -6,7 +6,7 @@ import click
 from chronovoyage.__about__ import __version__
 
 
-@click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=True)
+@click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)
 @click.version_option(version=__version__, prog_name="chronovoyage")
 def chronovoyage():
-    click.echo("Hello world!")
+    pass
