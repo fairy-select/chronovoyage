@@ -1,8 +1,14 @@
+from __future__ import annotations
+
 import sys
 from dataclasses import dataclass
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 from chronovoyage.exception.database import DatabaseUnknownVendorError
+from chronovoyage.logger import get_default_logger
+
+if TYPE_CHECKING:
+    from logging import Logger
 
 DatabaseVendor = Literal["mariadb"]
 
@@ -14,11 +20,16 @@ class ConnectionInfo:
     host: str
     port: int
 
+
 class DatabaseConnector:
+    def __init__(self, *, logger: Logger | None = None) -> None:
+        self._logger = logger if logger is not None else get_default_logger()
+
     # noinspection PyMethodMayBeStatic
     def get_connection(self, vendor: DatabaseVendor, connection_info: ConnectionInfo):
         if vendor == "mariadb":
             import mariadb
+
             try:
                 conn = mariadb.connect(
                     user=connection_info.user,
@@ -26,10 +37,10 @@ class DatabaseConnector:
                     host=connection_info.host,
                     port=connection_info.port,
                 )
-            except mariadb.Error as e:
-                print(f"Error connecting to MariaDB Platform: {e}")
+            except mariadb.Error:
+                self._logger.exception("Error connecting to MariaDB Platform")
                 sys.exit(1)
 
             return conn
 
-        raise DatabaseUnknownVendorError()
+        raise DatabaseUnknownVendorError

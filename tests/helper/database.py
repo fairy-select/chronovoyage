@@ -14,4 +14,6 @@ class DatabaseHelper:
                 host="127.0.0.1",
                 port=3307,
             )
-            return database_connector.get_connection('mariadb', connection_info)
+            return database_connector.get_connection("mariadb", connection_info)
+
+        return None
