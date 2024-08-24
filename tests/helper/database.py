@@ -1,6 +1,7 @@
-from helper import DEFAULT_TEST_ENV
+import pytest
 
 from chronovoyage.database.connection import ConnectionInfo, DatabaseConnector, DatabaseVendor
+from helper import DEFAULT_TEST_ENV
 
 
 class DatabaseHelper:
@@ -16,4 +17,4 @@ class DatabaseHelper:
             )
             return database_connector.get_connection("mariadb", connection_info)
 
-        return None
+        pytest.fail(f"{vendor} is an unknown vendor.")
