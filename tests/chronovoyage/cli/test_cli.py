@@ -6,3 +6,6 @@ class TestCli:
         result = subprocess.run(["chronovoyage"], capture_output=True, check=False)
         result.check_returncode()
         assert result.stdout.startswith(b"Usage:"), "show help"
+
+    def test_migrate(self) -> None:
+        _ = subprocess.run(["chronovoyage", "migrate"], capture_output=True, check=True)

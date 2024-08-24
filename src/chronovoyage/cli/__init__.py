@@ -10,3 +10,8 @@ from chronovoyage.__about__ import __version__
 @click.version_option(version=__version__, prog_name="chronovoyage")
 def chronovoyage():
     pass
+
+
+@chronovoyage.command()
+def migrate():
+    pass
