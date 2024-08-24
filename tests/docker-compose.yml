@@ -4,8 +4,8 @@ services:
     restart: always
     environment:
       MARIADB_RANDOM_ROOT_PASSWORD: 1
-      MARIADB_USER: mariadb
-      MARIADB_PASSWORD: password
+    env_file:
+      - test.env
     ports:
       - "${MARIADB_PORT:-3306}:3306"
     healthcheck:
