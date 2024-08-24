@@ -2,6 +2,8 @@ import sys
 from dataclasses import dataclass
 from typing import Literal
 
+from chronovoyage.exception.database import DatabaseUnknownVendorError
+
 DatabaseVendor = Literal["mariadb"]
 
 
@@ -30,4 +32,4 @@ class DatabaseConnector:
 
             return conn
 
-        return None
+        raise DatabaseUnknownVendorError()
