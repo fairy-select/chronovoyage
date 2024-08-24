@@ -26,6 +26,7 @@ classifiers = [
 ]
 dependencies = [
   "click",
+  "mariadb",
 ]
 
 [project.urls]

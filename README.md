@@ -20,6 +20,16 @@ I'm trying to write my own database migration framework and discuss database man
 pip install chronovoyage
 ```
 
+## Required dependencies
+
+To use MariaDB, you need the MariaDB development package.
+
+Install via apt:
+
+```shell
+sudo apt install libmariadb-dev
+```
+
 ## License
 
 `chronovoyage` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
