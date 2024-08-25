@@ -9,10 +9,10 @@ def connect(connection_info: ConnectionInfo, *, logger: Logger):
 
     try:
         conn = mariadb.connect(
-            user=connection_info.user,
-            password=connection_info.password,
             host=connection_info.host,
             port=connection_info.port,
+            user=connection_info.user,
+            password=connection_info.password,
         )
     except mariadb.Error:
         logger.exception("Error connecting to MariaDB Platform")

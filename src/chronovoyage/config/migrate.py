@@ -44,10 +44,10 @@ class MigrateDomainConfigFactory:
             config: dict[str, Any] = json.loads(f.read())
         vendor = DatabaseVendorEnum(config.get("vendor"))
         connection_info = ConnectionInfo(
-            user=config.get("user"),
-            password=config.get("password"),
             host=config.get("host"),
             port=config.get("port"),
+            user=config.get("user"),
+            password=config.get("password"),
         )
         return vendor, connection_info
 

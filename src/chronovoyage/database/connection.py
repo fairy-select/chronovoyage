@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 
 @dataclass(frozen=True)
 class ConnectionInfo:
-    user: str
-    password: str
     host: str
     port: int
+    user: str
+    password: str
 
 
 class DatabaseConnector:
