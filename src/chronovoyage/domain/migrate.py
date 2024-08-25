@@ -10,4 +10,4 @@ class MigrateDomain:
         self._logger = logger
 
     def execute(self) -> None:
-        MigrateUsecase(config=self._config, logger=self._logger).マイグレーションを実行する()
+        MigrateUsecase(config=self._config, logger=self._logger).migrate()

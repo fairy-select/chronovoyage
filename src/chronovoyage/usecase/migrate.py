@@ -10,9 +10,16 @@ class MigrateUsecase:
         self._logger = logger
 
     def _connect_database(self):
-        self._logger.debug("データベースに接続")
         return DatabaseConnector().get_connection(self._config.vendor, self._config.connection_info)
 
-    def マイグレーションを実行する(self):
-        self._logger.info("マイグレーションを実行する")
-        cnx = self._connect_database()
+    def migrate(self):
+        with self._connect_database() as _conn:
+            for sql_path in [period.go_sql_path for period in self._config.periods]:
+                for sql in [sql.strip() for sql in open(sql_path).read().strip().split(";") if sql]:
+                    try:
+                        with _conn.begin() as conn:
+                            cursor = conn.cursor()
+                            cursor.execute(sql)
+                    except:
+                        self._logger.warning(f"an error occurred when executing '{sql}'.")
+                        raise
