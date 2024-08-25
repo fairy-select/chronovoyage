@@ -1,7 +1,7 @@
 from logging import Logger
 
 from chronovoyage.config.migrate import MigrateDomainConfig
-from chronovoyage.database.connection import DatabaseConnector
+from chronovoyage.internal.database.connection import DatabaseConnector
 
 
 class MigrateUsecase:

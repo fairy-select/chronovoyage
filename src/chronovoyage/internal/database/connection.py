@@ -28,7 +28,7 @@ class DatabaseConnector:
     # noinspection PyMethodMayBeStatic
     def get_connection(self, vendor: DatabaseVendorEnum, connection_info: ConnectionInfo):
         if vendor == "mariadb":
-            from chronovoyage.database import mariadb
+            from chronovoyage.internal.database import mariadb
 
             return mariadb.connect(connection_info, logger=self._logger)
 

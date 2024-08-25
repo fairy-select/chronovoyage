@@ -1,7 +1,7 @@
 import sys
 from logging import Logger
 
-from chronovoyage.database.connection import ConnectionInfo
+from chronovoyage.internal.database.connection import ConnectionInfo
 
 
 def connect(connection_info: ConnectionInfo, *, logger: Logger):
