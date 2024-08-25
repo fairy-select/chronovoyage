@@ -1,9 +1,11 @@
 {
   "$schema": "",
   "vendor": "mariadb",
-  "host": "127.0.0.1",
-  "port": 3307,
-  "user": "mariadb",
-  "password": "password",
-  "database": "test"
+  "connection_info": {
+    "host": "127.0.0.1",
+    "port": 3307,
+    "user": "mariadb",
+    "password": "password",
+    "database": "test"
+  }
 }

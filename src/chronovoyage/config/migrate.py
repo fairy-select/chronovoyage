@@ -4,10 +4,10 @@ import json
 import os
 import re
 from dataclasses import dataclass
-from typing import Any
 
 from chronovoyage.database.connection import ConnectionInfo
 from chronovoyage.exception.config import MigrateConfigSqlMissingError, MigrateConfigVersionNameInvalidError
+from chronovoyage.type.config import MigrateConfigJson
 from chronovoyage.type.enum import DatabaseVendorEnum
 
 
@@ -41,14 +41,14 @@ class MigrateDomainConfigFactory:
     # noinspection PyMethodMayBeStatic
     def _parse_config(self, directory: str) -> tuple[DatabaseVendorEnum, ConnectionInfo]:
         with open(f"{directory}/config.json") as f:
-            config: dict[str, Any] = json.loads(f.read())
-        vendor = DatabaseVendorEnum(config.get("vendor"))
+            config: MigrateConfigJson = json.loads(f.read())
+        vendor = DatabaseVendorEnum(config["vendor"])
         connection_info = ConnectionInfo(
-            host=config.get("host"),
-            port=config.get("port"),
-            user=config.get("user"),
-            password=config.get("password"),
-            database=config.get("database"),
+            host=config["connection_info"]["host"],
+            port=config["connection_info"]["port"],
+            user=config["connection_info"]["user"],
+            password=config["connection_info"]["password"],
+            database=config["connection_info"]["database"],
         )
         return vendor, connection_info
 
