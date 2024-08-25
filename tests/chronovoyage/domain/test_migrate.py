@@ -12,8 +12,8 @@ class TestMigrateDomainMariadb:
         self.logger = get_default_logger()
         self.config_factory = MigrateDomainConfigFactory()
 
-    def test_ddl_only_create_db(self) -> None:
+    def test_ddl_only(self) -> None:
         migrate_domain_config = self.config_factory.create_from_directory(
-            f"{RESOURCE_DIR}/mariadb/ddl_only_create_db"
+            f"{RESOURCE_DIR}/mariadb/ddl_only"
         )
         MigrateDomain(migrate_domain_config, logger=self.logger).execute()
