@@ -2,7 +2,6 @@ import re
 
 import pytest
 from _pytest.fixtures import SubRequest
-
 from helper import RESOURCE_DIR
 
 
