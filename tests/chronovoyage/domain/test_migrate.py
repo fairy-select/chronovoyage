@@ -6,7 +6,7 @@ from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.logger import get_default_logger
 
 
-class TestMigrateDomain:
+class TestMigrateDomainMariadb:
     @pytest.fixture(autouse=True)
     def _(self) -> None:
         self.logger = get_default_logger()
