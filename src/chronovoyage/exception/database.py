@@ -3,4 +3,4 @@ class DatabaseError(Exception):
 
 
 class DatabaseUnknownVendorError(DatabaseError):
-    """想定外のデータベースベンダーが与えられたときに創出するエラー"""
+    """想定外のデータベースベンダーが与えられたときに送出するエラー"""
