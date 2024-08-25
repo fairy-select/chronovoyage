@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from chronovoyage.internal.exception.database import DatabaseUnknownVendorError
-from chronovoyage.logger import get_default_logger
+from chronovoyage.internal.logger import get_default_logger
 
 if TYPE_CHECKING:
     from logging import Logger

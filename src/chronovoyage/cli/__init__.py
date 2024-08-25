@@ -6,7 +6,7 @@ import click
 from chronovoyage.__about__ import __version__
 from chronovoyage.config.migrate import MigrateDomainConfigFactory
 from chronovoyage.domain.migrate import MigrateDomain
-from chronovoyage.logger import get_default_logger
+from chronovoyage.internal.logger import get_default_logger
 
 logger = get_default_logger()
 

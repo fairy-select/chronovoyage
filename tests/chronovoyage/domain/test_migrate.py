@@ -8,7 +8,7 @@ from chronovoyage.internal.exception.config import (
     MigrateConfigSqlMissingError,
     MigrateConfigVersionNameInvalidError,
 )
-from chronovoyage.logger import get_default_logger
+from chronovoyage.internal.logger import get_default_logger
 
 
 class TestMigrateDomainMariadb:
