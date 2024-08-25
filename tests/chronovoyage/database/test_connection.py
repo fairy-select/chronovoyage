@@ -1,9 +1,9 @@
 import pytest
+from helper import default_mariadb_connection_info
 
 from chronovoyage.internal.database.connection import ConnectionInfo, DatabaseConnector
 from chronovoyage.internal.exception.database import DatabaseUnknownVendorError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
-from helper import default_mariadb_connection_info
 
 
 class TestConnection:
