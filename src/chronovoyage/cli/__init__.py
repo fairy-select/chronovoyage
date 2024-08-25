@@ -4,7 +4,8 @@
 import click
 
 from chronovoyage.__about__ import __version__
-from chronovoyage.domain.migrate import MigrateDomain, MigrateDomainConfig
+from chronovoyage.domain.migrate import MigrateDomain
+from chronovoyage.config.migrate import MigrateDomainConfigFactory
 from chronovoyage.logger import get_default_logger
 
 logger = get_default_logger()
@@ -17,4 +18,5 @@ def chronovoyage():
 
 @chronovoyage.command()
 def migrate():
-    MigrateDomain(MigrateDomainConfig(), logger=logger).execute()
+    # TODO: receive directory
+    MigrateDomain(MigrateDomainConfigFactory().create_from_directory("TODO"), logger=logger).execute()

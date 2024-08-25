@@ -1,13 +1,18 @@
 from logging import Logger
 
+from chronovoyage.database.connection import DatabaseConnector
+from chronovoyage.config.migrate import MigrateDomainConfig
 
-class マイグレーション実行クラス:
-    def __init__(self, *, 接続設定, logger: Logger) -> None:
+
+class MigrateUsecase:
+    def __init__(self, *, config: MigrateDomainConfig, logger: Logger) -> None:
+        self._config = config
         self._logger = logger
-        self._データベースに接続する()
 
-    def _データベースに接続する(self):
-        self._logger.info("データベースに接続")
+    def _connect_database(self):
+        self._logger.debug("データベースに接続")
+        return DatabaseConnector().get_connection("mariadb", self._config.connection_info)
 
     def マイグレーションを実行する(self):
         self._logger.info("マイグレーションを実行する")
+        cnx = self._connect_database()
