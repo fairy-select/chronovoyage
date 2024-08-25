@@ -9,8 +9,7 @@ from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 def truncate_mariadb_test_db() -> None:
     with DatabaseConnector().get_connection(DatabaseVendorEnum.MARIADB, default_mariadb_connection_info()) as wrapper:
-        # noinspection PyProtectedMember
-        cursor = wrapper._conn.cursor()  # noqa: SLF001
+        cursor = wrapper.cursor()
         cursor.execute(
             "SELECT table_name FROM information_schema.tables WHERE table_schema = ?",
             (DEFAULT_TEST_ENV["MARIADB_DATABASE"],),

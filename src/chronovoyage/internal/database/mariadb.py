@@ -40,6 +40,9 @@ def connect(connection_info: ConnectionInfo, *, logger: Logger):
         def begin(self) -> MariadbDatabaseTransaction:
             return MariadbDatabaseTransaction(self._conn)
 
+        def cursor(self) -> mariadb.cursors.Cursor:
+            return self._conn.cursor()
+
     class MariadbDatabaseConnection:
         def __init__(self, _conn: mariadb.Connection) -> None:
             self._conn = conn
