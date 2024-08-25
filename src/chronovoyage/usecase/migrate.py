@@ -11,7 +11,7 @@ class MigrateUsecase:
 
     def _connect_database(self):
         self._logger.debug("データベースに接続")
-        return DatabaseConnector().get_connection("mariadb", self._config.connection_info)
+        return DatabaseConnector().get_connection(self._config.vendor, self._config.connection_info)
 
     def マイグレーションを実行する(self):
         self._logger.info("マイグレーションを実行する")

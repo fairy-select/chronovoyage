@@ -1,12 +1,13 @@
 import pytest
 
-from chronovoyage.database.connection import ConnectionInfo, DatabaseConnector, DatabaseVendor
+from chronovoyage.database.connection import ConnectionInfo, DatabaseConnector
+from chronovoyage.type.enum import DatabaseVendorEnum
 from helper import DEFAULT_TEST_ENV
 
 
 class DatabaseHelper:
     # noinspection PyMethodMayBeStatic
-    def get_connection(self, vendor: DatabaseVendor):
+    def get_connection(self, vendor: DatabaseVendorEnum):
         database_connector = DatabaseConnector()
         if vendor == "mariadb":
             connection_info = ConnectionInfo(
@@ -15,6 +16,6 @@ class DatabaseHelper:
                 host="127.0.0.1",
                 port=3307,
             )
-            return database_connector.get_connection("mariadb", connection_info)
+            return database_connector.get_connection(vendor, connection_info)
 
         pytest.fail(f"{vendor} is an unknown vendor.")

@@ -6,6 +6,7 @@ from typing import Dict, Any, List, Tuple
 
 from chronovoyage.database.connection import ConnectionInfo
 from chronovoyage.exception.config import MigrateConfigVersionNameInvalidError, MigrateConfigSqlMissingError
+from chronovoyage.type.enum import DatabaseVendorEnum
 
 
 @dataclass
@@ -19,7 +20,7 @@ class MigratePeriod:
 
 @dataclass
 class MigrateDomainConfig:
-    vendor: str
+    vendor: DatabaseVendorEnum
     connection_info: ConnectionInfo
     periods: List[MigratePeriod]
 
@@ -32,9 +33,9 @@ class MigrateDomainConfigFactory:
         return MigrateDomainConfig(vendor=vendor, connection_info=connection_info, periods=periods)
 
     # noinspection PyMethodMayBeStatic
-    def _parse_config(self, directory: str) -> Tuple[str, ConnectionInfo]:
+    def _parse_config(self, directory: str) -> Tuple[DatabaseVendorEnum, ConnectionInfo]:
         config: Dict[str, Any] = json.loads(open(f"{directory}/config.json").read())
-        vendor = str(config.get('vendor'))
+        vendor = DatabaseVendorEnum(config.get('vendor'))
         connection_info = ConnectionInfo(
             user=config.get('user'),
             password=config.get("password"),
