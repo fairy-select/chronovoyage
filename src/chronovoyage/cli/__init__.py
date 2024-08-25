@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: MIT
 import os.path
+from typing import Optional
 
 import click
 
@@ -20,6 +21,7 @@ def chronovoyage():
 
 
 @chronovoyage.command()
+@click.option("--target", "-t", help="[Not Implemented] Move to a specific period. (Example: 20060102150405)")
 @click.argument("path", type=click.Path(exists=True))
-def migrate(path):
+def migrate(path: str, target: Optional[str]):
     MigrateDomain(MigrateDomainConfigFactory().create_from_directory(os.path.realpath(path)), logger=logger).execute()
