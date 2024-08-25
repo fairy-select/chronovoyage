@@ -55,7 +55,7 @@ class MigrateDomainConfigFactory:
     def _parse_sql(self, directory: str) -> list[MigratePeriod]:
         os.chdir(directory)
 
-        sqls: list[MigratePeriod] = []
+        periods: list[MigratePeriod] = []
         for _dir in filter(lambda f: os.path.isdir(f), os.listdir()):
             matched = re.match(r"(?P<period_name>\d{4}\d{2}\d{2}\d{6})_(?P<language>(ddl|dml))_(?P<description>\w+)", _dir)
             if not matched:
@@ -65,7 +65,7 @@ class MigrateDomainConfigFactory:
                 # TODO: test
                 raise MigrateConfigSqlMissingError(_dir)
             _dir_realpath = os.path.realpath(_dir)
-            sqls.append(
+            periods.append(
                 MigratePeriod(
                     period_name=matched.group("period_name"),
                     language=matched.group("language"),
@@ -75,4 +75,4 @@ class MigrateDomainConfigFactory:
                 )
             )
 
-        return sorted(sqls)
+        return sorted(periods)
