@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from chronovoyage.database.connection import ConnectionInfo
-from chronovoyage.exception.config import (
+from chronovoyage.internal.exception.config import (
     MigrateConfigGoSqlMissingError,
     MigrateConfigReturnSqlMissingError,
     MigrateConfigVersionNameInvalidError,

@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from chronovoyage.exception.database import DatabaseUnknownVendorError
+from chronovoyage.internal.exception.database import DatabaseUnknownVendorError
 from chronovoyage.logger import get_default_logger
 
 if TYPE_CHECKING:

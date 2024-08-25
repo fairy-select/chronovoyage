@@ -1,7 +1,7 @@
 import pytest
 
 from chronovoyage.database.connection import ConnectionInfo, DatabaseConnector
-from chronovoyage.exception.database import DatabaseUnknownVendorError
+from chronovoyage.internal.exception.database import DatabaseUnknownVendorError
 from chronovoyage.type.enum import DatabaseVendorEnum
 
 
