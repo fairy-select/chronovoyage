@@ -1,7 +1,7 @@
 from logging import Logger
 
-from chronovoyage.database.connection import DatabaseConnector
 from chronovoyage.config.migrate import MigrateDomainConfig
+from chronovoyage.database.connection import DatabaseConnector
 
 
 class MigrateUsecase:
@@ -12,11 +12,13 @@ class MigrateUsecase:
     def migrate(self):
         with DatabaseConnector().get_connection(self._config.vendor, self._config.connection_info) as _conn:
             for sql_path in [period.go_sql_path for period in self._config.periods]:
-                for sql in [sql.strip() for sql in open(sql_path).read().strip().split(";") if sql]:
+                with open(sql_path) as f:
+                    file_content = f.read()
+                for sql in [sql.strip() for sql in file_content.strip().split(";") if sql]:
                     try:
                         with _conn.begin() as conn:
                             cursor = conn.cursor()
                             cursor.execute(sql)
                     except:
-                        self._logger.warning(f"an error occurred when executing '{sql}'.")
+                        self._logger.warning("an error occurred when executing '%s'.", sql)
                         raise

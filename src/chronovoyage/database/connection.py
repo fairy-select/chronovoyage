@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from chronovoyage.exception.database import DatabaseUnknownVendorError
 from chronovoyage.logger import get_default_logger
-from chronovoyage.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
     from logging import Logger
 
+    from chronovoyage.type.enum import DatabaseVendorEnum
 
 
 @dataclass(frozen=True)
@@ -29,6 +28,7 @@ class DatabaseConnector:
     def get_connection(self, vendor: DatabaseVendorEnum, connection_info: ConnectionInfo):
         if vendor == "mariadb":
             from chronovoyage.database import mariadb
+
             return mariadb.connect(connection_info, logger=self._logger)
 
         raise DatabaseUnknownVendorError
