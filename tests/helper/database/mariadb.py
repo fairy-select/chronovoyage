@@ -8,7 +8,7 @@ from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 
 def truncate_mariadb_test_db() -> None:
-    with DatabaseConnector().get_connection(DatabaseVendorEnum.MARIADB, default_mariadb_connection_info()) as wrapper:
+    with get_default_mariadb_connection() as wrapper:
         cursor = wrapper.cursor()
         cursor.execute(
             "SELECT table_name FROM information_schema.tables WHERE table_schema = ?",
@@ -19,3 +19,7 @@ def truncate_mariadb_test_db() -> None:
             if not re.match(r"\w+", table_name):  # pragma: no cover
                 pytest.fail(f"{table_name} is an invalid table name.")
             cursor.execute("DROP TABLE " + table_name)
+
+
+def get_default_mariadb_connection():
+    return DatabaseConnector().get_connection(DatabaseVendorEnum.MARIADB, default_mariadb_connection_info())
