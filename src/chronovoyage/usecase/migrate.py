@@ -9,11 +9,8 @@ class MigrateUsecase:
         self._config = config
         self._logger = logger
 
-    def _connect_database(self):
-        return DatabaseConnector().get_connection(self._config.vendor, self._config.connection_info)
-
     def migrate(self):
-        with self._connect_database() as _conn:
+        with DatabaseConnector().get_connection(self._config.vendor, self._config.connection_info) as _conn:
             for sql_path in [period.go_sql_path for period in self._config.periods]:
                 for sql in [sql.strip() for sql in open(sql_path).read().strip().split(";") if sql]:
                     try:
