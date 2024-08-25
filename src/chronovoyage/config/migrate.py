@@ -48,6 +48,7 @@ class MigrateDomainConfigFactory:
             port=config.get("port"),
             user=config.get("user"),
             password=config.get("password"),
+            database=config.get("database"),
         )
         return vendor, connection_info
 

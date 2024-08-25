@@ -18,6 +18,7 @@ class ConnectionInfo:
     port: int
     user: str
     password: str
+    database: str
 
 
 class DatabaseConnector:

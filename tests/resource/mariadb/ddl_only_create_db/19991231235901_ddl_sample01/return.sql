@@ -1,1 +1,3 @@
-DROP DATABASE test;
+# noinspection SqlResolveForFile @ table/"user"
+
+DROP TABLE user;

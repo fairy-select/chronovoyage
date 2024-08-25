@@ -13,6 +13,7 @@ def connect(connection_info: ConnectionInfo, *, logger: Logger):
             port=connection_info.port,
             user=connection_info.user,
             password=connection_info.password,
+            database=connection_info.database,
         )
     except mariadb.Error:
         logger.exception("Error connecting to MariaDB Platform")

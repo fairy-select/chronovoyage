@@ -15,6 +15,7 @@ class DatabaseHelper:
                 port=3307,
                 user=DEFAULT_TEST_ENV["MARIADB_USER"],
                 password=DEFAULT_TEST_ENV["MARIADB_PASSWORD"],
+                database=DEFAULT_TEST_ENV["MARIADB_DATABASE"],
             )
             return database_connector.get_connection(vendor, connection_info)
 

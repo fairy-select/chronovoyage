@@ -3,6 +3,7 @@
   "vendor": "mariadb",
   "host": "127.0.0.1",
   "port": 3307,
-  "user": "root",
-  "password": "password"
+  "user": "mariadb",
+  "password": "password",
+  "database": "test"
 }

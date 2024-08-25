@@ -1,1 +1,3 @@
-DROP TABLE test.user;
+# noinspection SqlResolveForFile @ table/"category"
+
+DROP TABLE category;
