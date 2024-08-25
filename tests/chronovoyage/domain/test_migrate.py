@@ -2,6 +2,7 @@ import pytest
 
 from chronovoyage.config.migrate import MigrateDomainConfigFactory
 from chronovoyage.domain.migrate import MigrateDomain
+from chronovoyage.exception.config import MigrateConfigVersionNameInvalidError
 from chronovoyage.logger import get_default_logger
 from helper import RESOURCE_DIR
 
@@ -17,3 +18,9 @@ class TestMigrateDomainMariadb:
             f"{RESOURCE_DIR}/mariadb/ddl_only"
         )
         MigrateDomain(migrate_domain_config, logger=self.logger).execute()
+
+    def test_period_name_invalid(self) -> None:
+        with pytest.raises(MigrateConfigVersionNameInvalidError):
+            _ = self.config_factory.create_from_directory(
+                f"{RESOURCE_DIR}/mariadb/period_name_invalid"
+            )

@@ -60,7 +60,6 @@ class MigrateDomainConfigFactory:
         for _dir in filter(lambda f: os.path.isdir(f), os.listdir()):
             matched = re.match(r"(?P<period_name>\d{4}\d{2}\d{2}\d{6})_(?P<language>(ddl|dml))_(?P<description>\w+)", _dir)
             if not matched:
-                # TODO: test
                 raise MigrateConfigVersionNameInvalidError(_dir)
             if not {"go.sql", "return.sql"} <= set(os.listdir(_dir)):
                 # TODO: test
