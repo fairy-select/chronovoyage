@@ -11,7 +11,7 @@ from chronovoyage.exception.config import MigrateConfigSqlMissingError, MigrateC
 from chronovoyage.type.enum import DatabaseVendorEnum
 
 
-@dataclass
+@dataclass(frozen=True)
 class MigratePeriod:
     period_name: str
     language: str
@@ -24,7 +24,7 @@ class MigratePeriod:
         return self.period_name < other.period_name
 
 
-@dataclass
+@dataclass(frozen=True)
 class MigrateDomainConfig:
     vendor: DatabaseVendorEnum
     connection_info: ConnectionInfo
