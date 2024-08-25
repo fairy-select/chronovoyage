@@ -2,7 +2,7 @@ import json
 import os
 import re
 from dataclasses import dataclass
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Tuple
 
 from chronovoyage.database.connection import ConnectionInfo
 from chronovoyage.exception.config import MigrateConfigVersionNameInvalidError, MigrateConfigSqlMissingError
@@ -27,18 +27,21 @@ class MigrateDomainConfig:
 class MigrateDomainConfigFactory:
     # noinspection PyMethodMayBeStatic
     def create_from_directory(self, directory: str) -> MigrateDomainConfig:
-        config: Dict[str, Any] = json.loads(open(f"{directory}/config.json").read())
+        vendor, connection_info = self._parse_config(directory)
         periods = self._parse_sql(directory)
-        return MigrateDomainConfig(
-            vendor=config.get('vendor'),
-            connection_info=ConnectionInfo(
-                user=config.get('user'),
-                password=config.get("password"),
-                host=config.get("host"),
-                port=config.get("port"),
-            ),
-            periods=periods,
+        return MigrateDomainConfig(vendor=vendor, connection_info=connection_info, periods=periods)
+
+    # noinspection PyMethodMayBeStatic
+    def _parse_config(self, directory: str) -> Tuple[str, ConnectionInfo]:
+        config: Dict[str, Any] = json.loads(open(f"{directory}/config.json").read())
+        vendor = str(config.get('vendor'))
+        connection_info = ConnectionInfo(
+            user=config.get('user'),
+            password=config.get("password"),
+            host=config.get("host"),
+            port=config.get("port"),
         )
+        return vendor, connection_info
 
     def _parse_sql(self, directory: str) -> List[MigratePeriod]:
         os.chdir(directory)
