@@ -51,7 +51,8 @@ check = "mypy --install-types --non-interactive {args:src/chronovoyage tests}"
 [tool.hatch.envs.test]
 dependencies = [
   "pytest",
-  "pytest-cov"
+  "pytest-cov",
+  "pytest-mock",
 ]
 
 [tool.coverage.run]
