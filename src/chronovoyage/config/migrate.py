@@ -13,7 +13,7 @@ from chronovoyage.type.enum import DatabaseVendorEnum
 
 @dataclass
 class MigratePeriod:
-    period: str
+    period_name: str
     language: str
     description: str
     go_sql_path: str
@@ -53,7 +53,7 @@ class MigrateDomainConfigFactory:
 
         sqls: list[MigratePeriod] = []
         for _dir in filter(lambda f: os.path.isdir(f), os.listdir()):
-            matched = re.match(r"(?P<period>\d{4}\d{2}\d{2}\d{6})_(?P<language>(ddl|dml))_(?P<description>\w+)", _dir)
+            matched = re.match(r"(?P<period_name>\d{4}\d{2}\d{2}\d{6})_(?P<language>(ddl|dml))_(?P<description>\w+)", _dir)
             if not matched:
                 # TODO: test
                 raise MigrateConfigVersionNameInvalidError(_dir)
@@ -63,7 +63,7 @@ class MigrateDomainConfigFactory:
             _dir_realpath = os.path.realpath(_dir)
             sqls.append(
                 MigratePeriod(
-                    period=matched.group("period"),
+                    period_name=matched.group("period_name"),
                     language=matched.group("language"),
                     description=matched.group("description"),
                     go_sql_path=f"{_dir_realpath}/go.sql",
@@ -71,5 +71,5 @@ class MigrateDomainConfigFactory:
                 )
             )
 
-        # TODO: sort by period
+        # TODO: sort by period_name
         return sqls
