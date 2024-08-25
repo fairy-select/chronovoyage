@@ -19,6 +19,10 @@ class MigratePeriod:
     go_sql_path: str
     return_sql_path: str
 
+    def __lt__(self, other: MigratePeriod) -> bool:
+        """時代の並び替えは時代名昇順"""
+        return self.period_name < other.period_name
+
 
 @dataclass
 class MigrateDomainConfig:
@@ -71,5 +75,4 @@ class MigrateDomainConfigFactory:
                 )
             )
 
-        # TODO: sort by period_name
-        return sqls
+        return sorted(sqls)
