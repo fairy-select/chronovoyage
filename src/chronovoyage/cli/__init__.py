@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2024-present Noritaka IZUMI <noritaka.izumi@gmail.com>
 #
 # SPDX-License-Identifier: MIT
+import os.path
+
 import click
 
 from chronovoyage.__about__ import __version__
@@ -18,6 +20,6 @@ def chronovoyage():
 
 
 @chronovoyage.command()
-def migrate():
-    # TODO: receive directory
-    MigrateDomain(MigrateDomainConfigFactory().create_from_directory("TODO"), logger=logger).execute()
+@click.argument("path", type=click.Path(exists=True))
+def migrate(path):
+    MigrateDomain(MigrateDomainConfigFactory().create_from_directory(os.path.realpath(path)), logger=logger).execute()
