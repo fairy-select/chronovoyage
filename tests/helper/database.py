@@ -2,7 +2,7 @@ import pytest
 from helper import DEFAULT_TEST_ENV
 
 from chronovoyage.internal.database.connection import ConnectionInfo, DatabaseConnector
-from chronovoyage.type.enum import DatabaseVendorEnum
+from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 
 class DatabaseHelper:

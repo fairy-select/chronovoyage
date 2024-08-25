@@ -9,7 +9,7 @@ from chronovoyage.internal.logger import get_default_logger
 if TYPE_CHECKING:
     from logging import Logger
 
-    from chronovoyage.type.enum import DatabaseVendorEnum
+    from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 
 @dataclass(frozen=True)

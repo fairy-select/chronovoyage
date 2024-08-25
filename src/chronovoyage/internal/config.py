@@ -12,10 +12,10 @@ from chronovoyage.internal.exception.config import (
     MigrateConfigReturnSqlMissingError,
     MigrateConfigVersionNameInvalidError,
 )
-from chronovoyage.type.enum import DatabaseVendorEnum
+from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
-    from chronovoyage.type.config import MigrateConfigJson
+    from chronovoyage.internal.type.config import MigrateConfigJson
 
 
 @dataclass(frozen=True)
