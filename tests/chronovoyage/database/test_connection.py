@@ -1,21 +1,15 @@
 import pytest
-from helper import DEFAULT_TEST_ENV
 
 from chronovoyage.internal.database.connection import ConnectionInfo, DatabaseConnector
 from chronovoyage.internal.exception.database import DatabaseUnknownVendorError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
+from helper import default_mariadb_connection_info
 
 
 class TestConnection:
     def test_connect_to_mariadb(self) -> None:
         # given
-        connection_info = ConnectionInfo(
-            host="127.0.0.1",
-            port=3307,
-            user=DEFAULT_TEST_ENV["MARIADB_USER"],
-            password=DEFAULT_TEST_ENV["MARIADB_PASSWORD"],
-            database=DEFAULT_TEST_ENV["MARIADB_DATABASE"],
-        )
+        connection_info = default_mariadb_connection_info()
         # when
         conn = DatabaseConnector().get_connection(DatabaseVendorEnum.MARIADB, connection_info)
         # then
