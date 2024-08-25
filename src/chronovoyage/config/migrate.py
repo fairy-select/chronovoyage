@@ -43,6 +43,7 @@ class MigrateDomainConfigFactory:
         )
         return vendor, connection_info
 
+    # noinspection PyMethodMayBeStatic
     def _parse_sql(self, directory: str) -> List[MigratePeriod]:
         os.chdir(directory)
 
