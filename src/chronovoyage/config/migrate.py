@@ -4,12 +4,18 @@ import json
 import os
 import re
 from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from chronovoyage.database.connection import ConnectionInfo
-from chronovoyage.exception.config import MigrateConfigSqlMissingError, MigrateConfigVersionNameInvalidError, \
-    MigrateConfigGoSqlMissingError, MigrateConfigReturnSqlMissingError
-from chronovoyage.type.config import MigrateConfigJson
+from chronovoyage.exception.config import (
+    MigrateConfigGoSqlMissingError,
+    MigrateConfigReturnSqlMissingError,
+    MigrateConfigVersionNameInvalidError,
+)
 from chronovoyage.type.enum import DatabaseVendorEnum
+
+if TYPE_CHECKING:
+    from chronovoyage.type.config import MigrateConfigJson
 
 
 @dataclass(frozen=True)
@@ -59,7 +65,9 @@ class MigrateDomainConfigFactory:
 
         periods: list[MigratePeriod] = []
         for _dir in filter(lambda f: os.path.isdir(f), os.listdir()):
-            matched = re.match(r"(?P<period_name>\d{4}\d{2}\d{2}\d{6})_(?P<language>(ddl|dml))_(?P<description>\w+)", _dir)
+            matched = re.match(
+                r"(?P<period_name>\d{4}\d{2}\d{2}\d{6})_(?P<language>(ddl|dml))_(?P<description>\w+)", _dir
+            )
             if not matched:
                 raise MigrateConfigVersionNameInvalidError(_dir)
             _files = os.listdir(_dir)
