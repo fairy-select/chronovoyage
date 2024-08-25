@@ -6,7 +6,8 @@ import re
 from dataclasses import dataclass
 
 from chronovoyage.database.connection import ConnectionInfo
-from chronovoyage.exception.config import MigrateConfigSqlMissingError, MigrateConfigVersionNameInvalidError
+from chronovoyage.exception.config import MigrateConfigSqlMissingError, MigrateConfigVersionNameInvalidError, \
+    MigrateConfigGoSqlMissingError, MigrateConfigReturnSqlMissingError
 from chronovoyage.type.config import MigrateConfigJson
 from chronovoyage.type.enum import DatabaseVendorEnum
 
@@ -61,9 +62,11 @@ class MigrateDomainConfigFactory:
             matched = re.match(r"(?P<period_name>\d{4}\d{2}\d{2}\d{6})_(?P<language>(ddl|dml))_(?P<description>\w+)", _dir)
             if not matched:
                 raise MigrateConfigVersionNameInvalidError(_dir)
-            if not {"go.sql", "return.sql"} <= set(os.listdir(_dir)):
-                # TODO: test
-                raise MigrateConfigSqlMissingError(_dir)
+            _files = os.listdir(_dir)
+            if "go.sql" not in _files:
+                raise MigrateConfigGoSqlMissingError(_dir)
+            if "return.sql" not in _files:
+                raise MigrateConfigReturnSqlMissingError(_dir)
             _dir_realpath = os.path.realpath(_dir)
             periods.append(
                 MigratePeriod(

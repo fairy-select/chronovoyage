@@ -7,4 +7,12 @@ class MigrateConfigVersionNameInvalidError(MigrateConfigError):
 
 
 class MigrateConfigSqlMissingError(MigrateConfigError):
-    """up.sql または down.sql が存在しない場合に送出するエラー"""
+    """go.sql または return.sql が存在しない場合に送出するエラー"""
+
+
+class MigrateConfigGoSqlMissingError(MigrateConfigSqlMissingError):
+    """go.sql が存在しない場合に送出するエラー"""
+
+
+class MigrateConfigReturnSqlMissingError(MigrateConfigSqlMissingError):
+    """return.sql が存在しない場合に送出するエラー"""
