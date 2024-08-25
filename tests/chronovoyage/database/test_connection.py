@@ -2,11 +2,12 @@ import pytest
 
 from chronovoyage.database.connection import ConnectionInfo, DatabaseConnector
 from chronovoyage.exception.database import DatabaseUnknownVendorError
+from chronovoyage.type.enum import DatabaseVendorEnum
 
 
 class TestConnection:
     def test_connect_to_mariadb(self, database_helper) -> None:
-        cnx = database_helper.get_connection("mariadb")
+        cnx = database_helper.get_connection(DatabaseVendorEnum.MARIADB)
         assert cnx is not None
 
     def test_connect_to_unknown(self) -> None:
