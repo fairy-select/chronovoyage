@@ -1,9 +1,9 @@
 import pytest
-from helper import TESTS_DIR
 
 from chronovoyage.config.migrate import MigrateDomainConfigFactory
 from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.logger import get_default_logger
+from helper import RESOURCE_DIR
 
 
 class TestMigrateDomainMariadb:
@@ -14,6 +14,6 @@ class TestMigrateDomainMariadb:
 
     def test_migrate_ddl_only_create_db(self) -> None:
         migrate_domain_config = self.config_factory.create_from_directory(
-            f"{TESTS_DIR}/resource/mariadb/ddl_only_create_db"
+            f"{RESOURCE_DIR}/mariadb/ddl_only_create_db"
         )
         MigrateDomain(migrate_domain_config, logger=self.logger).execute()
