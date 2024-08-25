@@ -1,6 +1,6 @@
 import pytest
 
-from chronovoyage.config.migrate import MigrateDomainConfigFactory
+from chronovoyage.internal.config import MigrateDomainConfigFactory
 from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.internal.exception.config import (
     MigrateConfigGoSqlMissingError,

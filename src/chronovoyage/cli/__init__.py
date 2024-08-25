@@ -4,7 +4,7 @@
 import click
 
 from chronovoyage.__about__ import __version__
-from chronovoyage.config.migrate import MigrateDomainConfigFactory
+from chronovoyage.internal.config import MigrateDomainConfigFactory
 from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.internal.logger import get_default_logger
 

@@ -1,6 +1,6 @@
 from logging import Logger
 
-from chronovoyage.config.migrate import MigrateDomainConfig
+from chronovoyage.internal.config import MigrateDomainConfig
 from chronovoyage.internal.database.connection import DatabaseConnector
 
 
