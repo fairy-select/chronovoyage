@@ -2,6 +2,8 @@ services:
   mariadb:
     image: mariadb:latest
     restart: always
+    environment:
+      MARIADB_RANDOM_ROOT_PASSWORD: 1
     env_file:
       - test.env
     ports:
