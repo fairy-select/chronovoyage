@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 from helper.database.mariadb import get_default_mariadb_connection
 
@@ -18,45 +20,37 @@ class TestMigrateDomainMariadb:
         self.logger = get_default_logger()
         self.config_factory = MigrateDomainConfigFactory()
 
+    # noinspection PyMethodMayBeStatic
+    def _get_tables(self) -> set[int]:
+        with get_default_mariadb_connection() as wrapper:
+            cursor = wrapper.cursor()
+            cursor.execute("SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'test'")
+            return {table_name for (table_name,) in cursor.fetchall()}
+
     def test_ddl_only(self, mariadb_resource_dir) -> None:
         # given
         migrate_domain_config = self.config_factory.create_from_directory(mariadb_resource_dir)
         # when
         MigrateDomain(migrate_domain_config, logger=self.logger).execute()
         # then
-        with get_default_mariadb_connection() as wrapper:
-            cursor = wrapper.cursor()
-            cursor.execute("SHOW TABLES")
-            assert {table for (table,) in cursor} == {"user", "category"}
+        assert self._get_tables() == {"user", "category"}
 
     def test_period_name_invalid(self, mariadb_resource_dir) -> None:
         with pytest.raises(MigrateConfigVersionNameInvalidError):
             _ = self.config_factory.create_from_directory(mariadb_resource_dir)
-        with get_default_mariadb_connection() as wrapper:
-            cursor = wrapper.cursor()
-            cursor.execute("SHOW TABLES")
-            assert cursor.rowcount == 0
+        assert self._get_tables() == set()
 
     def test_both_sqls_missing(self, mariadb_resource_dir) -> None:
         with pytest.raises(MigrateConfigSqlMissingError):
             _ = self.config_factory.create_from_directory(mariadb_resource_dir)
-        with get_default_mariadb_connection() as wrapper:
-            cursor = wrapper.cursor()
-            cursor.execute("SHOW TABLES")
-            assert cursor.rowcount == 0
+        assert self._get_tables() == set()
 
     def test_go_sql_missing(self, mariadb_resource_dir) -> None:
         with pytest.raises(MigrateConfigGoSqlMissingError):
             _ = self.config_factory.create_from_directory(mariadb_resource_dir)
-        with get_default_mariadb_connection() as wrapper:
-            cursor = wrapper.cursor()
-            cursor.execute("SHOW TABLES")
-            assert cursor.rowcount == 0
+        assert self._get_tables() == set()
 
     def test_return_sql_missing(self, mariadb_resource_dir) -> None:
         with pytest.raises(MigrateConfigReturnSqlMissingError):
             _ = self.config_factory.create_from_directory(mariadb_resource_dir)
-        with get_default_mariadb_connection() as wrapper:
-            cursor = wrapper.cursor()
-            cursor.execute("SHOW TABLES")
-            assert cursor.rowcount == 0
+        assert self._get_tables() == set()
