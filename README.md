@@ -46,14 +46,18 @@ sudo apt install libmariadb-dev
     - [x] MariaDB
     - [ ] PostgreSQL
 - Migration file support
-    - [ ] SQL (.sql)
+    - [x] SQL (.sql)
     - [ ] Shell script (.sh)
 - Commands
+    - new
+        - [ ] create migration directory and config file
     - generate
         - [ ] create migration files from template
     - migrate
-        - [ ] to latest
+        - [x] to latest
         - [ ] to specific version
+        - [x] from the beginning
+        - [ ] from the middle
         - --dry-run
             - [ ] show executing SQL
         - [ ] detect ddl or dml
