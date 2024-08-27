@@ -8,6 +8,10 @@ services:
       - test.env
     ports:
       - "3307:3306"
+    volumes:
+      - type: bind
+        source: ./docker-entrypoint-initdb.d/mariadb
+        target: /docker-entrypoint-initdb.d
     healthcheck:
       test: mariadb -u$$MARIADB_USER -p$$MARIADB_PASSWORD -e "SELECT 1;"
       start_period: 3s
