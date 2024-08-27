@@ -1,8 +1,9 @@
 # SPDX-FileCopyrightText: 2024-present Noritaka IZUMI <noritaka.izumi@gmail.com>
 #
 # SPDX-License-Identifier: MIT
+from __future__ import annotations
+
 import os.path
-from typing import Optional
 
 import click
 
@@ -23,5 +24,5 @@ def chronovoyage():
 @chronovoyage.command()
 @click.option("--target", "-t", help="[Not Implemented] Move to a specific period. (Example: 20060102150405)")
 @click.argument("path", type=click.Path(exists=True))
-def migrate(path: str, target: Optional[str]):
+def migrate(path: str, target: str | None):
     MigrateDomain(MigrateDomainConfigFactory().create_from_directory(os.path.realpath(path)), logger=logger).execute()
