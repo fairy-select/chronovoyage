@@ -18,7 +18,7 @@ class TestConnection:
 
     def test_connect_to_unknown(self) -> None:
         # given
-        connection_info = ConnectionInfo(host="", port=0, user="", password="", database="")
+        connection_info = ConnectionInfo(host=..., port=..., user=..., password=..., database=...)
         # when/then
         with pytest.raises(DatabaseUnknownVendorError):
             # noinspection PyTypeChecker
