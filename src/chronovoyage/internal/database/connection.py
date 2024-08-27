@@ -4,7 +4,6 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 from chronovoyage.internal.exception.database import DatabaseUnknownVendorError
-from chronovoyage.internal.logger import get_default_logger
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -22,8 +21,8 @@ class ConnectionInfo:
 
 
 class DatabaseConnector:
-    def __init__(self, *, logger: Logger | None = None) -> None:
-        self._logger = logger if logger is not None else get_default_logger()
+    def __init__(self, *, logger: Logger) -> None:
+        self._logger = logger
 
     # noinspection PyMethodMayBeStatic
     def get_connection(self, vendor: DatabaseVendorEnum, connection_info: ConnectionInfo):

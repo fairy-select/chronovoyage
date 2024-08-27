@@ -10,7 +10,7 @@ class MigrateUsecase:
         self._logger = logger
 
     def migrate(self):
-        with DatabaseConnector().get_connection(self._config.vendor, self._config.connection_info) as _conn:
+        with DatabaseConnector(logger=self._logger).get_connection(self._config.vendor, self._config.connection_info) as _conn:
             for period in self._config.periods:
                 self._logger.debug("adding the period '%s'.", period.period_name)
                 try:

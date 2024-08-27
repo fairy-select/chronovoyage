@@ -4,9 +4,10 @@ import re
 from typing import TYPE_CHECKING
 
 import pytest
-from helper import default_mariadb_connection_info, DEFAULT_TEST_ENV
+from helper import DEFAULT_TEST_ENV, default_mariadb_connection_info
 
 from chronovoyage.internal.database.connection import DatabaseConnector
+from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
@@ -43,4 +44,4 @@ def truncate_mariadb_test_db() -> None:
 
 
 def get_default_mariadb_connection():
-    return DatabaseConnector().get_connection(DatabaseVendorEnum.MARIADB, default_mariadb_connection_info())
+    return DatabaseConnector(logger=get_default_logger()).get_connection(DatabaseVendorEnum.MARIADB, default_mariadb_connection_info())

@@ -3,6 +3,7 @@ from helper import default_mariadb_connection_info
 
 from chronovoyage.internal.database.connection import ConnectionInfo, DatabaseConnector
 from chronovoyage.internal.exception.database import DatabaseUnknownVendorError
+from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 
@@ -11,7 +12,7 @@ class TestConnection:
         # given
         connection_info = default_mariadb_connection_info()
         # when
-        conn = DatabaseConnector().get_connection(DatabaseVendorEnum.MARIADB, connection_info)
+        conn = DatabaseConnector(logger=get_default_logger()).get_connection(DatabaseVendorEnum.MARIADB, connection_info)
         # then
         assert conn is not None
 
@@ -21,4 +22,5 @@ class TestConnection:
         # when/then
         with pytest.raises(DatabaseUnknownVendorError):
             # noinspection PyTypeChecker
-            DatabaseConnector().get_connection("unknown", connection_info)
+            # vendor in get_connection
+            DatabaseConnector(logger=get_default_logger()).get_connection("unknown", connection_info)
