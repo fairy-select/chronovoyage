@@ -26,11 +26,19 @@ class TestMigrateDomainMariadb:
             cursor = wrapper.cursor()
             return mariadb_get_tables(database, cursor)
 
+    @property
+    def _all_periods_have_come(self) -> bool:
+        with get_default_mariadb_connection() as wrapper:
+            cursor = wrapper.cursor()
+            cursor.execute("SELECT has_come FROM chronovoyage_periods")
+            return {has_come for (has_come,) in cursor.fetchall()} == {True}
+
     def test_ddl_only(self, mariadb_migrate_domain_config) -> None:
         # when
         MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute()
         # then
         assert self._get_tables(mariadb_migrate_domain_config.connection_info.database) == {"user", "category"}
+        assert self._all_periods_have_come
 
     def test_period_name_invalid(self, mariadb_resource_dir) -> None:
         with pytest.raises(MigrateConfigVersionNameInvalidError):
