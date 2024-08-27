@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
 def mariadb_get_tables(database: str, cursor: Cursor) -> set[str]:
     cursor.execute(
-        "SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND SUBSTR(TABLE_NAME, 0, 13) != 'chronovoyage_'",
+        "SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND SUBSTR(TABLE_NAME FROM 1 FOR 13) != 'chronovoyage_'",
         (database,),
     )
     return {table_name for (table_name,) in cursor.fetchall()}
