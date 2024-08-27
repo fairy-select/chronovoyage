@@ -21,10 +21,10 @@ class TestMigrateDomainMariadb:
         self.config_factory = MigrateDomainConfigFactory()
 
     # noinspection PyMethodMayBeStatic
-    def _get_tables(self, database: str) -> set[str]:
+    def _get_tables(self) -> set[str]:
         with get_default_mariadb_connection() as wrapper:
             cursor = wrapper.cursor()
-            return mariadb_get_tables(database, cursor)
+            return mariadb_get_tables(cursor)
 
     @property
     def _all_periods_have_come(self) -> bool:
@@ -37,7 +37,7 @@ class TestMigrateDomainMariadb:
         # when
         MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute()
         # then
-        assert self._get_tables(mariadb_migrate_domain_config.connection_info.database) == {"user", "category"}
+        assert self._get_tables() == {"user", "category"}
         assert self._all_periods_have_come
 
     def test_period_name_invalid(self, mariadb_resource_dir) -> None:
