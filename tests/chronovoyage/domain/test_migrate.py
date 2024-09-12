@@ -88,7 +88,7 @@ class TestMigrateDomainMariadb:
         # noinspection SqlResolve
         self.assert_rows_and_sql([(1, 'Jane'), (2, 'John')], "SELECT * FROM user ORDER BY id")
 
-    def test_partially_migrate(self, mariadb_migrate_domain_config) -> None:
+    def test_migrate_from_zero_to_target(self, mariadb_migrate_domain_config) -> None:
         # when
         MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute(target="19991231235902")
         # then
