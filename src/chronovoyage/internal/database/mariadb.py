@@ -4,6 +4,7 @@ from logging import Logger
 import mariadb
 
 from chronovoyage.internal.database.connection import ConnectionInfo
+from chronovoyage.internal.interface.database import IDatabaseConnection, PCanHandleTransaction
 
 
 def connect(connection_info: ConnectionInfo, *, logger: Logger):
@@ -37,7 +38,7 @@ class MariadbDatabaseTransaction:
             self._conn.rollback()
 
 
-class MariadbDatabaseConnectionWrapper:
+class MariadbDatabaseConnectionWrapper(PCanHandleTransaction):
     def __init__(self, _conn: mariadb.Connection) -> None:
         self._conn = _conn
 
@@ -48,7 +49,7 @@ class MariadbDatabaseConnectionWrapper:
         return self._conn.cursor()
 
 
-class MariadbDatabaseConnection:
+class MariadbDatabaseConnection(IDatabaseConnection):
     def __init__(self, _conn: mariadb.Connection) -> None:
         self._conn = _conn
 
