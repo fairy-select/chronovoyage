@@ -16,7 +16,9 @@ class MigrateUsecase:
         self._logger = logger
 
     def migrate(self, *, target: str | None):
-        with DatabaseConnector(logger=self._logger).get_connection(self._config.vendor, self._config.connection_info) as _conn:
+        with DatabaseConnector(logger=self._logger).get_connection(
+            self._config.vendor, self._config.connection_info
+        ) as _conn:
             for period in self._config.periods:
                 if target is not None and period.period_name > target:
                     self._logger.debug("period '%s' is in the future and will be skipped.", period.period_name)
@@ -26,9 +28,16 @@ class MigrateUsecase:
                 try:
                     with _conn.begin() as conn:
                         cursor = conn.cursor()
-                        cursor.execute("INSERT INTO chronovoyage_periods (period_name, language, description) VALUES (?, ?, ?)", (period.period_name, period.language, period.description))
+                        cursor.execute(
+                            "INSERT INTO chronovoyage_periods (period_name, language, description) VALUES (?, ?, ?)",
+                            (period.period_name, period.language, period.description),
+                        )
                         inserted_period_id = cursor.lastrowid
-                        self._logger.debug("inserted the period '%s' into chronovoyage_periods. id is %d.", period.period_name, inserted_period_id)
+                        self._logger.debug(
+                            "inserted the period '%s' into chronovoyage_periods. id is %d.",
+                            period.period_name,
+                            inserted_period_id,
+                        )
                 except:
                     self._logger.warning("an error occurred when adding the period '%s'.", period.period_name)
                     raise
@@ -50,7 +59,9 @@ class MigrateUsecase:
                 try:
                     with _conn.begin() as conn:
                         cursor = conn.cursor()
-                        cursor.execute("UPDATE chronovoyage_periods SET has_come = TRUE WHERE id = ?", (inserted_period_id,))
+                        cursor.execute(
+                            "UPDATE chronovoyage_periods SET has_come = TRUE WHERE id = ?", (inserted_period_id,)
+                        )
                         self._logger.debug("updated the period which id is %d.", inserted_period_id)
                 except:
                     self._logger.warning("an error occurred when updating the period '%s'.", period.period_name)

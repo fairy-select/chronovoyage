@@ -44,4 +44,6 @@ def truncate_mariadb_test_db() -> None:
 
 
 def get_default_mariadb_connection():
-    return DatabaseConnector(logger=get_default_logger()).get_connection(DatabaseVendorEnum.MARIADB, default_mariadb_connection_info())
+    return DatabaseConnector(logger=get_default_logger()).get_connection(
+        DatabaseVendorEnum.MARIADB, default_mariadb_connection_info()
+    )

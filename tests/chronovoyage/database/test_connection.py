@@ -12,7 +12,9 @@ class TestConnection:
         # given
         connection_info = default_mariadb_connection_info()
         # when
-        conn = DatabaseConnector(logger=get_default_logger()).get_connection(DatabaseVendorEnum.MARIADB, connection_info)
+        conn = DatabaseConnector(logger=get_default_logger()).get_connection(
+            DatabaseVendorEnum.MARIADB, connection_info
+        )
         # then
         assert conn is not None
 
