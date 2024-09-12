@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Any
+
 import pytest
 from helper.database.mariadb import get_default_mariadb_connection, mariadb_get_tables
 
@@ -44,6 +46,16 @@ class TestMigrateDomainMariadb:
             (period_name,) = row
             return period_name
 
+    # noinspection PyMethodMayBeStatic
+    def assert_rows_and_sql(self, want_rows: list[tuple[Any, ...]], sql: str) -> None:
+        with get_default_mariadb_connection() as wrapper:
+            cursor = wrapper.cursor()
+            cursor.execute(sql)
+            if cursor.rowcount != len(want_rows):
+                pytest.fail(f"件数が異なる (want: {len(want_rows)}), got: {cursor.rowcount}")
+            for i, got_user in enumerate(cursor):
+                assert got_user == want_rows[i], f"row {i}"
+
     def test_ddl_only(self, mariadb_migrate_domain_config) -> None:
         # when
         MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute()
@@ -73,15 +85,8 @@ class TestMigrateDomainMariadb:
         # then
         assert self._all_periods_have_come
         assert self._get_tables() == {"user"}
-        want_users = [(1, 'Jane'), (2, 'John')]
-        with get_default_mariadb_connection() as wrapper:
-            cursor = wrapper.cursor()
-            # noinspection SqlResolve
-            cursor.execute("SELECT * FROM user ORDER BY id")
-            if cursor.rowcount != len(want_users):
-                pytest.fail(f"件数が異なる (want: {len(want_users)}), got: {cursor.rowcount}")
-            for i, got_user in enumerate(cursor):
-                assert got_user == want_users[i], f"row {i}"
+        # noinspection SqlResolve
+        self.assert_rows_and_sql([(1, 'Jane'), (2, 'John')], "SELECT * FROM user ORDER BY id")
 
     @pytest.mark.skip
     def test_partially_migrate(self, mariadb_migrate_domain_config) -> None:
@@ -89,12 +94,5 @@ class TestMigrateDomainMariadb:
         MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute()
         # then
         assert self._current_period == "19991231235902"
-        want_users = [(1, 'Jane'), (2, 'John')]
-        with get_default_mariadb_connection() as wrapper:
-            cursor = wrapper.cursor()
-            # noinspection SqlResolve
-            cursor.execute("SELECT * FROM user ORDER BY id")
-            if cursor.rowcount != len(want_users):
-                pytest.fail(f"件数が異なる (want: {len(want_users)}), got: {cursor.rowcount}")
-            for i, got_user in enumerate(cursor):
-                assert got_user == want_users[i], f"row {i}"
+        # noinspection SqlResolve
+        self.assert_rows_and_sql([(1, 'Jane'), (2, 'John')], "SELECT * FROM user ORDER BY id")
