@@ -94,5 +94,6 @@ class TestMigrateDomainMariadb:
         MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute()
         # then
         assert self._current_period == "19991231235902"
+        assert self._get_tables() == {"user"}
         # noinspection SqlResolve
         self.assert_rows_and_sql([(1, 'Jane'), (2, 'John')], "SELECT * FROM user ORDER BY id")
