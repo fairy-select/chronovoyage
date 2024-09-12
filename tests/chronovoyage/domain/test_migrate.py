@@ -55,3 +55,17 @@ class TestMigrateDomainMariadb:
     def test_return_sql_missing(self, mariadb_resource_dir) -> None:
         with pytest.raises(MigrateConfigReturnSqlMissingError):
             _ = self.config_factory.create_from_directory(mariadb_resource_dir)
+
+    def test_ddl_and_dml(self, mariadb_migrate_domain_config) -> None:
+        # when
+        MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute()
+        # then
+        assert self._all_periods_have_come
+        assert self._get_tables() == {"user"}
+        want_users = [(1, 'Jane'), (2, 'John')]
+        with get_default_mariadb_connection() as wrapper:
+            cursor = wrapper.cursor()
+            # noinspection SqlResolve
+            cursor.execute("SELECT * FROM user ORDER BY id")
+            for i, (got_user, want_user) in enumerate(zip(cursor, want_users)):
+                assert got_user == want_user, f"row {i}"
