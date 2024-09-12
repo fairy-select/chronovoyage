@@ -25,4 +25,4 @@ def chronovoyage():
 @click.option("--target", "-t", help="[Not Implemented] Move to a specific period. (Example: 20060102150405)")
 @click.argument("path", type=click.Path(exists=True))
 def migrate(path: str, target: str | None):
-    MigrateDomain(MigrateDomainConfigFactory().create_from_directory(os.path.realpath(path)), logger=logger).execute()
+    MigrateDomain(MigrateDomainConfigFactory().create_from_directory(os.path.realpath(path)), logger=logger).execute(target=target)
