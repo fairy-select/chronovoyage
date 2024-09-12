@@ -1,7 +1,13 @@
-from logging import Logger
+from __future__ import annotations
 
-from chronovoyage.internal.config import MigrateDomainConfig
+from typing import TYPE_CHECKING
+
 from chronovoyage.usecase.migrate import MigrateUsecase
+
+if TYPE_CHECKING:
+    from logging import Logger
+
+    from chronovoyage.internal.config import MigrateDomainConfig
 
 
 class MigrateDomain:
@@ -9,5 +15,5 @@ class MigrateDomain:
         self._config = config
         self._logger = logger
 
-    def execute(self) -> None:
-        MigrateUsecase(config=self._config, logger=self._logger).migrate()
+    def execute(self, *, target: str | None = None) -> None:
+        MigrateUsecase(config=self._config, logger=self._logger).migrate(target=target)

@@ -1,7 +1,13 @@
-from logging import Logger
+from __future__ import annotations
 
-from chronovoyage.internal.config import MigrateDomainConfig
+from typing import TYPE_CHECKING
+
 from chronovoyage.internal.database.connection import DatabaseConnector
+
+if TYPE_CHECKING:
+    from logging import Logger
+
+    from chronovoyage.internal.config import MigrateDomainConfig
 
 
 class MigrateUsecase:
@@ -9,9 +15,13 @@ class MigrateUsecase:
         self._config = config
         self._logger = logger
 
-    def migrate(self):
+    def migrate(self, *, target: str | None):
         with DatabaseConnector(logger=self._logger).get_connection(self._config.vendor, self._config.connection_info) as _conn:
             for period in self._config.periods:
+                if target is not None and period.period_name > target:
+                    self._logger.debug("period '%s' is in the future and will be skipped.", period.period_name)
+                    continue
+
                 self._logger.debug("adding the period '%s'.", period.period_name)
                 try:
                     with _conn.begin() as conn:

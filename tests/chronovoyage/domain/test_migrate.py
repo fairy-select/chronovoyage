@@ -88,10 +88,9 @@ class TestMigrateDomainMariadb:
         # noinspection SqlResolve
         self.assert_rows_and_sql([(1, 'Jane'), (2, 'John')], "SELECT * FROM user ORDER BY id")
 
-    @pytest.mark.skip
     def test_partially_migrate(self, mariadb_migrate_domain_config) -> None:
         # when
-        MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute()
+        MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute(target="19991231235902")
         # then
         assert self._current_period == "19991231235902"
         assert self._get_tables() == {"user"}
