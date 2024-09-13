@@ -1,10 +1,15 @@
 import sys
 from logging import Logger
+from typing import Any, Generator
 
 import mariadb
 
-from chronovoyage.internal.database.connection import ConnectionInfo
-from chronovoyage.internal.interface.database import IDatabaseConnection, PCanHandleTransaction
+from chronovoyage.internal.config import MigratePeriod
+from chronovoyage.internal.interface.database import (
+    IDatabaseConnection,
+    IDatabaseConnectionWrapper,
+)
+from chronovoyage.internal.type.database import ConnectionInfo
 
 
 def connect(connection_info: ConnectionInfo, *, logger: Logger):
@@ -38,15 +43,39 @@ class MariadbDatabaseTransaction:
             self._conn.rollback()
 
 
-class MariadbDatabaseConnectionWrapper(PCanHandleTransaction):
+class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
     def __init__(self, _conn: mariadb.Connection) -> None:
         self._conn = _conn
 
-    def begin(self) -> MariadbDatabaseTransaction:
+    def _begin(self) -> MariadbDatabaseTransaction:
         return MariadbDatabaseTransaction(self._conn)
 
     def cursor(self) -> mariadb.cursors.Cursor:
         return self._conn.cursor()
+
+    def add_period(self, period: MigratePeriod) -> int:
+        with self._begin() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "INSERT INTO chronovoyage_periods (period_name, language, description) VALUES (?, ?, ?)",
+                (period.period_name, period.language, period.description),
+            )
+            return cursor.lastrowid
+
+    def get_sqls(self, filepath: str) -> Generator[str, Any, None]:
+        with open(filepath) as f:
+            file_content = f.read()
+        return (sql.strip() for sql in file_content.strip().split(";") if sql)
+
+    def execute_sql(self, sql: str) -> None:
+        with self._begin() as conn:
+            cursor = conn.cursor()
+            cursor.execute(sql)
+
+    def mark_period_as_come(self, inserted_period_id: int) -> None:
+        with self._begin() as conn:
+            cursor = conn.cursor()
+            cursor.execute("UPDATE chronovoyage_periods SET has_come = TRUE WHERE id = ?", (inserted_period_id,))
 
 
 class MariadbDatabaseConnection(IDatabaseConnection):

@@ -6,12 +6,12 @@ import re
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from chronovoyage.internal.database.connection import ConnectionInfo
 from chronovoyage.internal.exception.config import (
     MigrateConfigGoSqlMissingError,
     MigrateConfigReturnSqlMissingError,
     MigrateConfigVersionNameInvalidError,
 )
+from chronovoyage.internal.type.database import ConnectionInfo
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
