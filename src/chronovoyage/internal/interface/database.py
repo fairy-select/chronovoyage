@@ -1,7 +1,10 @@
-from abc import ABCMeta, abstractmethod
-from typing import Any, Generator, Protocol, TypeVar
+from __future__ import annotations
 
-from chronovoyage.internal.config import MigratePeriod
+from abc import ABCMeta, abstractmethod
+from typing import TYPE_CHECKING, Any, Generator, Protocol, TypeVar
+
+if TYPE_CHECKING:
+    from chronovoyage.internal.config import MigratePeriod
 
 T = TypeVar("T")
 
@@ -26,6 +29,10 @@ class IDatabaseConnectionWrapper(PCanHandleTransaction, metaclass=ABCMeta):
 
     @abstractmethod
     def mark_period_as_come(self, inserted_period_id: int) -> None:
+        pass
+
+    @abstractmethod
+    def get_current_period(self) -> str | None:
         pass
 
 

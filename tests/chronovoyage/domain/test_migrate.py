@@ -35,17 +35,6 @@ class TestMigrateDomainMariadb:
             cursor.execute("SELECT has_come FROM chronovoyage_periods")
             return {has_come for (has_come,) in cursor.fetchall()} == {True}
 
-    @property
-    def _current_period(self) -> str | None:
-        with get_default_mariadb_connection() as wrapper:
-            cursor = wrapper.cursor()
-            cursor.execute("SELECT period_name FROM chronovoyage_periods WHERE has_come IS TRUE ORDER BY id DESC")
-            row = cursor.fetchone()
-            if row is None:
-                return None
-            (period_name,) = row
-            return period_name
-
     # noinspection PyMethodMayBeStatic
     def assert_rows_and_sql(self, want_rows: list[tuple[Any, ...]], sql: str) -> None:
         with get_default_mariadb_connection() as wrapper:
@@ -89,10 +78,12 @@ class TestMigrateDomainMariadb:
         self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
 
     def test_migrate_from_zero_to_target(self, mariadb_migrate_domain_config) -> None:
+        # given
+        migrate_domain = MigrateDomain(mariadb_migrate_domain_config, logger=self.logger)
         # when
-        MigrateDomain(mariadb_migrate_domain_config, logger=self.logger).execute(target="19991231235902")
+        migrate_domain.execute(target="19991231235902")
         # then
-        assert self._current_period == "19991231235902"
+        assert migrate_domain.usecase.current() == "19991231235902"
         assert self._get_tables() == {"user"}
         # noinspection SqlResolve
         self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
@@ -105,7 +96,7 @@ class TestMigrateDomainMariadb:
         # when
         migrate_domain.execute()
         # then
-        assert self._current_period == "19991231235903"
+        assert migrate_domain.usecase.current() == "19991231235903"
         assert self._get_tables() == {"user"}
         # noinspection SqlResolve
         self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")

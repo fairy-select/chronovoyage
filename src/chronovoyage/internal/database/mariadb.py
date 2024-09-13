@@ -1,15 +1,20 @@
+from __future__ import annotations
+
 import sys
-from logging import Logger
-from typing import Any, Generator
+from typing import TYPE_CHECKING, Any, Generator
 
 import mariadb
 
-from chronovoyage.internal.config import MigratePeriod
 from chronovoyage.internal.interface.database import (
     IDatabaseConnection,
     IDatabaseConnectionWrapper,
 )
-from chronovoyage.internal.type.database import ConnectionInfo
+
+if TYPE_CHECKING:
+    from logging import Logger
+
+    from chronovoyage.internal.config import MigratePeriod
+    from chronovoyage.internal.type.database import ConnectionInfo
 
 
 def connect(connection_info: ConnectionInfo, *, logger: Logger):
@@ -76,6 +81,16 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
         with self._begin() as conn:
             cursor = conn.cursor()
             cursor.execute("UPDATE chronovoyage_periods SET has_come = TRUE WHERE id = ?", (inserted_period_id,))
+
+    def get_current_period(self) -> str | None:
+        with self._begin() as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT period_name FROM chronovoyage_periods WHERE has_come IS TRUE ORDER BY id DESC")
+            row = cursor.fetchone()
+            if row is None:
+                return None
+            (period_name,) = row
+            return period_name
 
 
 class MariadbDatabaseConnection(IDatabaseConnection):

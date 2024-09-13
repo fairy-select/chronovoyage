@@ -14,6 +14,7 @@ class MigrateDomain:
     def __init__(self, config: MigrateDomainConfig, *, logger: Logger) -> None:
         self._config = config
         self._logger = logger
+        self.usecase = MigrateUsecase(config=self._config, logger=self._logger)
 
     def execute(self, *, target: str | None = None) -> None:
-        MigrateUsecase(config=self._config, logger=self._logger).migrate(target=target)
+        self.usecase.migrate(target=target)

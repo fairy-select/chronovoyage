@@ -15,6 +15,12 @@ class MigrateUsecase:
         self._config = config
         self._logger = logger
 
+    def current(self) -> str | None:
+        with DatabaseConnector(logger=self._logger).get_connection(
+            self._config.vendor, self._config.connection_info
+        ) as _conn:
+            return _conn.get_current_period()
+
     def migrate(self, *, target: str | None):
         with DatabaseConnector(logger=self._logger).get_connection(
             self._config.vendor, self._config.connection_info
