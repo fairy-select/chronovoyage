@@ -11,6 +11,7 @@ class TestCli:
     @pytest.mark.parametrize(
         "command",
         [
+            pytest.param("init"),
             pytest.param("migrate"),
         ],
     )
