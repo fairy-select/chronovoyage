@@ -7,6 +7,7 @@ from chronovoyage.internal.type.database import ConnectionInfo
 TESTS_DIR = os.path.realpath(f"{os.path.dirname(__file__)}/..")
 RESOURCE_DIR = f"{TESTS_DIR}/resource"
 DEFAULT_TEST_ENV = dotenv_values(f"{TESTS_DIR}/test.env")
+TEST_TEMP_DIR = os.path.join(TESTS_DIR, "tmp")
 
 
 def default_mariadb_connection_info() -> ConnectionInfo:

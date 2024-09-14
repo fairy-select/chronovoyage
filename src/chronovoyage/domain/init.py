@@ -1,6 +1,7 @@
 import os.path
 from logging import Logger
 
+from chronovoyage.internal.exception.init import InitDomainTargetDirectoryNotFoundError
 from chronovoyage.usecase.init import InitUsecase
 
 
@@ -19,6 +20,6 @@ class InitDomain:
 
     @_cwd.setter
     def _cwd(self, cwd: str) -> None:
-        if os.path.isdir(cwd):
-            raise FileNotFoundError(f"{cwd} is not a directory")
+        if not os.path.isdir(cwd):
+            raise InitDomainTargetDirectoryNotFoundError(dirname=cwd)
         self.__cwd = cwd
