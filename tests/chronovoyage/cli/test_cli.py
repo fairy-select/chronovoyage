@@ -11,7 +11,6 @@ from chronovoyage.domain.init import InitDomain
 from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.internal.config import MigrateDomainConfigFactory
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
-from helper import TEST_TEMP_DIR
 
 
 class TestCli:
@@ -23,7 +22,6 @@ class TestCli:
         "command",
         [
             pytest.param("init"),
-            pytest.param("migrate"),
         ],
     )
     def test_with_command_and_no_options(self, command: str) -> None:
@@ -61,9 +59,9 @@ class TestCli:
         runner = CliRunner()
         with runner.isolated_filesystem():
             os.mkdir("sample")
-            runner.invoke(chronovoyage, ["migrate", "sample"])
+            runner.invoke(chronovoyage, ["migrate"])
             # then
-            assert m_create_config.call_args[0] == (os.path.join(os.getcwd(), "sample"),)
+            assert m_create_config.call_args[0] == (os.getcwd(),)
             assert m_instantiate.call_args[0] == (m_config,)
             assert m_execute.call_args[1] == {"target": None}
 
@@ -77,8 +75,8 @@ class TestCli:
         runner = CliRunner()
         with runner.isolated_filesystem():
             os.mkdir("sample")
-            runner.invoke(chronovoyage, ["migrate", "sample", "--target", "20060102150405"])
+            runner.invoke(chronovoyage, ["migrate", "--target", "20060102150405"])
             # then
-            assert m_create_config.call_args[0] == (os.path.join(os.getcwd(), "sample"),)
+            assert m_create_config.call_args[0] == (os.getcwd(),)
             assert m_instantiate.call_args[0] == (m_config,)
             assert m_execute.call_args[1] == {"target": "20060102150405"}
