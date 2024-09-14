@@ -54,7 +54,7 @@ class TestCli:
     def test_migrate_with_no_options(self, mocker: MockerFixture) -> None:
         # given
         m_config = MagicMock()
-        mocker.patch.object(MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, new=lambda *args, **kwargs: m_config)
+        m_create_config = mocker.patch.object(MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, return_value=m_config)
         m_instantiate = mocker.patch.object(MigrateDomain, MigrateDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(MigrateDomain, MigrateDomain.execute.__name__)
         # when
@@ -63,13 +63,14 @@ class TestCli:
             os.mkdir("sample")
             runner.invoke(chronovoyage, ["migrate", "sample"])
             # then
+            assert m_create_config.call_args[0] == (os.path.join(os.getcwd(), "sample"),)
             assert m_instantiate.call_args[0] == (m_config,)
             assert m_execute.call_args[1] == {"target": None}
 
     def test_migrate_with_options(self, mocker: MockerFixture) -> None:
         # given
         m_config = MagicMock()
-        mocker.patch.object(MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, new=lambda *args, **kwargs: m_config)
+        m_create_config = mocker.patch.object(MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, return_value=m_config)
         m_instantiate = mocker.patch.object(MigrateDomain, MigrateDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(MigrateDomain, MigrateDomain.execute.__name__)
         # when
@@ -78,5 +79,6 @@ class TestCli:
             os.mkdir("sample")
             runner.invoke(chronovoyage, ["migrate", "sample", "--target", "20060102150405"])
             # then
+            assert m_create_config.call_args[0] == (os.path.join(os.getcwd(), "sample"),)
             assert m_instantiate.call_args[0] == (m_config,)
             assert m_execute.call_args[1] == {"target": "20060102150405"}
