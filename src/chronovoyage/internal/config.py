@@ -39,14 +39,14 @@ class MigrateDomainConfig:
 
 
 class MigrateDomainConfigFactory:
-    # noinspection PyMethodMayBeStatic
-    def create_from_directory(self, directory: str) -> MigrateDomainConfig:
-        vendor, connection_info = self._parse_config(directory)
-        periods = self._parse_sql(directory)
+    @classmethod
+    def create_from_directory(cls, directory: str) -> MigrateDomainConfig:
+        vendor, connection_info = cls._parse_config(directory)
+        periods = cls._parse_sql(directory)
         return MigrateDomainConfig(vendor=vendor, connection_info=connection_info, periods=periods)
 
-    # noinspection PyMethodMayBeStatic
-    def _parse_config(self, directory: str) -> tuple[DatabaseVendorEnum, ConnectionInfo]:
+    @classmethod
+    def _parse_config(cls, directory: str) -> tuple[DatabaseVendorEnum, ConnectionInfo]:
         with open(f"{directory}/config.json") as f:
             config: MigrateConfigJson = json.loads(f.read())
         vendor = DatabaseVendorEnum(config["vendor"])
@@ -59,8 +59,8 @@ class MigrateDomainConfigFactory:
         )
         return vendor, connection_info
 
-    # noinspection PyMethodMayBeStatic
-    def _parse_sql(self, directory: str) -> list[MigratePeriod]:
+    @classmethod
+    def _parse_sql(cls, directory: str) -> list[MigratePeriod]:
         os.chdir(directory)
 
         periods: list[MigratePeriod] = []
