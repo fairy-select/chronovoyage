@@ -33,27 +33,23 @@ class TestCli:
     @pytest.mark.parametrize('vendor', [pytest.param(getattr(vendor, "value")) for vendor in DatabaseVendorEnum])
     def test_init(self, mocker: MockerFixture, vendor: str) -> None:
         # given
-        os.chdir(TEST_TEMP_DIR)
-        target_dir = "sample"
         m_instantiate = mocker.patch.object(InitDomain, InitDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(InitDomain, InitDomain.execute.__name__)
         # when
-        CliRunner().invoke(chronovoyage, ["init", target_dir, "--vendor", vendor])
+        CliRunner().invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
         # then
-        assert m_instantiate.call_args.args == (TEST_TEMP_DIR,)
-        assert m_execute.call_args.args == (target_dir, DatabaseVendorEnum("mariadb"))
+        assert m_instantiate.call_args.args == (os.getcwd(),)
+        assert m_execute.call_args.args == ("sample", DatabaseVendorEnum("mariadb"))
 
     def test_init__default_vendor_is_mariadb(self, mocker: MockerFixture) -> None:
         # given
-        os.chdir(TEST_TEMP_DIR)
-        target_dir = "sample"
         m_instantiate = mocker.patch.object(InitDomain, InitDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(InitDomain, InitDomain.execute.__name__)
         # when
-        CliRunner().invoke(chronovoyage, ["init", target_dir])
+        CliRunner().invoke(chronovoyage, ["init", "sample"])
         # then
-        assert m_instantiate.call_args.args == (TEST_TEMP_DIR,)
-        assert m_execute.call_args.args == (target_dir, DatabaseVendorEnum("mariadb"))
+        assert m_instantiate.call_args.args == (os.getcwd(),)
+        assert m_execute.call_args.args == ("sample", DatabaseVendorEnum("mariadb"))
 
     def test_migrate_with_no_options(self, mocker: MockerFixture) -> None:
         # given
