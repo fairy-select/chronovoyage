@@ -73,6 +73,9 @@ exclude_lines = [
   "if __name__ == .__main__.:",
   "if TYPE_CHECKING:",
 ]
+omit = [
+  "tests/*",
+]
 
 [tool.hatch.build.targets.sdist]
 ignore-vcs = true

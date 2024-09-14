@@ -6,3 +6,6 @@
 
 # build artifact
 /dist
+
+# pytest coverage database
+.coverage
