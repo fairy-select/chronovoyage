@@ -46,8 +46,7 @@ def init(dirname: str, vendor: str):
 @click.argument("description", type=click.STRING)
 def add(language: str, description: str):
     """Add migration period to your directory."""
-    config = MigrateDomainConfigFactory.create_from_directory(os.getcwd())
-    AddDomain(config, logger=logger).execute(MigratePeriodLanguageEnum(language), description, now=DatetimeLib.now())
+    AddDomain(logger=logger).execute(MigratePeriodLanguageEnum(language), description, now=DatetimeLib.now(), to_directory=os.getcwd())
 
 
 @chronovoyage.command()

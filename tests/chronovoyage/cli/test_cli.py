@@ -92,19 +92,16 @@ class TestCli:
     @pytest.mark.parametrize("language", [pytest.param(getattr(l, "value")) for l in MigratePeriodLanguageEnum])
     def test_add(self, mocker: MockerFixture, language: str) -> None:
         m_now = datetime(1999, 12, 31, 23, 59, 1)
-        mocker.patch.object(DatetimeLib, DatetimeLib.now.__name__, return_value=m_now)
-        m_config = MagicMock()
-        m_create_config = mocker.patch.object(
-            MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, return_value=m_config
+        _ = mocker.patch.object(DatetimeLib, DatetimeLib.now.__name__, return_value=m_now)
+        _ = mocker.patch.object(
+            MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__
         )
-        m_instantiate = mocker.patch.object(AddDomain, AddDomain.__init__.__name__, return_value=None)
+        _ = mocker.patch.object(AddDomain, AddDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(AddDomain, AddDomain.execute.__name__)
         # when
         runner = CliRunner()
         with runner.isolated_filesystem():
             runner.invoke(chronovoyage, ["add", language, "sample_description"])
             # then
-            assert m_create_config.call_args.args == (os.getcwd(),)
-            assert m_instantiate.call_args.args == (m_config,)
             assert m_execute.call_args.args == (MigratePeriodLanguageEnum(language), "sample_description")
-            assert m_execute.call_args.kwargs == {"now": m_now}
+            assert m_execute.call_args.kwargs == {"now": m_now, "to_directory": os.getcwd()}

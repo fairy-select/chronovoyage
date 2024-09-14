@@ -2,8 +2,11 @@ from __future__ import annotations
 
 import json
 import os
+import string
 from typing import TYPE_CHECKING, Any
 
+from chronovoyage.internal.config import MigrateDomainConfigFactory
+from chronovoyage.internal.type.config import MigratePeriodCreateParam
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
@@ -36,5 +39,16 @@ class InitUsecase:
             f.write("\n")
         self._logger.info("created file: config.json")
 
-    def create_migrate_period(self, directory_name: str) -> None:
-        pass
+    def create_migrate_period(self, to_directory: str, params: MigratePeriodCreateParam) -> None:
+        self._validate_directory(to_directory)
+        directory_name = string.Template("${period_name}_${language}_${description}").safe_substitute(period_name=params.period_name, language=params.language.value, description=params.description)
+        os.makedirs(directory_name)
+        for file in ("go.sql", "return.sql"):
+            with open(os.path.join(directory_name, file), "w") as _:
+                # create empty file
+                pass
+
+    # noinspection PyMethodMayBeStatic
+    def _validate_directory(self, directory: str) -> None:
+        # valid means config can be created
+        MigrateDomainConfigFactory.create_from_directory(directory)
