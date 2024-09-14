@@ -1,13 +1,16 @@
+import os
 from datetime import datetime
 from logging import Logger
 
+from chronovoyage.internal.exception.add_domain import AddDomainTargetDirectoryNotFoundError
 from chronovoyage.internal.type.config import MigratePeriodCreateParam
 from chronovoyage.internal.type.enum import MigratePeriodLanguageEnum
 from chronovoyage.usecase.init import InitUsecase
 
 
 class AddDomain:
-    def __init__(self, *, logger: Logger) -> None:
+    def __init__(self, cwd: str, *, logger: Logger) -> None:
+        self._cwd = cwd
         self._logger = logger
         self.usecase = InitUsecase(logger=self._logger)
 
@@ -18,3 +21,13 @@ class AddDomain:
             description=description,
         )
         self.usecase.create_migrate_period(to_directory, params)
+
+    @property
+    def _cwd(self) -> str:
+        return self.__cwd
+
+    @_cwd.setter
+    def _cwd(self, cwd: str) -> None:
+        if not os.path.isdir(cwd):
+            raise AddDomainTargetDirectoryNotFoundError(dirname=cwd)
+        self.__cwd = cwd
