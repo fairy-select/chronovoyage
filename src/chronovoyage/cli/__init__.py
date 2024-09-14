@@ -15,7 +15,7 @@ from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 logger = get_default_logger()
-database_vendors = [e.value for e in DatabaseVendorEnum]
+database_vendors = [getattr(e, "value") for e in DatabaseVendorEnum]
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)
