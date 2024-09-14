@@ -28,7 +28,7 @@ class TestCli:
         result = subprocess.run(["chronovoyage", command], capture_output=True, check=False)
         assert result.stderr.startswith(b"Usage:"), "show help"
 
-    @pytest.mark.parametrize('vendor', [pytest.param(getattr(vendor, "value")) for vendor in DatabaseVendorEnum])
+    @pytest.mark.parametrize("vendor", [pytest.param(vendor.value) for vendor in DatabaseVendorEnum])
     def test_init(self, mocker: MockerFixture, vendor: str) -> None:
         # given
         m_instantiate = mocker.patch.object(InitDomain, InitDomain.__init__.__name__, return_value=None)
@@ -52,7 +52,9 @@ class TestCli:
     def test_migrate_with_no_options(self, mocker: MockerFixture) -> None:
         # given
         m_config = MagicMock()
-        m_create_config = mocker.patch.object(MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, return_value=m_config)
+        m_create_config = mocker.patch.object(
+            MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, return_value=m_config
+        )
         m_instantiate = mocker.patch.object(MigrateDomain, MigrateDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(MigrateDomain, MigrateDomain.execute.__name__)
         # when
@@ -68,7 +70,9 @@ class TestCli:
     def test_migrate_with_options(self, mocker: MockerFixture) -> None:
         # given
         m_config = MagicMock()
-        m_create_config = mocker.patch.object(MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, return_value=m_config)
+        m_create_config = mocker.patch.object(
+            MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__, return_value=m_config
+        )
         m_instantiate = mocker.patch.object(MigrateDomain, MigrateDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(MigrateDomain, MigrateDomain.execute.__name__)
         # when
