@@ -7,6 +7,7 @@ from helper import TEST_TEMP_DIR
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.domain.add import AddDomain
+from chronovoyage.internal.exception import DirectoryAlreadyExistsError
 from chronovoyage.internal.exception.add_domain import AddDomainError, AddDomainInvalidDescriptionError
 from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import MigratePeriodLanguageEnum
@@ -61,5 +62,25 @@ class TestAddDomain:
                 AddDomain(os.getcwd(), logger=self.logger).execute(
                     language,
                     description,
+                    now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
+                )
+
+    @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
+    def test_execute__cannot_create_same_directory(self, language: MigratePeriodLanguageEnum) -> None:
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            # given
+            runner.invoke(chronovoyage, ["init", "sample", "--vendor", "mariadb"])
+            os.chdir("sample")
+            # when
+            AddDomain(os.getcwd(), logger=self.logger).execute(
+                language,
+                "sample_description",
+                now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
+            )
+            with pytest.raises(DirectoryAlreadyExistsError):
+                AddDomain(os.getcwd(), logger=self.logger).execute(
+                    language,
+                    "sample_description",
                     now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
                 )
