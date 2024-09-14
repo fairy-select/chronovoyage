@@ -3,3 +3,6 @@
 
 # asdf tool version info
 .tool-versions
+
+# build artifact
+/dist
