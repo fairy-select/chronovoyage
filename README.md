@@ -55,9 +55,9 @@ sudo apt install libmariadb-dev
         - [ ] create migration files from template
     - migrate
         - [x] to latest
-        - [ ] to specific version
+        - [x] to specific version
         - [x] from the beginning
-        - [ ] from the middle
+        - [x] from the middle
         - --dry-run
             - [ ] show executing SQL
         - [ ] detect ddl or dml
