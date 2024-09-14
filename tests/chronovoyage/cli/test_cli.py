@@ -30,16 +30,16 @@ class TestCli:
         result = subprocess.run(["chronovoyage", command], capture_output=True, check=False)
         assert result.stderr.startswith(b"Usage:"), "show help"
 
-    @pytest.mark.parametrize("vendor", [pytest.param(vendor.value) for vendor in DatabaseVendorEnum])
-    def test_init(self, mocker: MockerFixture, vendor: str) -> None:
+    @pytest.mark.parametrize("vendor", [pytest.param(vendor) for vendor in DatabaseVendorEnum])
+    def test_init(self, mocker: MockerFixture, vendor: DatabaseVendorEnum) -> None:
         # given
         m_instantiate = mocker.patch.object(InitDomain, InitDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(InitDomain, InitDomain.execute.__name__)
         # when
-        CliRunner().invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
+        CliRunner().invoke(chronovoyage, ["init", "sample", "--vendor", vendor.value])
         # then
         assert m_instantiate.call_args.args == (os.getcwd(),)
-        assert m_execute.call_args.args == ("sample", DatabaseVendorEnum("mariadb"))
+        assert m_execute.call_args.args == ("sample", vendor)
 
     def test_init__default_vendor_is_mariadb(self, mocker: MockerFixture) -> None:
         # given
@@ -87,8 +87,8 @@ class TestCli:
             assert m_instantiate.call_args[0] == (m_config,)
             assert m_execute.call_args[1] == {"target": "20060102150405"}
 
-    @pytest.mark.parametrize("language", [pytest.param(lang.value) for lang in MigratePeriodLanguageEnum])
-    def test_add(self, mocker: MockerFixture, language: str) -> None:
+    @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
+    def test_add(self, mocker: MockerFixture, language: MigratePeriodLanguageEnum) -> None:
         m_now = DatetimeLib.datetime(1999, 12, 31, 23, 59, 1)
         _ = mocker.patch.object(DatetimeLib, DatetimeLib.now.__name__, return_value=m_now)
         _ = mocker.patch.object(MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__)
@@ -97,7 +97,7 @@ class TestCli:
         # when
         runner = CliRunner()
         with runner.isolated_filesystem():
-            runner.invoke(chronovoyage, ["add", language, "sample_description"])
+            runner.invoke(chronovoyage, ["add", language.value, "sample_description"])
             # then
-            assert m_execute.call_args.args == (MigratePeriodLanguageEnum(language), "sample_description")
+            assert m_execute.call_args.args == (language, "sample_description")
             assert m_execute.call_args.kwargs == {"now": m_now}
