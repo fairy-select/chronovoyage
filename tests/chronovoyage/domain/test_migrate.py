@@ -115,3 +115,13 @@ class TestMigrateDomainMariadb:
         self.assert_rows_and_sql(
             [(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id"
         )
+
+    def test_migrate_to_unknown_target(self, mariadb_migrate_domain_config) -> None:
+        # given
+        migrate_domain = MigrateDomain(mariadb_migrate_domain_config, logger=self.logger)
+        # when
+        with pytest.raises(ValueError):
+            migrate_domain.execute(target="20060102150405")
+        # then
+        assert migrate_domain.usecase.current() is None
+        assert self._get_tables() == set()

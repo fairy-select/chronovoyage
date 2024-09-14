@@ -17,4 +17,8 @@ class MigrateDomain:
         self.usecase = MigrateUsecase(config=self._config, logger=self._logger)
 
     def execute(self, *, target: str | None = None) -> None:
+        if target is not None and target not in map(lambda _period: _period.period_name, self._config.periods):
+            self._logger.error("period '%s' is not a valid period name.", target)
+            raise ValueError("unknown target")
+
         self.usecase.migrate(target=target)
