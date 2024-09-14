@@ -25,8 +25,12 @@ class MigrateUsecase:
         with DatabaseConnector(logger=self._logger).get_connection(
             self._config.vendor, self._config.connection_info
         ) as _conn:
+            current = _conn.get_current_period()
             for period in self._config.periods:
-                if target is not None and period.period_name > target:
+                if current is not None and period.period_name <= current:
+                    self._logger.debug("period '%s' has already come.", period.period_name)
+                    continue
+                if target is not None and target < period.period_name:
                     self._logger.debug("period '%s' is in the future and will be skipped.", period.period_name)
                     continue
 

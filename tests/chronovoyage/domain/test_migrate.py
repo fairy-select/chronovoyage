@@ -88,10 +88,9 @@ class TestMigrateDomainMariadb:
         # noinspection SqlResolve
         self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
 
-    @pytest.mark.skip(reason="TODO")
     def test_migrate_from_halfway_to_latest(self, mariadb_migrate_domain_config) -> None:
-        migrate_domain = MigrateDomain(mariadb_migrate_domain_config, logger=self.logger)
         # given
+        migrate_domain = MigrateDomain(mariadb_migrate_domain_config, logger=self.logger)
         migrate_domain.execute(target="19991231235902")
         # when
         migrate_domain.execute()
@@ -99,4 +98,6 @@ class TestMigrateDomainMariadb:
         assert migrate_domain.usecase.current() == "19991231235903"
         assert self._get_tables() == {"user"}
         # noinspection SqlResolve
-        self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
+        self.assert_rows_and_sql(
+            [(1, "Jane"), (2, "John"), (3, "Allen"), (4, "Alicia")], "SELECT * FROM user ORDER BY id"
+        )
