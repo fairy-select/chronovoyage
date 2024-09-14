@@ -36,8 +36,8 @@ class MigrateUsecase:
                     self._logger.debug("period '%s' has already come.", period.period_name)
                     continue
                 if target is not None and target < period.period_name:
-                    self._logger.debug("period '%s' is in the future and will be skipped.", period.period_name)
-                    continue
+                    self._logger.debug("period '%s' is in the future and migrate will stop.", period.period_name)
+                    break
 
                 self._logger.debug("adding the period '%s'.", period.period_name)
                 try:
