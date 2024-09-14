@@ -101,3 +101,17 @@ class TestMigrateDomainMariadb:
         self.assert_rows_and_sql(
             [(1, "Jane"), (2, "John"), (3, "Allen"), (4, "Alicia")], "SELECT * FROM user ORDER BY id"
         )
+
+    def test_migrate_from_halfway_to_target(self, mariadb_migrate_domain_config) -> None:
+        # given
+        migrate_domain = MigrateDomain(mariadb_migrate_domain_config, logger=self.logger)
+        migrate_domain.execute(target="19991231235901")
+        # when
+        migrate_domain.execute(target="19991231235902")
+        # then
+        assert migrate_domain.usecase.current() == "19991231235902"
+        assert self._get_tables() == {"user"}
+        # noinspection SqlResolve
+        self.assert_rows_and_sql(
+            [(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id"
+        )
