@@ -8,14 +8,17 @@ import os.path
 import click
 
 from chronovoyage.__about__ import __version__
+from chronovoyage.domain.add import AddDomain
 from chronovoyage.domain.init import InitDomain
 from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.internal.config import MigrateDomainConfigFactory
 from chronovoyage.internal.logger import get_default_logger
-from chronovoyage.internal.type.enum import DatabaseVendorEnum
+from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLanguageEnum
+from chronovoyage.lib.datetime_time import DatetimeLib
 
 logger = get_default_logger()
 database_vendors = [getattr(e, "value") for e in DatabaseVendorEnum]
+migrate_period_languages = [getattr(e, "value") for e in MigratePeriodLanguageEnum]
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)
@@ -36,6 +39,15 @@ def chronovoyage():
 def init(dirname: str, vendor: str):
     """Create chronovoyage config directory and initialize."""
     InitDomain(os.getcwd(), logger=logger).execute(dirname, DatabaseVendorEnum(vendor))
+
+
+@chronovoyage.command()
+@click.argument("language", type=click.Choice(migrate_period_languages, case_sensitive=False))
+@click.argument("description", type=click.STRING)
+def add(language: str, description: str):
+    """Add migration period to your directory."""
+    config = MigrateDomainConfigFactory.create_from_directory(os.getcwd())
+    AddDomain(config, logger=logger).execute(MigratePeriodLanguageEnum(language), description, now=DatetimeLib.now())
 
 
 @chronovoyage.command()

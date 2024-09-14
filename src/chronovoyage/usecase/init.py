@@ -35,3 +35,6 @@ class InitUsecase:
             f.write(json.dumps(config_templates[vendor], indent=2))
             f.write("\n")
         self._logger.info("created file: config.json")
+
+    def create_migrate_period(self, directory_name: str) -> None:
+        pass
