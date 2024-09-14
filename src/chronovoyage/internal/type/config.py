@@ -16,6 +16,7 @@ class MigrateConfigJson(TypedDict):
     vendor: str
     connection_info: _MigrateConfigJsonConnectionInfo
 
+
 @dataclass(frozen=True)
 class MigratePeriodCreateParam:
     period_name: str

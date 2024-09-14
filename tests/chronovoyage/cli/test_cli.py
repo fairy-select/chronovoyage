@@ -1,6 +1,5 @@
 import os
 import subprocess
-from datetime import datetime
 from unittest.mock import MagicMock
 
 import pytest
@@ -88,13 +87,11 @@ class TestCli:
             assert m_instantiate.call_args[0] == (m_config,)
             assert m_execute.call_args[1] == {"target": "20060102150405"}
 
-    @pytest.mark.parametrize("language", [pytest.param(getattr(l, "value")) for l in MigratePeriodLanguageEnum])
+    @pytest.mark.parametrize("language", [pytest.param(lang.value) for lang in MigratePeriodLanguageEnum])
     def test_add(self, mocker: MockerFixture, language: str) -> None:
-        m_now = datetime(1999, 12, 31, 23, 59, 1)
+        m_now = DatetimeLib.datetime(1999, 12, 31, 23, 59, 1)
         _ = mocker.patch.object(DatetimeLib, DatetimeLib.now.__name__, return_value=m_now)
-        _ = mocker.patch.object(
-            MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__
-        )
+        _ = mocker.patch.object(MigrateDomainConfigFactory, MigrateDomainConfigFactory.create_from_directory.__name__)
         _ = mocker.patch.object(AddDomain, AddDomain.__init__.__name__, return_value=None)
         m_execute = mocker.patch.object(AddDomain, AddDomain.execute.__name__)
         # when

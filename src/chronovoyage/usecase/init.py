@@ -6,11 +6,12 @@ import string
 from typing import TYPE_CHECKING, Any
 
 from chronovoyage.internal.config import MigrateDomainConfigFactory
-from chronovoyage.internal.type.config import MigratePeriodCreateParam
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
     from logging import Logger
+
+    from chronovoyage.internal.type.config import MigratePeriodCreateParam
 
 config_templates: dict[DatabaseVendorEnum, dict[str, Any]] = {
     DatabaseVendorEnum.MARIADB: {
@@ -41,7 +42,9 @@ class InitUsecase:
 
     def create_migrate_period(self, to_directory: str, params: MigratePeriodCreateParam) -> None:
         self._validate_directory(to_directory)
-        directory_name = string.Template("${period_name}_${language}_${description}").safe_substitute(period_name=params.period_name, language=params.language.value, description=params.description)
+        directory_name = string.Template("${period_name}_${language}_${description}").safe_substitute(
+            period_name=params.period_name, language=params.language.value, description=params.description
+        )
         os.makedirs(directory_name)
         for file in ("go.sql", "return.sql"):
             with open(os.path.join(directory_name, file), "w") as _:

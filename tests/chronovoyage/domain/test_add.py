@@ -1,6 +1,5 @@
 import os
 import shutil
-from datetime import datetime
 
 import pytest
 from click.testing import CliRunner
@@ -11,6 +10,7 @@ from chronovoyage.domain.add import AddDomain
 from chronovoyage.internal.exception.add_domain import AddDomainError
 from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import MigratePeriodLanguageEnum
+from chronovoyage.lib.datetime_time import DatetimeLib
 
 
 class TestAddDomain:
@@ -26,7 +26,7 @@ class TestAddDomain:
         with pytest.raises(AddDomainError):
             AddDomain(target_dir, logger=self.logger)
 
-    @pytest.mark.parametrize("language", [pytest.param(l.value) for l in MigratePeriodLanguageEnum])
+    @pytest.mark.parametrize("language", [pytest.param(lang.value) for lang in MigratePeriodLanguageEnum])
     def test_execute(self, language: str) -> None:
         runner = CliRunner()
         with runner.isolated_filesystem():
@@ -34,6 +34,10 @@ class TestAddDomain:
             runner.invoke(chronovoyage, ["init", "sample", "--vendor", "mariadb"])
             os.chdir("sample")
             # when
-            AddDomain(os.getcwd(), logger=self.logger).execute(MigratePeriodLanguageEnum(language), "sample_description", now=datetime(1999,12,31,23,59,1))
+            AddDomain(os.getcwd(), logger=self.logger).execute(
+                MigratePeriodLanguageEnum(language),
+                "sample_description",
+                now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
+            )
             # then
             assert os.listdir(f"19991231235901_{language}_sample_description") == ["go.sql", "return.sql"]
