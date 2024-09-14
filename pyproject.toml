@@ -27,7 +27,6 @@ classifiers = [
 dependencies = [
   "click",
   "mariadb",
-  "python-dotenv",
 ]
 
 [project.urls]
@@ -53,6 +52,7 @@ dependencies = [
   "pytest",
   "pytest-cov",
   "pytest-mock",
+  "python-dotenv",
 ]
 
 [tool.coverage.run]
