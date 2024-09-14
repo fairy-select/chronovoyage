@@ -12,8 +12,10 @@ from chronovoyage.domain.init import InitDomain
 from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.internal.config import MigrateDomainConfigFactory
 from chronovoyage.internal.logger import get_default_logger
+from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 logger = get_default_logger()
+database_vendors = [e.value for e in DatabaseVendorEnum]
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)
@@ -24,9 +26,16 @@ def chronovoyage():
 
 @chronovoyage.command()
 @click.argument("dirname", type=click.STRING)
-def init(dirname: str):
+@click.option(
+    "--vendor",
+    "-v",
+    type=click.Choice(database_vendors, case_sensitive=False),
+    default=DatabaseVendorEnum.MARIADB,
+    help="Database vendor.",
+)
+def init(dirname: str, vendor: str):
     """Create chronovoyage config directory and initialize."""
-    InitDomain(os.getcwd(), logger=logger).execute(dirname)
+    InitDomain(os.getcwd(), logger=logger).execute(dirname, DatabaseVendorEnum(vendor))
 
 
 @chronovoyage.command()

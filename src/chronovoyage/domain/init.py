@@ -2,6 +2,7 @@ import os.path
 from logging import Logger
 
 from chronovoyage.internal.exception.init import InitDomainTargetDirectoryNotFoundError
+from chronovoyage.internal.type.enum import DatabaseVendorEnum
 from chronovoyage.usecase.init import InitUsecase
 
 
@@ -11,8 +12,8 @@ class InitDomain:
         self._logger = logger
         self.usecase = InitUsecase(logger=self._logger)
 
-    def execute(self, dirname: str) -> None:
-        self.usecase.create_files(to_directory=os.path.join(self._cwd, dirname))
+    def execute(self, dirname: str, vendor: DatabaseVendorEnum) -> None:
+        self.usecase.create_files(vendor=vendor, to_directory=os.path.join(self._cwd, dirname))
 
     @property
     def _cwd(self) -> str:

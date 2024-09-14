@@ -7,6 +7,7 @@ from helper import TEST_TEMP_DIR
 from chronovoyage.domain.init import InitDomain
 from chronovoyage.internal.exception.init import InitDomainError
 from chronovoyage.internal.logger import get_default_logger
+from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 
 class TestInitDomain:
@@ -25,12 +26,14 @@ class TestInitDomain:
     def test_execute(self) -> None:
         # when
         dirname = "sample"
-        InitDomain(TEST_TEMP_DIR, logger=self.logger).execute(dirname)
+        InitDomain(TEST_TEMP_DIR, logger=self.logger).execute(dirname, DatabaseVendorEnum("mariadb"))
         # then
         assert os.listdir(os.path.join(TEST_TEMP_DIR, dirname)) == ["config.json"]
-        with open(os.path.join(TEST_TEMP_DIR, dirname, "config.json"), "r") as f:
+        with open(os.path.join(TEST_TEMP_DIR, dirname, "config.json")) as f:
             config = f.read()
-        assert config == """
+        assert (
+            config
+            == """
 {
   "$schema": "https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/schema/config.schema.json",
   "vendor": "mariadb",
@@ -42,4 +45,6 @@ class TestInitDomain:
     "database": "test"
   }
 }
-""".strip() + "\n"
+""".strip()
+            + "\n"
+        )
