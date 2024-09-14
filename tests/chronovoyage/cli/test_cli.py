@@ -2,9 +2,8 @@ import subprocess
 
 
 class TestCli:
-    def test_with_no_option(self) -> None:
-        result = subprocess.run(["chronovoyage"], capture_output=True, check=False)
-        result.check_returncode()
+    def test_with_no_command_and_no_option(self) -> None:
+        result = subprocess.run(["chronovoyage"], capture_output=True, check=True)
         assert result.stdout.startswith(b"Usage:"), "show help"
 
     def test_migrate_with_no_options(self) -> None:
