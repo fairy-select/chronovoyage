@@ -49,10 +49,10 @@ sudo apt install libmariadb-dev
     - [x] SQL (.sql)
     - [ ] Shell script (.sh)
 - Commands
-    - new
-        - [ ] create migration directory and config file
-    - generate
-        - [ ] create migration files from template
+    - ~~new~~ init
+        - [x] create migration directory and config file
+    - ~~generate~~ add
+        - [x] create migration files from template
     - migrate
         - [x] to latest
         - [x] to specific version
