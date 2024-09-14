@@ -115,6 +115,15 @@ class TestMigrateDomainMariadb:
         # noinspection SqlResolve
         self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
 
+    def test_migrate_to_now(self, mariadb_migrate_domain_config) -> None:
+        # given
+        migrate_domain = MigrateDomain(mariadb_migrate_domain_config, logger=self.logger)
+        migrate_domain.execute(target="19991231235902")
+        # when
+        migrate_domain.execute(target="19991231235902")
+        # then
+        assert migrate_domain.usecase.current() == "19991231235902"
+
     def test_migrate_to_past(self, mariadb_migrate_domain_config) -> None:
         # given
         migrate_domain = MigrateDomain(mariadb_migrate_domain_config, logger=self.logger)
