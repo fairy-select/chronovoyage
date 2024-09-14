@@ -132,7 +132,7 @@ class TestMigrateDomainMariadb:
         # given
         migrate_domain = MigrateDomain(mariadb_migrate_domain_config, logger=self.logger)
         # when
-        with pytest.raises(ValueError):
+        with pytest.raises(MigrateInvalidTargetError):
             migrate_domain.execute(target="20060102150405")
         # then
         assert migrate_domain.usecase.current() is None

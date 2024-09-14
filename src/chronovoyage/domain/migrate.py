@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+from chronovoyage.internal.exception.migrate import MigrateInvalidTargetError
 from chronovoyage.usecase.migrate import MigrateUsecase
 
 if TYPE_CHECKING:
@@ -19,6 +20,6 @@ class MigrateDomain:
     def execute(self, *, target: str | None = None) -> None:
         if target is not None and target not in map(lambda _period: _period.period_name, self._config.periods):
             self._logger.error("period '%s' is not a valid period name.", target)
-            raise ValueError("unknown target")
+            raise MigrateInvalidTargetError("unknown target")
 
         self.usecase.migrate(target=target)
