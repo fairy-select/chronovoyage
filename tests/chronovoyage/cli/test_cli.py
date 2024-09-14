@@ -7,7 +7,6 @@ import pytest
 from click.testing import CliRunner
 from pytest_mock import MockerFixture
 
-from chronovoyage import cli
 from chronovoyage.cli import chronovoyage
 from chronovoyage.domain.add import AddDomain
 from chronovoyage.domain.init import InitDomain
@@ -104,4 +103,4 @@ class TestCli:
             runner.invoke(chronovoyage, ["add", language, "sample_description"])
             # then
             assert m_execute.call_args.args == (MigratePeriodLanguageEnum(language), "sample_description")
-            assert m_execute.call_args.kwargs == {"now": m_now, "to_directory": os.getcwd()}
+            assert m_execute.call_args.kwargs == {"now": m_now}

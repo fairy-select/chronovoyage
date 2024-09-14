@@ -17,8 +17,8 @@ from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLan
 from chronovoyage.lib.datetime_time import DatetimeLib
 
 logger = get_default_logger()
-database_vendors = [getattr(e, "value") for e in DatabaseVendorEnum]
-migrate_period_languages = [getattr(e, "value") for e in MigratePeriodLanguageEnum]
+database_vendors = [e.value for e in DatabaseVendorEnum]
+migrate_period_languages = [e.value for e in MigratePeriodLanguageEnum]
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)
@@ -46,7 +46,7 @@ def init(dirname: str, vendor: str):
 @click.argument("description", type=click.STRING)
 def add(language: str, description: str):
     """Add migration period to your directory."""
-    AddDomain(logger=logger).execute(MigratePeriodLanguageEnum(language), description, now=DatetimeLib.now(), to_directory=os.getcwd())
+    AddDomain(os.getcwd(), logger=logger).execute(MigratePeriodLanguageEnum(language), description, now=DatetimeLib.now())
 
 
 @chronovoyage.command()

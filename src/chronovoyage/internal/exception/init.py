@@ -7,4 +7,3 @@ class InitDomainError(Exception):
 
 class InitDomainTargetDirectoryNotFoundError(TargetDirectoryNotFoundError, InitDomainError):
     """初期化したいディレクトリの作成場所が存在しない場合に送出するエラー"""
-    pass

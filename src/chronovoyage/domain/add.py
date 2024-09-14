@@ -14,13 +14,13 @@ class AddDomain:
         self._logger = logger
         self.usecase = InitUsecase(logger=self._logger)
 
-    def execute(self, language: MigratePeriodLanguageEnum, description: str, *, now: datetime, to_directory: str) -> None:
+    def execute(self, language: MigratePeriodLanguageEnum, description: str, *, now: datetime) -> None:
         params = MigratePeriodCreateParam(
             period_name=now.strftime("%Y%m%d%H%M%S"),
             language=language,
             description=description,
         )
-        self.usecase.create_migrate_period(to_directory, params)
+        self.usecase.create_migrate_period(self._cwd, params)
 
     @property
     def _cwd(self) -> str:
