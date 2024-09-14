@@ -1,8 +1,12 @@
 import os
+import re
 from datetime import datetime
 from logging import Logger
 
-from chronovoyage.internal.exception.add_domain import AddDomainTargetDirectoryNotFoundError
+from chronovoyage.internal.exception.add_domain import (
+    AddDomainInvalidDescriptionError,
+    AddDomainTargetDirectoryNotFoundError,
+)
 from chronovoyage.internal.type.config import MigratePeriodCreateParam
 from chronovoyage.internal.type.enum import MigratePeriodLanguageEnum
 from chronovoyage.usecase.init import InitUsecase
@@ -15,6 +19,9 @@ class AddDomain:
         self.usecase = InitUsecase(logger=self._logger)
 
     def execute(self, language: MigratePeriodLanguageEnum, description: str, *, now: datetime) -> None:
+        if not re.match(r"^[a-z0-9_]+$", description):
+            raise AddDomainInvalidDescriptionError
+
         params = MigratePeriodCreateParam(
             period_name=now.strftime("%Y%m%d%H%M%S"),
             language=language,
