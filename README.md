@@ -81,7 +81,7 @@ chronovoyage migrate
 
 - Support for Python
     - [x] 3.8
-    - [ ] 3.9 or later
+    - [x] 3.9 or later
 - Database support
     - [ ] MySQL
     - [x] MariaDB
