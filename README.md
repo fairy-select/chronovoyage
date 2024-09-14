@@ -32,6 +32,47 @@ Install via apt:
 sudo apt install libmariadb-dev
 ```
 
+## Usage
+
+First, you should name and initialize a directory.
+
+```shell
+chronovoyage init my-project
+cd my-project
+```
+
+Edit `config.json`.
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/schema/config.schema.json",
+  "vendor": "mariadb",
+  "connection_info": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "mariadb",
+    "password": "password",
+    "database": "test"
+  }
+}
+```
+
+Create migration template directory.
+
+```shell
+chronovoyage add ddl initial_migration
+# if you create DML,
+chronovoyage add dml second_migration
+```
+
+Write up sql to `go.sql`, and rollback sql to `return.sql`.
+
+Then, migrate.
+
+```shell
+chronovoyage migrate
+```
+
 ## License
 
 `chronovoyage` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
