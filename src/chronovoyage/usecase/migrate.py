@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from chronovoyage.internal.database.connection import DatabaseConnector
+from chronovoyage.internal.exception.migrate import MigrateInvalidTargetError
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -26,6 +27,10 @@ class MigrateUsecase:
             self._config.vendor, self._config.connection_info
         ) as _conn:
             current = _conn.get_current_period()
+            if target is not None and current is not None and target < current:
+                self._logger.error("migrate operation cannot go back to the period '%s'", target)
+                raise MigrateInvalidTargetError("migrate operation cannot go back")
+
             for period in self._config.periods:
                 if current is not None and period.period_name <= current:
                     self._logger.debug("period '%s' has already come.", period.period_name)
