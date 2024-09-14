@@ -3,8 +3,6 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-
-from chronovoyage.internal.exception.migrate import MigrateInvalidTargetError
 from helper.database.mariadb import get_default_mariadb_connection, mariadb_get_tables
 
 from chronovoyage.domain.migrate import MigrateDomain
@@ -15,6 +13,7 @@ from chronovoyage.internal.exception.config import (
     MigrateConfigSqlMissingError,
     MigrateConfigVersionNameInvalidError,
 )
+from chronovoyage.internal.exception.migrate import MigrateInvalidTargetError
 from chronovoyage.internal.logger import get_default_logger
 
 
@@ -114,9 +113,7 @@ class TestMigrateDomainMariadb:
         assert migrate_domain.usecase.current() == "19991231235902"
         assert self._get_tables() == {"user"}
         # noinspection SqlResolve
-        self.assert_rows_and_sql(
-            [(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id"
-        )
+        self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
 
     def test_migrate_to_past(self, mariadb_migrate_domain_config) -> None:
         # given
