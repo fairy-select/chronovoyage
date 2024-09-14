@@ -26,8 +26,10 @@ classifiers = [
 ]
 dependencies = [
   "click",
-  "mariadb",
   "python-dotenv",
+]
+features = [
+  "mariadb",
 ]
 
 [project.urls]
@@ -85,5 +87,6 @@ exclude = [
 
 [tool.hatch.build.targets.wheel]
 packages = [
+  "assets",
   "src/chronovoyage",
 ]

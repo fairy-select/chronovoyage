@@ -3,7 +3,7 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/chronovoyage.svg)](https://pypi.org/project/chronovoyage)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chronovoyage.svg)](https://pypi.org/project/chronovoyage)
 
-![logo](assets/images/logo.jpeg)
+![logo](https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/assets/images/logo.jpeg)
 
 -----
 
@@ -13,8 +13,8 @@ I'm trying to write my own database migration framework and discuss database man
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [License](#license)
+- [Installation](#Installation)
+- [License](#License)
 
 ## Installation
 
@@ -61,7 +61,11 @@ Create migration template directory.
 
 ```shell
 chronovoyage add ddl initial_migration
-# if you create DML,
+```
+
+If you create DML,
+
+```shell
 chronovoyage add dml second_migration
 ```
 
