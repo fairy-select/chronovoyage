@@ -15,6 +15,6 @@ class TestCli:
             pytest.param("migrate"),
         ],
     )
-    def test_migrate_with_no_options(self, command: str) -> None:
+    def test_with_command_and_no_options(self, command: str) -> None:
         result = subprocess.run(["chronovoyage", command], capture_output=True, check=False)
         assert result.stderr.startswith(b"Usage:"), "show help"
