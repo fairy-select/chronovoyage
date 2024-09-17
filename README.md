@@ -18,18 +18,10 @@ I'm trying to write my own database migration framework and discuss database man
 
 ## Installation
 
-```console
-pip install chronovoyage
-```
-
-## Required dependencies
-
-To use MariaDB, you need the MariaDB development package.
-
-Install via apt:
+To use MariaDB version, you need the MariaDB development package (`libmariadb-dev` in apt).
 
 ```shell
-sudo apt install libmariadb-dev
+pip install chronovoyage[mariadb]
 ```
 
 ## Usage
@@ -37,7 +29,7 @@ sudo apt install libmariadb-dev
 First, you should name and initialize a directory.
 
 ```shell
-chronovoyage init my-project
+chronovoyage init my-project --vendor mariadb
 cd my-project
 ```
 

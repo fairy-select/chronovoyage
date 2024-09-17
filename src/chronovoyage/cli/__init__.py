@@ -54,4 +54,5 @@ def add(language: str, description: str):
 @chronovoyage.command()
 @click.option("--target", "-t", help="Move to a specific period. (Example: 20060102150405)")
 def migrate(target: str | None):
+    """Migrate database. Use \"rollback\" if you move to a previous version."""
     MigrateDomain(MigrateDomainConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute(target=target)
