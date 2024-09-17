@@ -31,6 +31,10 @@ dependencies = [
 features = [
   "mariadb",
 ]
+[project.optional-dependencies]
+mariadb = [
+  "mariadb",
+]
 
 [project.urls]
 Documentation = "https://gitlab.com/technical-study/chronovoyage/-/blob/main/README.md"
