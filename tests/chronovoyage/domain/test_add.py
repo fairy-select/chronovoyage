@@ -4,7 +4,6 @@ import shutil
 import pytest
 from click.testing import CliRunner
 from helper import TEST_TEMP_DIR
-from typing_extensions import LiteralString
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.domain.add import AddDomain
@@ -30,20 +29,20 @@ class TestAddDomain:
 
     @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
     @pytest.mark.parametrize("vendor", [pytest.param(vendor) for vendor in DatabaseVendorEnum])
-    def test_execute(self, vendor: LiteralString, language: LiteralString) -> None:
+    def test_execute(self, vendor: DatabaseVendorEnum, language: MigratePeriodLanguageEnum) -> None:
         runner = CliRunner()
         with runner.isolated_filesystem():
             # given
-            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
+            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor.value])
             os.chdir("sample")
             # when
             AddDomain(os.getcwd(), logger=self.logger).execute(
-                MigratePeriodLanguageEnum(language),
+                language,
                 "sample_description",
                 now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
             )
             # then
-            assert os.listdir(f"19991231235901_{language}_sample_description") == ["go.sql", "return.sql"]
+            assert os.listdir(f"19991231235901_{language.value}_sample_description") == ["go.sql", "return.sql"]
 
     @pytest.mark.parametrize(
         "description",
@@ -55,38 +54,40 @@ class TestAddDomain:
     @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
     @pytest.mark.parametrize("vendor", [pytest.param(vendor) for vendor in DatabaseVendorEnum])
     def test_execute__invalid_description_pattern(
-        self, vendor: LiteralString, language: LiteralString, description: str
+        self, vendor: DatabaseVendorEnum, language: MigratePeriodLanguageEnum, description: str
     ) -> None:
         runner = CliRunner()
         with runner.isolated_filesystem():
             # given
-            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
+            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor.value])
             os.chdir("sample")
             # when/then
             with pytest.raises(AddDomainInvalidDescriptionError):
                 AddDomain(os.getcwd(), logger=self.logger).execute(
-                    MigratePeriodLanguageEnum(language),
+                    language,
                     description,
                     now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
                 )
 
     @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
     @pytest.mark.parametrize("vendor", [pytest.param(vendor) for vendor in DatabaseVendorEnum])
-    def test_execute__cannot_create_same_directory(self, vendor: LiteralString, language: LiteralString) -> None:
+    def test_execute__cannot_create_same_directory(
+        self, vendor: DatabaseVendorEnum, language: MigratePeriodLanguageEnum
+    ) -> None:
         runner = CliRunner()
         with runner.isolated_filesystem():
             # given
-            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
+            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor.value])
             os.chdir("sample")
             AddDomain(os.getcwd(), logger=self.logger).execute(
-                MigratePeriodLanguageEnum(language),
+                language,
                 "sample_description",
                 now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
             )
             # when/then
             with pytest.raises(DirectoryAlreadyExistsError):
                 AddDomain(os.getcwd(), logger=self.logger).execute(
-                    MigratePeriodLanguageEnum(language),
+                    language,
                     "sample_description",
                     now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
                 )

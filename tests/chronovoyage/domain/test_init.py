@@ -1,15 +1,14 @@
 import os.path
 import shutil
 from typing import Mapping
-from typing_extensions import LiteralString
 
 import pytest
+from helper import TEST_TEMP_DIR
 
 from chronovoyage.domain.init import InitDomain
 from chronovoyage.internal.exception.init import InitDomainError
 from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
-from helper import TEST_TEMP_DIR
 
 
 def _want_config(vendor: DatabaseVendorEnum) -> str:
@@ -47,13 +46,13 @@ class TestInitDomain:
 
     @pytest.mark.parametrize(
         ("vendor", "want_config"),
-        [pytest.param(vendor, _want_config(DatabaseVendorEnum(vendor)), id=vendor) for vendor in DatabaseVendorEnum],
+        [pytest.param(vendor, _want_config(vendor), id=vendor.value) for vendor in DatabaseVendorEnum],
     )
-    def test_execute(self, vendor: LiteralString, want_config: str) -> None:
+    def test_execute(self, vendor: DatabaseVendorEnum, want_config: str) -> None:
         # given
         dirname = "sample"
         # when
-        InitDomain(TEST_TEMP_DIR, logger=self.logger).execute(dirname, DatabaseVendorEnum(vendor))
+        InitDomain(TEST_TEMP_DIR, logger=self.logger).execute(dirname, vendor)
         # then
         assert os.listdir(os.path.join(TEST_TEMP_DIR, dirname)) == ["config.json"]
         with open(os.path.join(TEST_TEMP_DIR, dirname, "config.json")) as f:

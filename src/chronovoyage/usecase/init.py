@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 import os
 import string
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Mapping
 
 from chronovoyage.internal.config import MigrateDomainConfigFactory
 from chronovoyage.internal.exception import DirectoryAlreadyExistsError
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
 
     from chronovoyage.internal.type.config import MigratePeriodCreateParam
 
-config_templates: dict[DatabaseVendorEnum, dict[str, Any]] = {
+config_templates: Mapping[DatabaseVendorEnum, Mapping[str, Any]] = {
     DatabaseVendorEnum.MARIADB: {
         "$schema": "https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/schema/config.schema.json",
         "vendor": "mariadb",

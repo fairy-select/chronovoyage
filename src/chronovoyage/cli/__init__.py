@@ -36,7 +36,7 @@ def chronovoyage():
     "--vendor",
     "-v",
     type=click.Choice(database_vendors, case_sensitive=False),
-    default=DatabaseVendorEnum.MARIADB,
+    default=DatabaseVendorEnum.MARIADB.value,
     help="Database vendor.",
 )
 def init(dirname: str, vendor: str):
