@@ -6,6 +6,7 @@ from __future__ import annotations
 import os.path
 
 import click
+from click import Group
 
 from chronovoyage.__about__ import __version__
 from chronovoyage.domain.add import AddDomain
@@ -19,6 +20,8 @@ from chronovoyage.lib.datetime_time import DatetimeLib
 logger = get_default_logger()
 database_vendors = [e.value for e in DatabaseVendorEnum]
 migrate_period_languages = [e.value for e in MigratePeriodLanguageEnum]
+
+chronovoyage: Group
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)

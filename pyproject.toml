@@ -27,6 +27,7 @@ classifiers = [
 dependencies = [
   "click",
   "python-dotenv",
+  "typing-extensions",
 ]
 features = [
   "mariadb",
