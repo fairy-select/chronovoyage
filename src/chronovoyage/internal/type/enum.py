@@ -1,5 +1,7 @@
 from enum import Enum
 
+from chronovoyage.internal.exception.enum import InvalidDatabaseVendorValueError
+
 
 class StrEnum(Enum):
     def __eq__(self, __value):
@@ -15,6 +17,10 @@ class StrEnum(Enum):
 
 class DatabaseVendorEnum(StrEnum):
     MARIADB = "mariadb"
+
+    @classmethod
+    def _missing_(cls, _):
+        raise InvalidDatabaseVendorValueError
 
 
 class MigratePeriodLanguageEnum(StrEnum):

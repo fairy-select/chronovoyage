@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Any
 
 import pytest
-from helper.database.mariadb import get_default_mariadb_connection, mariadb_get_tables
+from helper.database._mariadb import get_default_mariadb_connection, mariadb_get_tables
 
 from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.internal.config import MigrateDomainConfigFactory

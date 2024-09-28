@@ -14,7 +14,7 @@ def default_mariadb_connection_info() -> ConnectionInfo:
     return ConnectionInfo(
         host="127.0.0.1",
         port=3307,
-        user=DEFAULT_TEST_ENV["MARIADB_USER"],
-        password=DEFAULT_TEST_ENV["MARIADB_PASSWORD"],
-        database=DEFAULT_TEST_ENV["MARIADB_DATABASE"],
+        user=DEFAULT_TEST_ENV["MARIADB_USER"] or "",
+        password=DEFAULT_TEST_ENV["MARIADB_PASSWORD"] or "",
+        database=DEFAULT_TEST_ENV["MARIADB_DATABASE"] or "",
     )

@@ -24,7 +24,7 @@ migrate_period_languages = [e.value for e in MigratePeriodLanguageEnum]
 chronovoyage: Group
 
 
-@click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)
+@click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)  # type: ignore[no-redef]
 @click.version_option(version=__version__, prog_name="chronovoyage")
 def chronovoyage():
     pass

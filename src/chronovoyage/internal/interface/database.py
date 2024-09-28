@@ -45,8 +45,10 @@ class PCanUseWithClause(Protocol):
 
 
 class IDatabaseConnection(PCanUseWithClause, metaclass=ABCMeta):
+    @abstractmethod
     def __enter__(self) -> IDatabaseConnectionWrapper:
         pass
 
+    @abstractmethod
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass

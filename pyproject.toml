@@ -84,6 +84,22 @@ omit = [
   "tests/*",
 ]
 
+[tool.mypy]
+mypy_path = '$MYPY_CONFIG_FILE_DIR/src/chronovoyage'
+
+[[tool.mypy.overrides]]
+module = [
+  # src
+  "chronovoyage.*",
+  "mariadb",
+  # tests
+  "helper.*",
+  "pytest",
+  "_pytest.fixtures",
+  "pytest_mock",
+]
+ignore_missing_imports = true
+
 [tool.hatch.build.targets.sdist]
 ignore-vcs = true
 exclude = [
