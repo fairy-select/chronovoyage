@@ -3,7 +3,7 @@ import re
 import pytest
 from _pytest.fixtures import SubRequest
 from helper import DEFAULT_TEST_ENV, RESOURCE_DIR
-from helper.database._mariadb import truncate_mariadb_test_db
+from helper.database.mariadb_ import truncate_mariadb_test_db
 
 from chronovoyage.internal.config import MigrateDomainConfigFactory
 
