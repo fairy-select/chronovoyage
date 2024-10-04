@@ -35,6 +35,15 @@ class IDatabaseConnectionWrapper(PCanHandleTransaction, metaclass=ABCMeta):
     def get_current_period(self) -> str | None:
         pass
 
+    @abstractmethod
+    def create_if_not_exists_system_table(self) -> bool:
+        """Create a table if it does not exist.
+
+        Returns:
+            bool: True if the table is created, False otherwise.
+
+        """
+
 
 class PCanUseWithClause(Protocol):
     def __enter__(self) -> Any:

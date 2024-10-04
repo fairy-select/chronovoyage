@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
+import mariadb
 import pytest
 from helper.database.mariadb_ import get_default_mariadb_connection, mariadb_get_tables
 
@@ -141,5 +142,6 @@ class TestMigrateDomainMariadb:
         with pytest.raises(MigrateInvalidTargetError):
             migrate_domain.execute(target="20060102150405")
         # then
-        assert migrate_domain.usecase.current() is None
+        with pytest.raises(mariadb.ProgrammingError):
+            migrate_domain.usecase.current()
         assert self._get_tables() == set()

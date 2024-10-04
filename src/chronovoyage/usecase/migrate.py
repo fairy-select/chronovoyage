@@ -26,6 +26,10 @@ class MigrateUsecase:
         with DatabaseConnector(logger=self._logger).get_connection(
             self._config.vendor, self._config.connection_info
         ) as _conn:
+            created = _conn.create_if_not_exists_system_table()
+            if created:
+                self._logger.info("system table created")
+
             current = _conn.get_current_period()
             if target is not None and current is not None and target < current:
                 self._logger.error("migrate operation cannot go back to the period '%s'", target)

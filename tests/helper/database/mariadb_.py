@@ -40,7 +40,7 @@ def truncate_mariadb_test_db() -> None:
         for system_table in mariadb_get_system_tables(cursor):
             if not re.match(r"\w+", system_table):  # pragma: no cover
                 pytest.fail(f"{system_table} is an invalid table name.")
-            cursor.execute("TRUNCATE TABLE " + system_table)
+            cursor.execute("DROP TABLE " + system_table)
 
 
 def get_default_mariadb_connection():

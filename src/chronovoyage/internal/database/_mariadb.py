@@ -92,6 +92,30 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
             (period_name,) = row
             return period_name
 
+    def create_if_not_exists_system_table(self) -> bool:
+        with self._begin() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND TABLE_NAME = 'chronovoyage_periods'",
+                (conn.database,),
+            )
+            if cursor.fetchone() is not None:
+                return False
+            cursor.execute(
+                """
+CREATE TABLE chronovoyage_periods
+(
+    `id`          INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `period_name` VARCHAR(14)   NOT NULL UNIQUE COMMENT 'バージョン名 (%Y%m%d%H%M%S)',
+    `language`    VARCHAR(3)    NOT NULL COMMENT '言語種別 (ddl/dml)',
+    `description` VARCHAR(4096) NOT NULL COMMENT '説明',
+    `has_come`    BOOLEAN       NOT NULL DEFAULT FALSE COMMENT 'TRUE: 反映済みである, FALSE: 未反映・ロールバック済みである',
+    `is_verified` BOOLEAN       NOT NULL DEFAULT FALSE COMMENT 'go.sql と return.sql のデータ整合性が検証済みである'
+) COMMENT 'マイグレーションバージョン管理';
+""".strip()
+            )
+            return True
+
 
 class MariadbDatabaseConnection(IDatabaseConnection):
     def __init__(self, _conn: mariadb.Connection) -> None:
