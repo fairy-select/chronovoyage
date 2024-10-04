@@ -36,6 +36,7 @@ class TestMigrateDomainMariadb:
         with get_default_mariadb_connection() as wrapper:
             with wrapper._begin() as conn:
                 cursor = conn.cursor()
+                # noinspection SqlResolve
                 cursor.execute("SELECT has_come FROM chronovoyage_periods")
                 return {has_come for (has_come,) in cursor.fetchall()} == {True}
 
