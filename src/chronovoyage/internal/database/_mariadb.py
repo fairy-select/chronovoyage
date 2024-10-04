@@ -55,9 +55,6 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
     def _begin(self) -> MariadbDatabaseTransaction:
         return MariadbDatabaseTransaction(self._conn)
 
-    def cursor(self) -> mariadb.cursors.Cursor:
-        return self._conn.cursor()
-
     def add_period(self, period: MigratePeriod) -> int:
         with self._begin() as conn:
             cursor = conn.cursor()

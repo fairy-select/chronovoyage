@@ -32,15 +32,17 @@ def mariadb_get_system_tables(cursor: Cursor) -> set[str]:
 
 def truncate_mariadb_test_db() -> None:
     with get_default_mariadb_connection() as wrapper:
-        cursor = wrapper.cursor()
-        for table in mariadb_get_tables(cursor):
-            if not re.match(r"\w+", table):  # pragma: no cover
-                pytest.fail(f"{table} is an invalid table name.")
-            cursor.execute("DROP TABLE " + table)
-        for system_table in mariadb_get_system_tables(cursor):
-            if not re.match(r"\w+", system_table):  # pragma: no cover
-                pytest.fail(f"{system_table} is an invalid table name.")
-            cursor.execute("DROP TABLE " + system_table)
+        # noinspection PyProtectedMember
+        with wrapper._begin() as conn:
+            cursor = conn.cursor()
+            for table in mariadb_get_tables(cursor):
+                if not re.match(r"\w+", table):  # pragma: no cover
+                    pytest.fail(f"{table} is an invalid table name.")
+                cursor.execute("DROP TABLE " + table)
+            for system_table in mariadb_get_system_tables(cursor):
+                if not re.match(r"\w+", system_table):  # pragma: no cover
+                    pytest.fail(f"{system_table} is an invalid table name.")
+                cursor.execute("DROP TABLE " + system_table)
 
 
 def get_default_mariadb_connection():
