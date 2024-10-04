@@ -26,30 +26,27 @@ class TestMigrateDomainMariadb:
 
     # noinspection PyMethodMayBeStatic
     def _get_tables(self) -> set[str]:
-        with get_default_mariadb_connection() as wrapper:
-            with wrapper._begin() as conn:
-                cursor = conn.cursor()
-                return mariadb_get_tables(cursor)
+        with get_default_mariadb_connection() as wrapper, wrapper.begin() as conn:
+            cursor = conn.cursor()
+            return mariadb_get_tables(cursor)
 
     @property
     def _all_periods_have_come(self) -> bool:
-        with get_default_mariadb_connection() as wrapper:
-            with wrapper._begin() as conn:
-                cursor = conn.cursor()
-                # noinspection SqlResolve
-                cursor.execute("SELECT has_come FROM chronovoyage_periods")
-                return {has_come for (has_come,) in cursor.fetchall()} == {True}
+        with get_default_mariadb_connection() as wrapper, wrapper.begin() as conn:
+            cursor = conn.cursor()
+            # noinspection SqlResolve
+            cursor.execute("SELECT has_come FROM chronovoyage_periods")
+            return {has_come for (has_come,) in cursor.fetchall()} == {True}
 
     # noinspection PyMethodMayBeStatic
     def assert_rows_and_sql(self, want_rows: list[tuple[Any, ...]], sql: str) -> None:
-        with get_default_mariadb_connection() as wrapper:
-            with wrapper._begin() as conn:
-                cursor = conn.cursor()
-                cursor.execute(sql)
-                if cursor.rowcount != len(want_rows):
-                    pytest.fail(f"件数が異なる (want: {len(want_rows)}), got: {cursor.rowcount}")
-                for i, got_user in enumerate(cursor):
-                    assert got_user == want_rows[i], f"row {i}"
+        with get_default_mariadb_connection() as wrapper, wrapper.begin() as conn:
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            if cursor.rowcount != len(want_rows):
+                pytest.fail(f"件数が異なる (want: {len(want_rows)}), got: {cursor.rowcount}")
+            for i, got_user in enumerate(cursor):
+                assert got_user == want_rows[i], f"row {i}"
 
     def test_ddl_only(self, mariadb_migrate_domain_config) -> None:
         # when

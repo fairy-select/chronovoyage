@@ -10,7 +10,7 @@ T = TypeVar("T")
 
 
 class PCanHandleTransaction(Protocol):
-    def _begin(self):
+    def begin(self):
         pass
 
 

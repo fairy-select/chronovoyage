@@ -52,11 +52,11 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
     def __init__(self, _conn: mariadb.Connection) -> None:
         self._conn = _conn
 
-    def _begin(self) -> MariadbDatabaseTransaction:
+    def begin(self) -> MariadbDatabaseTransaction:
         return MariadbDatabaseTransaction(self._conn)
 
     def add_period(self, period: MigratePeriod) -> int:
-        with self._begin() as conn:
+        with self.begin() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 "INSERT INTO chronovoyage_periods (period_name, language, description) VALUES (?, ?, ?)",
@@ -70,17 +70,17 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
         return (sql.strip() for sql in file_content.strip().split(";") if sql)
 
     def execute_sql(self, sql: str) -> None:
-        with self._begin() as conn:
+        with self.begin() as conn:
             cursor = conn.cursor()
             cursor.execute(sql)
 
     def mark_period_as_come(self, inserted_period_id: int) -> None:
-        with self._begin() as conn:
+        with self.begin() as conn:
             cursor = conn.cursor()
             cursor.execute("UPDATE chronovoyage_periods SET has_come = TRUE WHERE id = ?", (inserted_period_id,))
 
     def get_current_period(self) -> str | None:
-        with self._begin() as conn:
+        with self.begin() as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT period_name FROM chronovoyage_periods WHERE has_come IS TRUE ORDER BY id DESC")
             row = cursor.fetchone()
@@ -90,7 +90,7 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
             return period_name
 
     def create_if_not_exists_system_table(self) -> bool:
-        with self._begin() as conn:
+        with self.begin() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 "SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND TABLE_NAME = 'chronovoyage_periods'",
