@@ -19,8 +19,8 @@ class DatabaseConnector:
     # noinspection PyMethodMayBeStatic
     def get_connection(self, vendor: DatabaseVendorEnum, connection_info: ConnectionInfo) -> IDatabaseConnection:
         if vendor == DatabaseVendorEnum.MARIADB:
-            from chronovoyage.internal.database import _mariadb
+            from chronovoyage.internal.database import mariadb_
 
-            return _mariadb.connect(connection_info, logger=self._logger)
+            return mariadb_.connect(connection_info, logger=self._logger)
 
         raise DatabaseUnknownVendorError

@@ -1,7 +1,7 @@
 from logging import Logger
 from typing import Literal, overload
 
-from chronovoyage.internal.database._mariadb import MariadbDatabaseConnection
+from chronovoyage.internal.database.mariadb_ import MariadbDatabaseConnection
 from chronovoyage.internal.interface.database import IDatabaseConnection
 from chronovoyage.internal.type.database import ConnectionInfo
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
