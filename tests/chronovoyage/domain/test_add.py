@@ -3,7 +3,6 @@ import shutil
 
 import pytest
 from click.testing import CliRunner
-from helper import TEST_TEMP_DIR
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.domain.add import AddDomain
@@ -20,12 +19,15 @@ class TestAddDomain:
         self.logger = get_default_logger()
 
     def test___init___non_existent_directory(self) -> None:
-        # given
-        target_dir = os.path.join(TEST_TEMP_DIR, "unknown")
-        shutil.rmtree(target_dir, ignore_errors=True)
-        # when
-        with pytest.raises(AddDomainError):
-            AddDomain(target_dir, logger=self.logger)
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            # given
+            cwd = os.getcwd()
+            target_dir = os.path.join(cwd, "unknown")
+            shutil.rmtree(target_dir, ignore_errors=True)
+            # when/then
+            with pytest.raises(AddDomainError):
+                AddDomain(target_dir, logger=self.logger)
 
     @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
     @pytest.mark.parametrize("vendor", [pytest.param(vendor) for vendor in DatabaseVendorEnum])

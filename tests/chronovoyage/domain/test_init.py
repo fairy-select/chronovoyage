@@ -3,7 +3,7 @@ import shutil
 from typing import Mapping
 
 import pytest
-from helper import TEST_TEMP_DIR
+from click.testing import CliRunner
 
 from chronovoyage.domain.init import InitDomain
 from chronovoyage.internal.exception.init import InitDomainError
@@ -37,12 +37,15 @@ class TestInitDomain:
         self.logger = get_default_logger()
 
     def test___init___non_existent_directory(self) -> None:
-        # given
-        target_dir = os.path.join(TEST_TEMP_DIR, "unknown")
-        shutil.rmtree(target_dir, ignore_errors=True)
-        # when
-        with pytest.raises(InitDomainError):
-            InitDomain(target_dir, logger=self.logger)
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            # given
+            cwd = os.getcwd()
+            target_dir = os.path.join(cwd, "unknown")
+            shutil.rmtree(target_dir, ignore_errors=True)
+            # when/then
+            with pytest.raises(InitDomainError):
+                InitDomain(target_dir, logger=self.logger)
 
     @pytest.mark.parametrize(
         ("vendor", "want_config"),
@@ -52,9 +55,12 @@ class TestInitDomain:
         # given
         dirname = "sample"
         # when
-        InitDomain(TEST_TEMP_DIR, logger=self.logger).execute(dirname, vendor)
-        # then
-        assert os.listdir(os.path.join(TEST_TEMP_DIR, dirname)) == ["config.json"]
-        with open(os.path.join(TEST_TEMP_DIR, dirname, "config.json")) as f:
-            config = f.read()
-        assert config == want_config
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            cwd = os.getcwd()
+            InitDomain(cwd, logger=self.logger).execute(dirname, vendor)
+            # then
+            assert os.listdir(os.path.join(cwd, dirname)) == ["config.json"]
+            with open(os.path.join(cwd, dirname, "config.json")) as f:
+                config = f.read()
+            assert config == want_config
