@@ -3,13 +3,15 @@ from typing import Callable, ClassVar, Mapping
 from chronovoyage.internal.exception.feature import FeatureFlagNotDefinedError, FeatureNotSupportedError
 from chronovoyage.internal.type.enum import FeatureFlagEnum
 
+flags: Mapping[FeatureFlagEnum, bool] = {FeatureFlagEnum.ROLLBACK_WITHOUT_OPTIONS: False}
+
 
 class FeatureFlagEnabledMeta(type):
-    flags: ClassVar[Mapping[FeatureFlagEnum, bool]] = {FeatureFlagEnum.ROLLBACK_WITHOUT_OPTIONS: False}
+    __flags: ClassVar[Mapping[FeatureFlagEnum, bool]] = flags
 
     def __getattr__(cls, attr) -> bool:
         flag_enum = FeatureFlagEnum(attr)
-        flag = cls.flags.get(flag_enum)
+        flag = cls.__flags.get(flag_enum)
         if flag is None:
             raise FeatureFlagNotDefinedError(flag_enum)
         return flag
@@ -27,12 +29,12 @@ class FeatureFlagEnabled(metaclass=FeatureFlagEnabledMeta):
 
 
 class FeatureFlagEnabledCheckerMeta(type):
-    flags: ClassVar[Mapping[FeatureFlagEnum, bool]] = {FeatureFlagEnum.ROLLBACK_WITHOUT_OPTIONS: False}
+    __flags: ClassVar[Mapping[FeatureFlagEnum, bool]] = flags
 
     def __getattr__(cls, attr) -> Callable[[], None]:
         def wrapper() -> None:
             flag_enum = FeatureFlagEnum(attr)
-            flag = cls.flags.get(flag_enum)
+            flag = cls.__flags.get(flag_enum)
             if flag is None:
                 raise FeatureFlagNotDefinedError(flag_enum)
             if not flag:
