@@ -58,6 +58,7 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
     def add_period(self, period: MigratePeriod) -> int:
         with self.begin() as conn:
             cursor = conn.cursor()
+            # noinspection SqlResolve
             cursor.execute(
                 "INSERT INTO chronovoyage_periods (period_name, language, description) VALUES (?, ?, ?)",
                 (period.period_name, period.language, period.description),
@@ -77,11 +78,13 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
     def mark_period_as_come(self, inserted_period_id: int) -> None:
         with self.begin() as conn:
             cursor = conn.cursor()
+            # noinspection SqlResolve
             cursor.execute("UPDATE chronovoyage_periods SET has_come = TRUE WHERE id = ?", (inserted_period_id,))
 
     def get_current_period(self) -> str | None:
         with self.begin() as conn:
             cursor = conn.cursor()
+            # noinspection SqlResolve
             cursor.execute("SELECT period_name FROM chronovoyage_periods WHERE has_come IS TRUE ORDER BY id DESC")
             row = cursor.fetchone()
             if row is None:
