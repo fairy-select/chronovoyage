@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Generator
+from typing import TYPE_CHECKING, Any, Generator
 
 import pytest
 from click.testing import CliRunner
+from helper.database.mariadb_ import get_default_mariadb_connection, mariadb_get_tables, truncate_mariadb_test_db
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.exception.config import (
@@ -13,7 +14,10 @@ from chronovoyage.internal.exception.config import (
     MigrateConfigSqlMissingError,
     MigrateConfigVersionNameInvalidError,
 )
-from helper.database.mariadb_ import get_default_mariadb_connection, mariadb_get_tables, truncate_mariadb_test_db
+from chronovoyage.internal.exception.migrate import MigrateInvalidTargetError
+
+if TYPE_CHECKING:
+    from chronovoyage.internal.config import MigratePeriod
 
 
 class TestMigrateCommandMariadb:
@@ -98,3 +102,87 @@ class TestMigrateCommandMariadb:
         assert self._get_tables() == {"user"}
         # noinspection SqlResolve
         self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
+
+    def test_migrate_from_zero_to_target(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            # when
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
+        # then
+        assert period.period_name == "19991231235902"
+        assert self._get_tables() == {"user"}
+        # noinspection SqlResolve
+        self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
+
+    def test_migrate_from_halfway_to_latest(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            # when
+            runner.invoke(chronovoyage, ["migrate"])
+            period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
+        # then
+        assert period.period_name == "19991231235903"
+        assert self._get_tables() == {"user"}
+        # noinspection SqlResolve
+        self.assert_rows_and_sql(
+            [(1, "Jane"), (2, "John"), (3, "Allen"), (4, "Alicia")], "SELECT * FROM user ORDER BY id"
+        )
+
+    def test_migrate_from_halfway_to_target(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235901"])
+            # when
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
+        # then
+        assert period.period_name == "19991231235902"
+        assert self._get_tables() == {"user"}
+        # noinspection SqlResolve
+        self.assert_rows_and_sql([(1, "Jane"), (2, "John")], "SELECT * FROM user ORDER BY id")
+
+    def test_migrate_to_now(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            # when
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
+        # then
+        assert period.period_name == "19991231235902"
+
+    def test_migrate_to_past(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            # when
+            result = runner.invoke(chronovoyage, ["migrate", "--target", "19991231235901"])
+            period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
+        # then
+        assert isinstance(result.exception, MigrateInvalidTargetError)
+        assert period.period_name == "19991231235902"
+
+    def test_migrate_to_unknown_target(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            # when
+            result = runner.invoke(chronovoyage, ["migrate", "--target", "20060102150405"])
+            period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
+        # then
+        assert isinstance(result.exception, MigrateInvalidTargetError)
+        assert period.period_name == "19991231235902"
