@@ -5,7 +5,7 @@ import os
 import string
 from typing import TYPE_CHECKING, Any, Mapping
 
-from chronovoyage.internal.config import MigrateDomainConfigFactory
+from chronovoyage.internal.config import MigrateConfigFactory
 from chronovoyage.internal.exception import DirectoryAlreadyExistsError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
@@ -59,4 +59,4 @@ class InitUsecase:
     # noinspection PyMethodMayBeStatic
     def _validate_directory(self, directory: str) -> None:
         # valid means config can be created
-        MigrateDomainConfigFactory.create_from_directory(directory)
+        MigrateConfigFactory.create_from_directory(directory)

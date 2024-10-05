@@ -8,11 +8,11 @@ from chronovoyage.internal.exception.migrate import MigratePastTargetError
 if TYPE_CHECKING:
     from logging import Logger
 
-    from chronovoyage.internal.config import MigrateDomainConfig
+    from chronovoyage.internal.config import MigrateConfig
 
 
 class MigrateUsecase:
-    def __init__(self, *, config: MigrateDomainConfig, logger: Logger) -> None:
+    def __init__(self, *, config: MigrateConfig, logger: Logger) -> None:
         self._config = config
         self._logger = logger
 

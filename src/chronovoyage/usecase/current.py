@@ -8,11 +8,11 @@ from chronovoyage.internal.exception.current import CurrentDbCurrentPeriodNotInM
 if TYPE_CHECKING:
     from logging import Logger
 
-    from chronovoyage.internal.config import MigrateDomainConfig, MigratePeriod
+    from chronovoyage.internal.config import MigrateConfig, MigratePeriod
 
 
 class CurrentUsecase:
-    def __init__(self, *, config: MigrateDomainConfig, logger: Logger) -> None:
+    def __init__(self, *, config: MigrateConfig, logger: Logger) -> None:
         self._config = config
         self._logger = logger
 

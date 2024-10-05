@@ -7,11 +7,11 @@ from chronovoyage.usecase.current import CurrentUsecase
 if TYPE_CHECKING:
     from logging import Logger
 
-    from chronovoyage.internal.config import MigrateDomainConfig, MigratePeriod
+    from chronovoyage.internal.config import MigrateConfig, MigratePeriod
 
 
 class CurrentDomain:
-    def __init__(self, config: MigrateDomainConfig, *, logger: Logger) -> None:
+    def __init__(self, config: MigrateConfig, *, logger: Logger) -> None:
         self._config = config
         self._logger = logger
         self.usecase = CurrentUsecase(config=self._config, logger=self._logger)

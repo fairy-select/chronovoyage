@@ -32,18 +32,18 @@ class MigratePeriod:
 
 
 @dataclass(frozen=True)
-class MigrateDomainConfig:
+class MigrateConfig:
     vendor: DatabaseVendorEnum
     connection_info: ConnectionInfo
     periods: list[MigratePeriod]
 
 
-class MigrateDomainConfigFactory:
+class MigrateConfigFactory:
     @classmethod
-    def create_from_directory(cls, directory: str) -> MigrateDomainConfig:
+    def create_from_directory(cls, directory: str) -> MigrateConfig:
         vendor, connection_info = cls._parse_config(directory)
         periods = cls._parse_sql(directory)
-        return MigrateDomainConfig(vendor=vendor, connection_info=connection_info, periods=periods)
+        return MigrateConfig(vendor=vendor, connection_info=connection_info, periods=periods)
 
     @classmethod
     def _parse_config(cls, directory: str) -> tuple[DatabaseVendorEnum, ConnectionInfo]:

@@ -13,7 +13,7 @@ from chronovoyage.domain.add import AddDomain
 from chronovoyage.domain.current import CurrentDomain
 from chronovoyage.domain.init import InitDomain
 from chronovoyage.domain.migrate import MigrateDomain
-from chronovoyage.internal.config import MigrateDomainConfigFactory
+from chronovoyage.internal.config import MigrateConfigFactory
 from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLanguageEnum
 from chronovoyage.lib.datetime_time import DatetimeLib
@@ -58,7 +58,7 @@ def add(language: str, description: str):
 @chronovoyage.command()
 def current():
     """Get current period."""
-    period = CurrentDomain(MigrateDomainConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute()
+    period = CurrentDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute()
     click.echo(f"Current period: {period.period_name} {period.language} {period.description}")
     return period
 
@@ -67,4 +67,4 @@ def current():
 @click.option("--target", "-t", help="Move to a specific period. (Example: 20060102150405)")
 def migrate(target: str | None):
     """Migrate database. Use \"rollback\" if you move to a previous version."""
-    MigrateDomain(MigrateDomainConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute(target=target)
+    MigrateDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute(target=target)
