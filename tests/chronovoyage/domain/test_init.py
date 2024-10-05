@@ -5,6 +5,7 @@ from typing import Mapping
 import pytest
 from click.testing import CliRunner
 
+from chronovoyage.cli import chronovoyage
 from chronovoyage.domain.init import InitDomain
 from chronovoyage.internal.exception.init import InitDomainError
 from chronovoyage.internal.logger import get_default_logger
@@ -57,9 +58,9 @@ class TestInitDomain:
         # when
         runner = CliRunner()
         with runner.isolated_filesystem():
-            cwd = os.getcwd()
-            InitDomain(cwd, logger=self.logger).execute(dirname, vendor)
+            runner.invoke(chronovoyage, ["init", dirname, "--vendor", vendor.value])
             # then
+            cwd = os.getcwd()
             assert os.listdir(os.path.join(cwd, dirname)) == ["config.json"]
             with open(os.path.join(cwd, dirname, "config.json")) as f:
                 config = f.read()

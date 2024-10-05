@@ -3,6 +3,7 @@ import shutil
 
 import pytest
 from click.testing import CliRunner
+from pytest_mock import MockerFixture
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.domain.add import AddDomain
@@ -29,22 +30,19 @@ class TestAddDomain:
             with pytest.raises(AddDomainError):
                 AddDomain(target_dir, logger=self.logger)
 
-    @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
-    @pytest.mark.parametrize("vendor", [pytest.param(vendor) for vendor in DatabaseVendorEnum])
-    def test_execute(self, vendor: DatabaseVendorEnum, language: MigratePeriodLanguageEnum) -> None:
+    @pytest.mark.parametrize("language", [pytest.param(lang.value) for lang in MigratePeriodLanguageEnum])
+    @pytest.mark.parametrize("vendor", [pytest.param(vendor.value) for vendor in DatabaseVendorEnum])
+    def test_execute(self, mocker: MockerFixture, vendor: str, language: str) -> None:
+        # given
+        mocker.patch.object(DatetimeLib, DatetimeLib.now.__name__, return_value=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1))
         runner = CliRunner()
         with runner.isolated_filesystem():
-            # given
-            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor.value])
+            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
             os.chdir("sample")
             # when
-            AddDomain(os.getcwd(), logger=self.logger).execute(
-                language,
-                "sample_description",
-                now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
-            )
+            runner.invoke(chronovoyage, ["add", language, "sample_description"])
             # then
-            assert os.listdir(f"19991231235901_{language.value}_sample_description") == ["go.sql", "return.sql"]
+            assert os.listdir(f"19991231235901_{language}_sample_description") == ["go.sql", "return.sql"]
 
     @pytest.mark.parametrize(
         "description",
@@ -53,43 +51,33 @@ class TestAddDomain:
             pytest.param("hello world", id="cannot_use_space"),
         ],
     )
-    @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
-    @pytest.mark.parametrize("vendor", [pytest.param(vendor) for vendor in DatabaseVendorEnum])
+    @pytest.mark.parametrize("language", [pytest.param(lang.value) for lang in MigratePeriodLanguageEnum])
+    @pytest.mark.parametrize("vendor", [pytest.param(vendor.value) for vendor in DatabaseVendorEnum])
     def test_execute__invalid_description_pattern(
-        self, vendor: DatabaseVendorEnum, language: MigratePeriodLanguageEnum, description: str
+        self, mocker: MockerFixture, vendor: str, language: str, description: str
     ) -> None:
+        # given
+        mocker.patch.object(DatetimeLib, DatetimeLib.now.__name__, return_value=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1))
         runner = CliRunner()
         with runner.isolated_filesystem():
-            # given
-            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor.value])
+            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
             os.chdir("sample")
             # when/then
-            with pytest.raises(AddDomainInvalidDescriptionError):
-                AddDomain(os.getcwd(), logger=self.logger).execute(
-                    language,
-                    description,
-                    now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
-                )
+            result = runner.invoke(chronovoyage, ["add", language, description])
+            assert issubclass(result.exception.__class__, AddDomainInvalidDescriptionError)
 
-    @pytest.mark.parametrize("language", [pytest.param(lang) for lang in MigratePeriodLanguageEnum])
-    @pytest.mark.parametrize("vendor", [pytest.param(vendor) for vendor in DatabaseVendorEnum])
+    @pytest.mark.parametrize("language", [pytest.param(lang.value) for lang in MigratePeriodLanguageEnum])
+    @pytest.mark.parametrize("vendor", [pytest.param(vendor.value) for vendor in DatabaseVendorEnum])
     def test_execute__cannot_create_same_directory(
-        self, vendor: DatabaseVendorEnum, language: MigratePeriodLanguageEnum
+        self, mocker: MockerFixture, vendor: str, language: str
     ) -> None:
+        # given
+        mocker.patch.object(DatetimeLib, DatetimeLib.now.__name__, return_value=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1))
         runner = CliRunner()
         with runner.isolated_filesystem():
-            # given
-            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor.value])
+            runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
             os.chdir("sample")
-            AddDomain(os.getcwd(), logger=self.logger).execute(
-                language,
-                "sample_description",
-                now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
-            )
+            runner.invoke(chronovoyage, ["add", language, "sample_description"])
             # when/then
-            with pytest.raises(DirectoryAlreadyExistsError):
-                AddDomain(os.getcwd(), logger=self.logger).execute(
-                    language,
-                    "sample_description",
-                    now=DatetimeLib.datetime(1999, 12, 31, 23, 59, 1),
-                )
+            result = runner.invoke(chronovoyage, ["add", language, "sample_description"])
+            assert issubclass(result.exception.__class__, DirectoryAlreadyExistsError)
