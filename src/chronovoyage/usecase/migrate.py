@@ -8,7 +8,8 @@ from chronovoyage.internal.exception.migrate import MigratePastTargetError
 if TYPE_CHECKING:
     from logging import Logger
 
-    from chronovoyage.internal.config import MigrateConfig
+    from chronovoyage.internal.config import MigrateConfig, MigratePeriod
+    from chronovoyage.internal.interface.database import IDatabaseConnectionWrapper
 
 
 class MigrateUsecase:
@@ -37,22 +38,7 @@ class MigrateUsecase:
                     self._logger.debug("period '%s' is in the future and migrate will stop.", period.period_name)
                     break
 
-                period_id = _conn.find_period_id(period)
-                if period_id is not None:
-                    self._logger.info("the period '%s' found.", period.period_name)
-                else:
-                    self._logger.debug("adding the period '%s'.", period.period_name)
-                    try:
-                        period_id = _conn.add_period(period)
-                        self._logger.debug(
-                            "inserted the period '%s' into chronovoyage_periods. id is %d.",
-                            period.period_name,
-                            period_id,
-                        )
-                    except:
-                        self._logger.warning("an error occurred when adding the period '%s'.", period.period_name)
-                        raise
-                    self._logger.info("added the period '%s'.", period.period_name)
+                period_id = self._find_or_add_period(period, _conn=_conn)
 
                 self._logger.debug("the period '%s' is coming.", period.period_name)
                 for sql in _conn.get_sqls(period.go_sql_path):
@@ -69,3 +55,29 @@ class MigrateUsecase:
                     self._logger.warning("an error occurred when updating the period '%s'.", period.period_name)
                     raise
                 self._logger.info("the period '%s' has come.", period.period_name)
+
+    def _find_or_add_period(self, period: MigratePeriod, *, _conn: IDatabaseConnectionWrapper) -> int:
+        """
+
+        Returns:
+            int: found or inserted id.
+
+        """
+        period_id = _conn.find_period_id(period)
+        if period_id is not None:
+            self._logger.info("the period '%s' found.", period.period_name)
+            return period_id
+
+        self._logger.debug("adding the period '%s'.", period.period_name)
+        try:
+            inserted_period_id = _conn.add_period(period)
+            self._logger.debug(
+                "inserted the period '%s' into chronovoyage_periods. id is %d.",
+                period.period_name,
+                inserted_period_id,
+            )
+        except:
+            self._logger.warning("an error occurred when adding the period '%s'.", period.period_name)
+            raise
+        self._logger.info("added the period '%s'.", period.period_name)
+        return inserted_period_id
