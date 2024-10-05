@@ -29,6 +29,12 @@ class RollbackSystemTableNotExistError(RollbackError):
 class RollbackInvalidTargetError(RollbackError):
     """ロールバックで不適切な時代が指定された際に送出するエラー"""
 
+class RollbackUnknownTargetError(RollbackInvalidTargetError):
+    """存在しない時代が指定された際に送出するエラー"""
+
+    def __init__(self) -> None:
+        super().__init__("unknown target")
+
 
 class RollbackFutureTargetError(RollbackInvalidTargetError):
     """ロールバックで未来の時代が指定された際に送出するエラー"""
