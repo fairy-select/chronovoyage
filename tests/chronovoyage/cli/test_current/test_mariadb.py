@@ -47,10 +47,10 @@ class TestCurrentCommandMariadb:
             shutil.copytree(mariadb_resource_dir, "migrations")
             os.chdir("migrations")
             runner.invoke(chronovoyage, ["migrate"])
-            # when
             for f in os.listdir(mariadb_resource_dir):
                 if os.path.isdir(f):
                     shutil.rmtree(f)
+            # when
             result = runner.invoke(chronovoyage, ["current"])
         # then
         assert isinstance(result.exception, CurrentDbCurrentPeriodNotInMigrateConfigError)

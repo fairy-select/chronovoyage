@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import TYPE_CHECKING, Any, Generator
+from typing import TYPE_CHECKING, Any, Generator, Iterable
 
 import mariadb
 
@@ -141,6 +141,22 @@ CREATE TABLE chronovoyage_periods
                 (conn.database,),
             )
             return cursor.fetchone() is not None
+
+    def get_all_come_periods(self, *, reverse: bool) -> Iterable[tuple[int, str]]:
+        with self.begin() as conn:
+            cursor = conn.cursor()
+            if reverse:
+                # noinspection SqlResolve
+                cursor.execute(
+                    "SELECT id, period_name FROM chronovoyage_periods WHERE has_come IS TRUE ORDER BY id DESC"
+                )
+            else:
+                # noinspection SqlResolve
+                cursor.execute("SELECT id, period_name FROM chronovoyage_periods WHERE has_come IS TRUE ORDER BY id")
+            rows = cursor.fetchall()
+        for row in rows:
+            (period_id, period_name) = row
+            yield period_id, period_name
 
 
 class MariadbDatabaseConnection(IDatabaseConnection):

@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
-from typing import TYPE_CHECKING, Any, Generator, Protocol, TypeVar
+from typing import TYPE_CHECKING, Any, Generator, Iterable, Protocol, TypeVar
 
 if TYPE_CHECKING:
     from chronovoyage.internal.config import MigratePeriod
@@ -58,6 +58,18 @@ class IDatabaseConnectionWrapper(PCanHandleTransaction, metaclass=ABCMeta):
 
         Returns:
             bool: True if the table exists, False otherwise.
+
+        """
+
+    @abstractmethod
+    def get_all_come_periods(self, *, reverse: bool) -> Iterable[tuple[int, str]]:
+        """Get all come periods.
+
+        Args:
+            reverse (bool):
+
+        Returns:
+            list[int]: List of all come periods from newer to lower.
 
         """
 

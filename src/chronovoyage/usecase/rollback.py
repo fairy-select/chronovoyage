@@ -3,7 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from chronovoyage.internal.database.connection import DatabaseConnector
-from chronovoyage.internal.exception.migrate import RollbackFutureTargetError, RollbackSystemTableNotExistError
+from chronovoyage.internal.exception.migrate import (
+    RollbackFutureTargetError,
+    RollbackMigratedPeriodNotInMigrateConfigError,
+    RollbackSystemTableNotExistError,
+)
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -29,20 +33,20 @@ class RollbackUsecase:
                 self._logger.error("rollback operation cannot go forward to the period '%s'", target)
                 raise RollbackFutureTargetError
 
-            for period in reversed(self._config.periods):
-                if current is not None and current < period.period_name:
-                    self._logger.debug("period '%s' has not come yet.", period.period_name)
+            period_name_to_period = {period.period_name: period for period in self._config.periods}
+            for period_id, period_name in _conn.get_all_come_periods(reverse=True):
+                if current is not None and current < period_name:
+                    self._logger.debug("period '%s' has not come yet.", period_name)
                     continue
-                if target is not None and period.period_name <= target:
-                    self._logger.debug("period '%s' is now or the past and migrate will stop.", period.period_name)
+                if target is not None and period_name <= target:
+                    self._logger.debug("period '%s' is now or the past and migrate will stop.", period_name)
                     break
 
-                period_id = _conn.find_period_id(period)
-                if period_id is None:
-                    # TODO: error log and raise Exception
-                    return
+                period = period_name_to_period.get(period_name)
+                if period is None:
+                    raise RollbackMigratedPeriodNotInMigrateConfigError(period_name)
 
-                self._logger.debug("going back to the period '%s'.", period.period_name)
+                self._logger.debug("going back to the period '%s'.", period_name)
                 for sql in _conn.get_sqls(period.return_sql_path):
                     try:
                         _conn.execute_sql(sql)
@@ -54,6 +58,6 @@ class RollbackUsecase:
                     _conn.mark_period_as_not_come(period_id)
                     self._logger.debug("updated the period which id is %d.", period_id)
                 except:
-                    self._logger.warning("an error occurred when updating the period '%s'.", period.period_name)
+                    self._logger.warning("an error occurred when updating the period '%s'.", period_name)
                     raise
-                self._logger.info("went back to the period '%s'.", period.period_name)
+                self._logger.info("went back to the period '%s'.", period_name)

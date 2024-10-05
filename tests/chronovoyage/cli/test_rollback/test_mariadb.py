@@ -1,15 +1,19 @@
 import os
+import shutil
 from typing import TYPE_CHECKING, Any, Generator
 
 import pytest
 from click.testing import CliRunner
-
-from chronovoyage.internal.exception.migrate import RollbackFutureTargetError, RollbackSystemTableNotExistError, \
-    RollbackInvalidTargetError
 from support.database.mariadb_ import SupportMariadb
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.exception.feature import FeatureNotSupportedError
+from chronovoyage.internal.exception.migrate import (
+    RollbackFutureTargetError,
+    RollbackInvalidTargetError,
+    RollbackMigratedPeriodNotInMigrateConfigError,
+    RollbackSystemTableNotExistError,
+)
 
 if TYPE_CHECKING:
     from chronovoyage.internal.config import MigratePeriod
@@ -109,3 +113,18 @@ class TestRollbackCommandMariadb:
         # then
         assert isinstance(result.exception, RollbackInvalidTargetError)
         assert period.period_name == "19991231235902"
+
+    def test_rollback_config_is_missing(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            shutil.copytree(mariadb_resource_dir, "migrations")
+            os.chdir("migrations")
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            for f in os.listdir(mariadb_resource_dir):
+                if os.path.isdir(f) and f.startswith("19991231235902"):
+                    shutil.rmtree(f)
+            # when
+            result = runner.invoke(chronovoyage, ["rollback", "--target", "19991231235901"])
+        # then
+        assert isinstance(result.exception, RollbackMigratedPeriodNotInMigrateConfigError)
