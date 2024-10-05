@@ -69,6 +69,7 @@ dependencies = [
   "pytest",
   "pytest-cov",
   "pytest-mock",
+  "poethepoet",
 ]
 
 [tool.coverage.run]
