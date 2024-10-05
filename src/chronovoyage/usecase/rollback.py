@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from chronovoyage.internal.database.connection import DatabaseConnector
+from chronovoyage.internal.exception.migrate import RollbackFutureTargetError
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -24,7 +25,9 @@ class RollbackUsecase:
                 return
 
             current = _conn.get_current_period()
-            # TODO: raise Exception if the target is beyond current.
+            if target is not None and current is not None and current < target:
+                self._logger.error("rollback operation cannot go forward to the period '%s'", target)
+                raise RollbackFutureTargetError
 
             for period in reversed(self._config.periods):
                 if current is not None and current < period.period_name:
