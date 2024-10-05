@@ -3,7 +3,6 @@ import re
 import pytest
 from _pytest.fixtures import SubRequest
 from helper import DEFAULT_TEST_ENV, RESOURCE_DIR
-from helper.database.mariadb_ import truncate_mariadb_test_db
 
 from chronovoyage.internal.config import MigrateDomainConfigFactory
 
@@ -28,7 +27,4 @@ def mariadb_migrate_domain_config(mariadb_resource_dir):
     migrate_domain_config = MigrateDomainConfigFactory().create_from_directory(mariadb_resource_dir)
     if migrate_domain_config.connection_info.database != DEFAULT_TEST_ENV["MARIADB_DATABASE"]:
         pytest.fail(f'設定ファイルの database は {DEFAULT_TEST_ENV["MARIADB_DATABASE"]} にしてください')
-    try:
-        yield migrate_domain_config
-    finally:
-        truncate_mariadb_test_db()
+    return migrate_domain_config
