@@ -120,3 +120,8 @@ exclude = [
 packages = [
   "src/chronovoyage",
 ]
+
+[tool.poe.tasks]
+lint = ["fmt", "types"]
+fmt = "hatch fmt"
+types = "hatch -e types run check"
