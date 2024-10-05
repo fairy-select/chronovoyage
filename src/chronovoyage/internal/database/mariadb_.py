@@ -55,6 +55,17 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
     def begin(self) -> MariadbDatabaseTransaction:
         return MariadbDatabaseTransaction(self._conn)
 
+    def find_period_id(self, period: MigratePeriod) -> int | None:
+        with self.begin() as conn:
+            cursor = conn.cursor()
+            # noinspection SqlResolve
+            cursor.execute("SELECT id FROM chronovoyage_periods WHERE period_name = %s", (period.period_name,))
+            row = cursor.fetchone()
+            if row is None:
+                return None
+            (_id,) = row
+            return _id
+
     def add_period(self, period: MigratePeriod) -> int:
         with self.begin() as conn:
             cursor = conn.cursor()
@@ -80,6 +91,12 @@ class MariadbDatabaseConnectionWrapper(IDatabaseConnectionWrapper):
             cursor = conn.cursor()
             # noinspection SqlResolve
             cursor.execute("UPDATE chronovoyage_periods SET has_come = TRUE WHERE id = ?", (inserted_period_id,))
+
+    def mark_period_as_not_come(self, inserted_period_id: int) -> None:
+        with self.begin() as conn:
+            cursor = conn.cursor()
+            # noinspection SqlResolve
+            cursor.execute("UPDATE chronovoyage_periods SET has_come = FALSE WHERE id = ?", (inserted_period_id,))
 
     def get_current_period(self) -> str | None:
         with self.begin() as conn:
@@ -115,6 +132,15 @@ CREATE TABLE chronovoyage_periods
 """.strip()
             )
             return True
+
+    def system_table_exists(self) -> bool:
+        with self.begin() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "SELECT table_name FROM information_schema.tables WHERE table_schema = ? AND TABLE_NAME = 'chronovoyage_periods'",
+                (conn.database,),
+            )
+            return cursor.fetchone() is not None
 
 
 class MariadbDatabaseConnection(IDatabaseConnection):

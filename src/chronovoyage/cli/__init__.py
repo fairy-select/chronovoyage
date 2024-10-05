@@ -13,7 +13,9 @@ from chronovoyage.domain.add import AddDomain
 from chronovoyage.domain.current import CurrentDomain
 from chronovoyage.domain.init import InitDomain
 from chronovoyage.domain.migrate import MigrateDomain
+from chronovoyage.domain.rollback import RollbackDomain
 from chronovoyage.internal.config import MigrateConfigFactory
+from chronovoyage.internal.feature.flags import FeatureFlagEnabledChecker
 from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLanguageEnum
 from chronovoyage.lib.datetime_time import DatetimeLib
@@ -68,3 +70,12 @@ def current():
 def migrate(target: str | None):
     """Migrate database. Use \"rollback\" if you move to a previous version."""
     MigrateDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute(target=target)
+
+
+@chronovoyage.command()
+@click.option("--target", "-t", help="Move to a specific period. (Example: 20060102150405)")
+def rollback(target: str | None):
+    """Rollback database."""
+    if target is None:
+        FeatureFlagEnabledChecker.rollback_without_options()
+    RollbackDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute(target=target)

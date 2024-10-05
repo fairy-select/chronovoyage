@@ -26,3 +26,7 @@ class DatabaseVendorEnum(StrEnum):
 class MigratePeriodLanguageEnum(StrEnum):
     DDL = "ddl"
     DML = "dml"
+
+
+class FeatureFlagEnum(StrEnum):
+    ROLLBACK_WITHOUT_OPTIONS = "rollback_without_options"

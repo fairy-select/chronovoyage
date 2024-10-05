@@ -20,6 +20,10 @@ class IDatabaseConnectionWrapper(PCanHandleTransaction, metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def find_period_id(self, period: MigratePeriod) -> int | None:
+        pass
+
+    @abstractmethod
     def get_sqls(self, filepath: str) -> Generator[str, Any, None]:
         pass
 
@@ -32,6 +36,10 @@ class IDatabaseConnectionWrapper(PCanHandleTransaction, metaclass=ABCMeta):
         pass
 
     @abstractmethod
+    def mark_period_as_not_come(self, inserted_period_id: int) -> None:
+        pass
+
+    @abstractmethod
     def get_current_period(self) -> str | None:
         pass
 
@@ -41,6 +49,15 @@ class IDatabaseConnectionWrapper(PCanHandleTransaction, metaclass=ABCMeta):
 
         Returns:
             bool: True if the table is created, False otherwise.
+
+        """
+
+    @abstractmethod
+    def system_table_exists(self) -> bool:
+        """Check whether system table exists.
+
+        Returns:
+            bool: True if the table exists, False otherwise.
 
         """
 
