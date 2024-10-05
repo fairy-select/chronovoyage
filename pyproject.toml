@@ -48,7 +48,7 @@ chronovoyage = "chronovoyage.cli:chronovoyage"
 [tool.hatch.version]
 path = "src/chronovoyage/__about__.py"
 
-[tool.hatch.envs.nightly]
+[tool.hatch.envs.mariadb]
 features = [
   "mariadb",
 ]
