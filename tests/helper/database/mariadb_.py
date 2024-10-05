@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import re
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from helper import DEFAULT_TEST_ENV, default_mariadb_connection_info
@@ -47,3 +47,21 @@ def get_default_mariadb_connection():
     return DatabaseConnector(logger=get_default_logger()).get_connection(
         DatabaseVendorEnum.MARIADB, default_mariadb_connection_info()
     )
+
+
+class SupportMariadb:
+    @staticmethod
+    def get_tables():
+        with get_default_mariadb_connection() as wrapper, wrapper.begin() as conn:
+            cursor = conn.cursor()
+            return mariadb_get_tables(cursor)
+
+    @staticmethod
+    def assert_rows_and_sql(want_rows: list[tuple[Any, ...]], sql: str) -> None:
+        with get_default_mariadb_connection() as wrapper, wrapper.begin() as conn:
+            cursor = conn.cursor()
+            cursor.execute(sql)
+            if cursor.rowcount != len(want_rows):
+                pytest.fail(f"件数が異なる (want: {len(want_rows)}), got: {cursor.rowcount}")
+            for i, got_user in enumerate(cursor):
+                assert got_user == want_rows[i], f"row {i}"

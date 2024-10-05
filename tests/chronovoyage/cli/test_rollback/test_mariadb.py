@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Generator
 
 import pytest
 from click.testing import CliRunner
-from helper.database.mariadb_ import truncate_mariadb_test_db
+from helper.database.mariadb_ import SupportMariadb, truncate_mariadb_test_db
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.exception.feature import FeatureNotSupportedError
@@ -55,3 +55,18 @@ class TestRollbackCommandMariadb:
             period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
         # then
         assert period.period_name == "19991231235902"
+
+    def test_rollback_from_halfway_to_target(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            # when
+            runner.invoke(chronovoyage, ["rollback", "--target", "19991231235901"])
+            period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
+        # then
+        assert period.period_name == "19991231235901"
+        assert SupportMariadb.get_tables() == {"user"}
+        # noinspection SqlResolve
+        SupportMariadb.assert_rows_and_sql([], "SELECT * FROM user ORDER BY id")
