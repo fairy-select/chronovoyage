@@ -43,3 +43,15 @@ class TestRollbackCommandMariadb:
         # then
         assert result.exit_code == 0
         assert period.period_name == "19991231235901"
+
+    def test_rollback_to_now(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            runner.invoke(chronovoyage, ["migrate", "--target", "19991231235902"])
+            # when
+            runner.invoke(chronovoyage, ["rollback", "--target", "19991231235902"])
+            period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
+        # then
+        assert period.period_name == "19991231235902"
