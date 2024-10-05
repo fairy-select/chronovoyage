@@ -94,8 +94,8 @@ chronovoyage migrate
         - --dry-run
             - [ ] show executing SQL
         - [ ] detect ddl or dml
-    - status
-        - [ ] show current migration status
+    - ~~status~~ current
+        - [x] show current migration status
     - rollback
         - [ ] to version
     - test
