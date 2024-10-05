@@ -5,7 +5,6 @@ from typing import Any, Generator
 
 import pytest
 from click.testing import CliRunner
-from helper.database.mariadb_ import get_default_mariadb_connection, mariadb_get_tables, truncate_mariadb_test_db
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.exception.config import (
@@ -14,6 +13,7 @@ from chronovoyage.internal.exception.config import (
     MigrateConfigSqlMissingError,
     MigrateConfigVersionNameInvalidError,
 )
+from helper.database.mariadb_ import get_default_mariadb_connection, mariadb_get_tables, truncate_mariadb_test_db
 
 
 class TestMigrateCommandMariadb:
@@ -61,7 +61,7 @@ class TestMigrateCommandMariadb:
         # when
         result = CliRunner().invoke(chronovoyage, ["migrate"])
         # then
-        assert issubclass(result.exception.__class__, MigrateConfigVersionNameInvalidError)
+        assert isinstance(result.exception, MigrateConfigVersionNameInvalidError)
 
     def test_both_sqls_missing(self, mariadb_resource_dir) -> None:
         # given
@@ -69,7 +69,7 @@ class TestMigrateCommandMariadb:
         # when
         result = CliRunner().invoke(chronovoyage, ["migrate"])
         # then
-        assert issubclass(result.exception.__class__, MigrateConfigSqlMissingError)
+        assert isinstance(result.exception, MigrateConfigSqlMissingError)
 
     def test_go_sql_missing(self, mariadb_resource_dir) -> None:
         # given
@@ -77,7 +77,7 @@ class TestMigrateCommandMariadb:
         # when
         result = CliRunner().invoke(chronovoyage, ["migrate"])
         # then
-        assert issubclass(result.exception.__class__, MigrateConfigGoSqlMissingError)
+        assert isinstance(result.exception, MigrateConfigGoSqlMissingError)
 
     def test_return_sql_missing(self, mariadb_resource_dir) -> None:
         # given
@@ -85,7 +85,7 @@ class TestMigrateCommandMariadb:
         # when
         result = CliRunner().invoke(chronovoyage, ["migrate"])
         # then
-        assert issubclass(result.exception.__class__, MigrateConfigReturnSqlMissingError)
+        assert isinstance(result.exception, MigrateConfigReturnSqlMissingError)
 
     def test_ddl_and_dml(self, mariadb_resource_dir) -> None:
         # given

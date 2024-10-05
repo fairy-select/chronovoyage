@@ -10,9 +10,9 @@ from click import Group
 
 from chronovoyage.__about__ import __version__
 from chronovoyage.domain.add import AddDomain
+from chronovoyage.domain.current import CurrentDomain
 from chronovoyage.domain.init import InitDomain
 from chronovoyage.domain.migrate import MigrateDomain
-from chronovoyage.domain.current import CurrentDomain
 from chronovoyage.internal.config import MigrateDomainConfigFactory
 from chronovoyage.internal.logger import get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLanguageEnum
@@ -60,6 +60,7 @@ def current():
     """Get current period."""
     period = CurrentDomain(MigrateDomainConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute()
     click.echo(f"Current period: {period.period_name} {period.language} {period.description}")
+    return period
 
 
 @chronovoyage.command()

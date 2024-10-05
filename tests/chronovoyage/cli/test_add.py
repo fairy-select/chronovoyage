@@ -48,9 +48,10 @@ class TestAddCommand:
         with runner.isolated_filesystem():
             runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
             os.chdir("sample")
-            # when/then
+            # when
             result = runner.invoke(chronovoyage, ["add", language, description])
-            assert issubclass(result.exception.__class__, AddDomainInvalidDescriptionError)
+        # then
+        assert isinstance(result.exception, AddDomainInvalidDescriptionError)
 
     @pytest.mark.parametrize("language", [pytest.param(lang.value) for lang in MigratePeriodLanguageEnum])
     @pytest.mark.parametrize("vendor", [pytest.param(vendor.value) for vendor in DatabaseVendorEnum])
@@ -64,6 +65,7 @@ class TestAddCommand:
             runner.invoke(chronovoyage, ["init", "sample", "--vendor", vendor])
             os.chdir("sample")
             runner.invoke(chronovoyage, ["add", language, "sample_description"])
-            # when/then
+            # when
             result = runner.invoke(chronovoyage, ["add", language, "sample_description"])
-            assert issubclass(result.exception.__class__, DirectoryAlreadyExistsError)
+        # then
+        assert isinstance(result.exception, DirectoryAlreadyExistsError)

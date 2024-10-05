@@ -44,7 +44,7 @@ class TestInitCommand:
             # then
             with open(os.path.join(os.getcwd(), "sample", "config.json")) as f:
                 config = f.read()
-                assert json.loads(config)["vendor"] == "mariadb"
+        assert json.loads(config)["vendor"] == "mariadb"
 
     @pytest.mark.parametrize(
         ("vendor", "want_config"),
@@ -62,4 +62,4 @@ class TestInitCommand:
             assert os.listdir(os.path.join(cwd, dirname)) == ["config.json"]
             with open(os.path.join(cwd, dirname, "config.json")) as f:
                 config = f.read()
-            assert config == want_config
+        assert config == want_config
