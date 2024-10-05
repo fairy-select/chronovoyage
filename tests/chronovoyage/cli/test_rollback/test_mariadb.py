@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Generator
 import pytest
 from click.testing import CliRunner
 
-from chronovoyage.internal.exception.migrate import RollbackFutureTargetError
+from chronovoyage.internal.exception.migrate import RollbackFutureTargetError, RollbackSystemTableNotExistError
 from support.database.mariadb_ import SupportMariadb
 
 from chronovoyage.cli import chronovoyage
@@ -85,3 +85,13 @@ class TestRollbackCommandMariadb:
         # then
         assert isinstance(result.exception, RollbackFutureTargetError)
         assert period.period_name == "19991231235901"
+
+    def test_rollback_from_nothing(self, mariadb_resource_dir) -> None:
+        # given
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(mariadb_resource_dir)
+            # when
+            result = runner.invoke(chronovoyage, ["rollback", "--target", "19991231235901"])
+        # then
+        assert isinstance(result.exception, RollbackSystemTableNotExistError)

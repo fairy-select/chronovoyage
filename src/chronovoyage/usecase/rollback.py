@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from chronovoyage.internal.database.connection import DatabaseConnector
-from chronovoyage.internal.exception.migrate import RollbackFutureTargetError
+from chronovoyage.internal.exception.migrate import RollbackFutureTargetError, RollbackSystemTableNotExistError
 
 if TYPE_CHECKING:
     from logging import Logger
@@ -21,8 +21,8 @@ class RollbackUsecase:
             self._config.vendor, self._config.connection_info
         ) as _conn:
             if not _conn.system_table_exists():
-                # TODO: error log and raise Exception
-                return
+                self._logger.error("system table does not exist")
+                raise RollbackSystemTableNotExistError
 
             current = _conn.get_current_period()
             if target is not None and current is not None and current < target:

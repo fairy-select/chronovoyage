@@ -20,7 +20,13 @@ class MigratePastTargetError(MigrateInvalidTargetError):
         super().__init__("past target")
 
 
-class RollbackInvalidTargetError(MigrateError):
+class RollbackError(Exception):
+    """ロールバックに関するエラー"""
+
+class RollbackSystemTableNotExistError(RollbackError):
+    """ロールバック時にシステムテーブルが存在しない場合に送出するエラー"""
+
+class RollbackInvalidTargetError(RollbackError):
     """ロールバックで不適切な時代が指定された際に送出するエラー"""
 
 
