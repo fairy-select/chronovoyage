@@ -37,18 +37,22 @@ class MigrateUsecase:
                     self._logger.debug("period '%s' is in the future and migrate will stop.", period.period_name)
                     break
 
-                self._logger.debug("adding the period '%s'.", period.period_name)
-                try:
-                    inserted_period_id = _conn.add_period(period)
-                    self._logger.debug(
-                        "inserted the period '%s' into chronovoyage_periods. id is %d.",
-                        period.period_name,
-                        inserted_period_id,
-                    )
-                except:
-                    self._logger.warning("an error occurred when adding the period '%s'.", period.period_name)
-                    raise
-                self._logger.info("added the period '%s'.", period.period_name)
+                period_id = _conn.find_period_id(period)
+                if period_id is not None:
+                    self._logger.info("the period '%s' found.", period.period_name)
+                else:
+                    self._logger.debug("adding the period '%s'.", period.period_name)
+                    try:
+                        period_id = _conn.add_period(period)
+                        self._logger.debug(
+                            "inserted the period '%s' into chronovoyage_periods. id is %d.",
+                            period.period_name,
+                            period_id,
+                        )
+                    except:
+                        self._logger.warning("an error occurred when adding the period '%s'.", period.period_name)
+                        raise
+                    self._logger.info("added the period '%s'.", period.period_name)
 
                 self._logger.debug("the period '%s' is coming.", period.period_name)
                 for sql in _conn.get_sqls(period.go_sql_path):
@@ -59,8 +63,8 @@ class MigrateUsecase:
                         self._logger.warning("an error occurred when executing the sql '%s'.", sql)
                         raise
                 try:
-                    _conn.mark_period_as_come(inserted_period_id)
-                    self._logger.debug("updated the period which id is %d.", inserted_period_id)
+                    _conn.mark_period_as_come(period_id)
+                    self._logger.debug("updated the period which id is %d.", period_id)
                 except:
                     self._logger.warning("an error occurred when updating the period '%s'.", period.period_name)
                     raise
