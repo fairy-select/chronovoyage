@@ -102,7 +102,7 @@ module = [
   "chronovoyage.*",
   "mariadb",
   # tests
-  "helper.*",
+  "support.*",
   "pytest",
   "_pytest.fixtures",
   "pytest_mock",

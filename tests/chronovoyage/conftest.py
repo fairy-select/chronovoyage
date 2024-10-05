@@ -2,7 +2,7 @@ import re
 
 import pytest
 from _pytest.fixtures import SubRequest
-from helper import DEFAULT_TEST_ENV, RESOURCE_DIR
+from support import DEFAULT_TEST_ENV, RESOURCE_DIR
 
 from chronovoyage.internal.config import MigrateConfigFactory
 

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Generator
 
 import pytest
 from click.testing import CliRunner
-from helper.database.mariadb_ import SupportMariadb, truncate_mariadb_test_db
+from support.database.mariadb_ import SupportMariadb
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.exception.feature import FeatureNotSupportedError
@@ -16,7 +16,7 @@ class TestRollbackCommandMariadb:
     @pytest.fixture(autouse=True)
     def _(self) -> Generator[Any, Any, None]:
         yield
-        truncate_mariadb_test_db()
+        SupportMariadb.truncate_mariadb_test_db()
 
     def test_rollback_with_no_options(self, mariadb_resource_dir) -> None:
         """オプションなしで 1 時代のみ巻き戻す機能。現在未実装。"""

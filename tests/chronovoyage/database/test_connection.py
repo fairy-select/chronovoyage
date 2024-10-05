@@ -1,5 +1,5 @@
 import pytest
-from helper import default_mariadb_connection_info
+from support import default_mariadb_connection_info
 
 from chronovoyage.internal.database.connection import DatabaseConnector
 from chronovoyage.internal.logger import get_default_logger

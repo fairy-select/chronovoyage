@@ -6,7 +6,7 @@ from typing import Any, Generator
 
 import pytest
 from click.testing import CliRunner
-from helper.database.mariadb_ import truncate_mariadb_test_db
+from support.database.mariadb_ import SupportMariadb
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.exception.current import CurrentDbCurrentPeriodNotInMigrateConfigError
@@ -16,7 +16,7 @@ class TestCurrentCommandMariadb:
     @pytest.fixture(autouse=True)
     def _(self) -> Generator[Any, Any, None]:
         yield
-        truncate_mariadb_test_db()
+        SupportMariadb.truncate_mariadb_test_db()
 
     def test_current_is_latest(self, mariadb_resource_dir) -> None:
         # given
