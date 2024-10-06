@@ -13,7 +13,7 @@ class NoMariadbResourcesFoundError(FileNotFoundError):
 @pytest.fixture
 def mariadb_resource_dir(request: SubRequest) -> str:
     """テストケース名に対応した mariadb の設定ディレクトリを取得する"""
-    matched = re.match(r"^test_(?P<test_name>.+)$", request.node.name)
+    matched = re.match(r"^(?P<test_name>test_.+)$", request.node.name)
     if not matched:
         raise NoMariadbResourcesFoundError(request.node.name)
     test_name = matched.group("test_name")
