@@ -16,7 +16,7 @@ from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.domain.rollback import RollbackDomain
 from chronovoyage.internal.config import MigrateConfigFactory
 from chronovoyage.internal.feature.flags import FeatureFlagEnabledChecker
-from chronovoyage.internal.logger.logger import AppLogger, get_default_logger
+from chronovoyage.internal.logger.logger import AppLoggerFactory, get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLanguageEnum
 from chronovoyage.lib.datetime_time import DatetimeLib
 
@@ -30,7 +30,7 @@ chronovoyage: Group
 @click.version_option(version=__version__, prog_name="chronovoyage")
 @click.option("-v", "--verbose", is_flag=True, default=False, help="Enable verbose log.")
 def chronovoyage(*, verbose: bool):
-    AppLogger.set_verbose(verbose=verbose)
+    AppLoggerFactory.set_verbose(verbose=verbose)
 
 
 @chronovoyage.command()

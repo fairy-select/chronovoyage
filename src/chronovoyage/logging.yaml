@@ -17,7 +17,7 @@ loggers:
     level: INFO
     handlers: [console_app]
     propagate: no
-  AppLogger-debug:
+  AppLoggerDebug:
     level: DEBUG
     handlers: [console_app]
     propagate: no
