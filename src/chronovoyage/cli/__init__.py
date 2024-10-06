@@ -37,7 +37,6 @@ def chronovoyage():
 @click.argument("dirname", type=click.STRING)
 @click.option(
     "--vendor",
-    "-v",
     type=click.Choice(database_vendors, case_sensitive=False),
     default=DatabaseVendorEnum.MARIADB.value,
     help="Database vendor.",
