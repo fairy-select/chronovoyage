@@ -6,7 +6,7 @@ class FeatureNotSupportedError(Exception):
 
     def __init__(self, feature: FeatureFlagEnum) -> None:
         s = feature.value.capitalize().replace("_", " ")
-        super().__init__(f"'{s}' is not supported")
+        super().__init__(f"'{s}' is currently not supported")
 
 
 class FeatureFlagNotDefinedError(Exception):
