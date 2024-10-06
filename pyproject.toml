@@ -29,7 +29,6 @@ dependencies = [
   "python-dotenv",
   "typing-extensions",
   "pyyaml",
-  "setuptools",
 ]
 features = [
   "mariadb",
