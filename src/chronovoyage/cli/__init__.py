@@ -16,7 +16,7 @@ from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.domain.rollback import RollbackDomain
 from chronovoyage.internal.config import MigrateConfigFactory
 from chronovoyage.internal.feature.flags import FeatureFlagEnabledChecker
-from chronovoyage.internal.logger import get_default_logger
+from chronovoyage.internal.logger.logger import get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLanguageEnum
 from chronovoyage.lib.datetime_time import DatetimeLib
 

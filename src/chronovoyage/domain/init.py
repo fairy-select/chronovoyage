@@ -1,7 +1,7 @@
 import os.path
 
 from chronovoyage.internal.exception.init import InitDomainTargetDirectoryNotFoundError
-from chronovoyage.internal.logger import AppLogger
+from chronovoyage.internal.logger.logger import AppLogger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 from chronovoyage.usecase.init import InitUsecase
 

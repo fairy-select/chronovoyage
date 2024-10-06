@@ -11,7 +11,7 @@ from chronovoyage.internal.exception.migrate import (
 
 if TYPE_CHECKING:
     from chronovoyage.internal.config import MigrateConfig
-    from chronovoyage.internal.logger import AppLogger
+    from chronovoyage.internal.logger.logger import AppLogger
 
 
 class RollbackUsecase:

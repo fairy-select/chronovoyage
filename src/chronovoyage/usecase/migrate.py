@@ -8,7 +8,7 @@ from chronovoyage.internal.exception.migrate import MigratePastTargetError
 if TYPE_CHECKING:
     from chronovoyage.internal.config import MigrateConfig, MigratePeriod
     from chronovoyage.internal.interface.database import IDatabaseConnectionWrapper
-    from chronovoyage.internal.logger import AppLogger
+    from chronovoyage.internal.logger.logger import AppLogger
 
 
 class MigrateUsecase:

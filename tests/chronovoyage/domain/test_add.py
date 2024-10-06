@@ -6,7 +6,7 @@ from click.testing import CliRunner
 
 from chronovoyage.domain.add import AddDomain
 from chronovoyage.internal.exception.add_domain import AddDomainError
-from chronovoyage.internal.logger import get_default_logger
+from chronovoyage.internal.logger.logger import get_default_logger
 
 
 class TestAddDomain:

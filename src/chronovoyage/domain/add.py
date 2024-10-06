@@ -6,7 +6,7 @@ from chronovoyage.internal.exception.add_domain import (
     AddDomainInvalidDescriptionError,
     AddDomainTargetDirectoryNotFoundError,
 )
-from chronovoyage.internal.logger import AppLogger
+from chronovoyage.internal.logger.logger import AppLogger
 from chronovoyage.internal.type.config import MigratePeriodCreateParam
 from chronovoyage.internal.type.enum import MigratePeriodLanguageEnum
 from chronovoyage.usecase.init import InitUsecase

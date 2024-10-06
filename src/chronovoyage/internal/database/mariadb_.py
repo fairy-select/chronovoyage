@@ -12,7 +12,7 @@ from chronovoyage.internal.interface.database import (
 
 if TYPE_CHECKING:
     from chronovoyage.internal.config import MigratePeriod
-    from chronovoyage.internal.logger import AppLogger
+    from chronovoyage.internal.logger.logger import AppLogger
     from chronovoyage.internal.type.database import ConnectionInfo
 
 

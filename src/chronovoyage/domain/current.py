@@ -6,7 +6,7 @@ from chronovoyage.usecase.current import CurrentUsecase
 
 if TYPE_CHECKING:
     from chronovoyage.internal.config import MigrateConfig, MigratePeriod
-    from chronovoyage.internal.logger import AppLogger
+    from chronovoyage.internal.logger.logger import AppLogger
 
 
 class CurrentDomain:

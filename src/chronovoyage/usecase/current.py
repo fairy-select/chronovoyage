@@ -7,7 +7,7 @@ from chronovoyage.internal.exception.current import CurrentDbCurrentPeriodNotInM
 
 if TYPE_CHECKING:
     from chronovoyage.internal.config import MigrateConfig, MigratePeriod
-    from chronovoyage.internal.logger import AppLogger
+    from chronovoyage.internal.logger.logger import AppLogger
 
 
 class CurrentUsecase:

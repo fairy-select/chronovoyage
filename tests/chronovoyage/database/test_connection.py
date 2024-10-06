@@ -2,7 +2,7 @@ import pytest
 from support import default_mariadb_connection_info
 
 from chronovoyage.internal.database.connection import DatabaseConnector
-from chronovoyage.internal.logger import get_default_logger
+from chronovoyage.internal.logger.logger import get_default_logger
 from chronovoyage.internal.type.database import ConnectionInfo
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 

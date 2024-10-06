@@ -10,7 +10,7 @@ from chronovoyage.internal.exception import DirectoryAlreadyExistsError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
-    from chronovoyage.internal.logger import AppLogger
+    from chronovoyage.internal.logger.logger import AppLogger
     from chronovoyage.internal.type.config import MigratePeriodCreateParam
 
 config_templates: Mapping[DatabaseVendorEnum, Mapping[str, Any]] = {
