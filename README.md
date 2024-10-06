@@ -97,7 +97,9 @@ chronovoyage migrate
     - ~~status~~ current
         - [x] show current migration status
     - rollback
-        - [ ] to version
+        - [x] to version
     - test
         - [ ] check if every "migrate -> rollback" operation means do nothing for schema
         - [ ] if dml, the operation means do nothing for data (including autoincrement num)
+- Other
+    - [ ] CLI logging
