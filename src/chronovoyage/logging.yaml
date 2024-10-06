@@ -3,7 +3,7 @@ version: 1
 
 formatters:
   app_fmt:
-    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    format: '%(asctime)s - %(levelname)s - %(message)s'
 
 handlers:
   console_app:
@@ -18,6 +18,6 @@ loggers:
     handlers: [console_app]
     propagate: no
   AppLogger-debug:
-    level: INFO
+    level: DEBUG
     handlers: [console_app]
     propagate: no

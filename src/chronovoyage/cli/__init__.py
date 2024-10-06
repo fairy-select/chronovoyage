@@ -16,11 +16,10 @@ from chronovoyage.domain.migrate import MigrateDomain
 from chronovoyage.domain.rollback import RollbackDomain
 from chronovoyage.internal.config import MigrateConfigFactory
 from chronovoyage.internal.feature.flags import FeatureFlagEnabledChecker
-from chronovoyage.internal.logger.logger import get_default_logger
+from chronovoyage.internal.logger.logger import AppLogger, get_default_logger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLanguageEnum
 from chronovoyage.lib.datetime_time import DatetimeLib
 
-logger = get_default_logger()
 database_vendors = [e.value for e in DatabaseVendorEnum]
 migrate_period_languages = [e.value for e in MigratePeriodLanguageEnum]
 
@@ -29,8 +28,9 @@ chronovoyage: Group
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)  # type: ignore[no-redef]
 @click.version_option(version=__version__, prog_name="chronovoyage")
-def chronovoyage():
-    pass
+@click.option("-v", "--verbose", is_flag=True, default=False, help="Enable verbose log.")
+def chronovoyage(*, verbose: bool):
+    AppLogger.set_verbose(verbose=verbose)
 
 
 @chronovoyage.command()
@@ -43,7 +43,7 @@ def chronovoyage():
 )
 def init(dirname: str, vendor: str):
     """Create chronovoyage config directory and initialize."""
-    InitDomain(os.getcwd(), logger=logger).execute(dirname, DatabaseVendorEnum(vendor))
+    InitDomain(os.getcwd(), logger=get_default_logger()).execute(dirname, DatabaseVendorEnum(vendor))
 
 
 @chronovoyage.command()
@@ -51,7 +51,7 @@ def init(dirname: str, vendor: str):
 @click.argument("description", type=click.STRING)
 def add(language: str, description: str):
     """Add migration period to your directory."""
-    AddDomain(os.getcwd(), logger=logger).execute(
+    AddDomain(os.getcwd(), logger=get_default_logger()).execute(
         MigratePeriodLanguageEnum(language), description, now=DatetimeLib.now()
     )
 
@@ -59,7 +59,9 @@ def add(language: str, description: str):
 @chronovoyage.command()
 def current():
     """Get current period."""
-    period = CurrentDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute()
+    period = CurrentDomain(
+        MigrateConfigFactory.create_from_directory(os.getcwd()), logger=get_default_logger()
+    ).execute()
     click.echo(f"Current period: {period.period_name} {period.language} {period.description}")
     return period
 
@@ -68,7 +70,9 @@ def current():
 @click.option("--target", "-t", help="Move to a specific period. (Example: 20060102150405)")
 def migrate(target: str | None):
     """Migrate database. Use \"rollback\" if you move to a previous version."""
-    MigrateDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute(target=target)
+    MigrateDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=get_default_logger()).execute(
+        target=target
+    )
 
 
 @chronovoyage.command()
@@ -77,4 +81,6 @@ def rollback(target: str | None):
     """Rollback database."""
     if target is None:
         FeatureFlagEnabledChecker.rollback_without_options()
-    RollbackDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=logger).execute(target=target)
+    RollbackDomain(MigrateConfigFactory.create_from_directory(os.getcwd()), logger=get_default_logger()).execute(
+        target=target
+    )
