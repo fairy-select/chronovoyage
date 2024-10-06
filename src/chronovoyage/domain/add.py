@@ -2,7 +2,7 @@ import os
 import re
 from datetime import datetime
 
-from chronovoyage.internal.exception.add_domain import (
+from chronovoyage.internal.exception.domain import (
     AddDomainInvalidDescriptionError,
     AddDomainTargetDirectoryNotFoundError,
 )

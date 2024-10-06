@@ -7,13 +7,13 @@ from click.testing import CliRunner
 from support.database import SupportDbClass
 
 from chronovoyage.cli import chronovoyage
-from chronovoyage.internal.exception.feature import FeatureNotSupportedError
-from chronovoyage.internal.exception.migrate import (
-    RollbackFutureTargetError,
-    RollbackInvalidTargetError,
-    RollbackMigratedPeriodNotInMigrateConfigError,
-    RollbackSystemTableNotExistError,
+from chronovoyage.internal.exception.domain import (
+    RollbackDomainFutureTargetError,
+    RollbackDomainInvalidTargetError,
+    RollbackDomainMigratedPeriodNotInMigrateConfigError,
+    RollbackDomainSystemTableNotExistError,
 )
+from chronovoyage.internal.exception.feature import FeatureNotSupportedError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
@@ -97,7 +97,7 @@ class TestRollbackCommandMariadb:
             result = runner.invoke(chronovoyage, ["rollback", "--target", "19991231235902"])
             period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
         # then
-        assert isinstance(result.exception, RollbackFutureTargetError)
+        assert isinstance(result.exception, RollbackDomainFutureTargetError)
         assert period.period_name == "19991231235901"
 
     def test_rollback_from_nothing(self, resource_dir_factory) -> None:
@@ -109,7 +109,7 @@ class TestRollbackCommandMariadb:
             # when
             result = runner.invoke(chronovoyage, ["rollback", "--target", "19991231235901"])
         # then
-        assert isinstance(result.exception, RollbackSystemTableNotExistError)
+        assert isinstance(result.exception, RollbackDomainSystemTableNotExistError)
 
     def test_rollback_to_unknown_target(self, resource_dir_factory) -> None:
         # given
@@ -122,7 +122,7 @@ class TestRollbackCommandMariadb:
             result = runner.invoke(chronovoyage, ["rollback", "--target", "19991130123456"])
             period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
         # then
-        assert isinstance(result.exception, RollbackInvalidTargetError)
+        assert isinstance(result.exception, RollbackDomainInvalidTargetError)
         assert period.period_name == "19991231235902"
 
     def test_rollback_config_is_missing(self, resource_dir_factory) -> None:
@@ -139,4 +139,4 @@ class TestRollbackCommandMariadb:
             # when
             result = runner.invoke(chronovoyage, ["rollback", "--target", "19991231235901"])
         # then
-        assert isinstance(result.exception, RollbackMigratedPeriodNotInMigrateConfigError)
+        assert isinstance(result.exception, RollbackDomainMigratedPeriodNotInMigrateConfigError)

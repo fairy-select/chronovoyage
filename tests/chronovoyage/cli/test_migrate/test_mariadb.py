@@ -14,7 +14,7 @@ from chronovoyage.internal.exception.config import (
     MigrateConfigSqlMissingError,
     MigrateConfigVersionNameInvalidError,
 )
-from chronovoyage.internal.exception.migrate import MigrateInvalidTargetError
+from chronovoyage.internal.exception.domain import MigrateDomainInvalidTargetError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
@@ -164,7 +164,7 @@ class TestMigrateCommandMariadb:
             result = runner.invoke(chronovoyage, ["migrate", "--target", "19991231235901"])
             period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
         # then
-        assert isinstance(result.exception, MigrateInvalidTargetError)
+        assert isinstance(result.exception, MigrateDomainInvalidTargetError)
         assert period.period_name == "19991231235902"
 
     def test_migrate_to_unknown_target(self, resource_dir_factory) -> None:
@@ -178,7 +178,7 @@ class TestMigrateCommandMariadb:
             result = runner.invoke(chronovoyage, ["migrate", "--target", "20060102150405"])
             period: MigratePeriod = runner.invoke(chronovoyage, ["current"], standalone_mode=False).return_value
         # then
-        assert isinstance(result.exception, MigrateInvalidTargetError)
+        assert isinstance(result.exception, MigrateDomainInvalidTargetError)
         assert period.period_name == "19991231235902"
 
     def test_migrate_once_rolled_back_period(self, resource_dir_factory) -> None:

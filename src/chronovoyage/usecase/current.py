@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from chronovoyage.internal.database.connection import DatabaseConnector
-from chronovoyage.internal.exception.current import CurrentDbCurrentPeriodNotInMigrateConfigError
+from chronovoyage.internal.exception.domain import CurrentDomainDbCurrentPeriodNotInMigrateConfigError
 
 if TYPE_CHECKING:
     from chronovoyage.internal.config import MigrateConfig, MigratePeriod
@@ -28,4 +28,4 @@ class CurrentUsecase:
             if period.period_name == current_period:
                 return period
 
-        raise CurrentDbCurrentPeriodNotInMigrateConfigError(current_period)
+        raise CurrentDomainDbCurrentPeriodNotInMigrateConfigError(current_period)

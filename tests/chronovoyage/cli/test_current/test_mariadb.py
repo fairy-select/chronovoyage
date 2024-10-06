@@ -9,7 +9,7 @@ from click.testing import CliRunner
 from support.database import SupportDbClass
 
 from chronovoyage.cli import chronovoyage
-from chronovoyage.internal.exception.current import CurrentDbCurrentPeriodNotInMigrateConfigError
+from chronovoyage.internal.exception.domain import CurrentDomainDbCurrentPeriodNotInMigrateConfigError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 
@@ -60,4 +60,4 @@ class TestCurrentCommandMariadb:
             # when
             result = runner.invoke(chronovoyage, ["current"])
         # then
-        assert isinstance(result.exception, CurrentDbCurrentPeriodNotInMigrateConfigError)
+        assert isinstance(result.exception, CurrentDomainDbCurrentPeriodNotInMigrateConfigError)

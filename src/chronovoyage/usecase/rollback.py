@@ -3,10 +3,10 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from chronovoyage.internal.database.connection import DatabaseConnector
-from chronovoyage.internal.exception.migrate import (
-    RollbackFutureTargetError,
-    RollbackMigratedPeriodNotInMigrateConfigError,
-    RollbackSystemTableNotExistError,
+from chronovoyage.internal.exception.domain import (
+    RollbackDomainFutureTargetError,
+    RollbackDomainMigratedPeriodNotInMigrateConfigError,
+    RollbackDomainSystemTableNotExistError,
 )
 
 if TYPE_CHECKING:
@@ -25,12 +25,12 @@ class RollbackUsecase:
         ) as _conn:
             if not _conn.system_table_exists():
                 self._logger.error("system table does not exist")
-                raise RollbackSystemTableNotExistError
+                raise RollbackDomainSystemTableNotExistError
 
             current = _conn.get_current_period()
             if target is not None and current is not None and current < target:
                 self._logger.error("rollback operation cannot go forward to the period '%s'", target)
-                raise RollbackFutureTargetError
+                raise RollbackDomainFutureTargetError
 
             period_name_to_period = {period.period_name: period for period in self._config.periods}
             for period_id, period_name in _conn.get_all_come_periods(reverse=True):
@@ -43,7 +43,7 @@ class RollbackUsecase:
 
                 period = period_name_to_period.get(period_name)
                 if period is None:
-                    raise RollbackMigratedPeriodNotInMigrateConfigError(period_name)
+                    raise RollbackDomainMigratedPeriodNotInMigrateConfigError(period_name)
 
                 self._logger.debug("going back to the period '%s'.", period_name)
                 for sql in _conn.get_sqls(period.return_sql_path):

@@ -6,7 +6,7 @@ from pytest_mock import MockerFixture
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.exception import DirectoryAlreadyExistsError
-from chronovoyage.internal.exception.add_domain import AddDomainInvalidDescriptionError
+from chronovoyage.internal.exception.domain import AddDomainInvalidDescriptionError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum, MigratePeriodLanguageEnum
 from chronovoyage.lib.datetime_time import DatetimeLib
 
