@@ -102,4 +102,4 @@ chronovoyage migrate
         - [ ] check if every "migrate -> rollback" operation means do nothing for schema
         - [ ] if dml, the operation means do nothing for data (including autoincrement num)
 - Other
-    - [ ] CLI logging
+    - [x] CLI logging
