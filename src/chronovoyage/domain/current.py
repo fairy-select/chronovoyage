@@ -5,13 +5,12 @@ from typing import TYPE_CHECKING
 from chronovoyage.usecase.current import CurrentUsecase
 
 if TYPE_CHECKING:
-    from logging import Logger
-
     from chronovoyage.internal.config import MigrateConfig, MigratePeriod
+    from chronovoyage.internal.logger import AppLogger
 
 
 class CurrentDomain:
-    def __init__(self, config: MigrateConfig, *, logger: Logger) -> None:
+    def __init__(self, config: MigrateConfig, *, logger: AppLogger) -> None:
         self._config = config
         self._logger = logger
         self.usecase = CurrentUsecase(config=self._config, logger=self._logger)

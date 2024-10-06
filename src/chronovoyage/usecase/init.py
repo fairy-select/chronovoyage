@@ -10,8 +10,7 @@ from chronovoyage.internal.exception import DirectoryAlreadyExistsError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
-    from logging import Logger
-
+    from chronovoyage.internal.logger import AppLogger
     from chronovoyage.internal.type.config import MigratePeriodCreateParam
 
 config_templates: Mapping[DatabaseVendorEnum, Mapping[str, Any]] = {
@@ -30,7 +29,7 @@ config_templates: Mapping[DatabaseVendorEnum, Mapping[str, Any]] = {
 
 
 class InitUsecase:
-    def __init__(self, *, logger: Logger) -> None:
+    def __init__(self, *, logger: AppLogger) -> None:
         self._logger = logger
 
     def create_files(self, *, vendor: DatabaseVendorEnum, to_directory: str) -> None:

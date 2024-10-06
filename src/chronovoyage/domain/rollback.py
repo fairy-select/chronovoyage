@@ -6,13 +6,12 @@ from chronovoyage.internal.exception.migrate import RollbackUnknownTargetError
 from chronovoyage.usecase.rollback import RollbackUsecase
 
 if TYPE_CHECKING:
-    from logging import Logger
-
     from chronovoyage.internal.config import MigrateConfig
+    from chronovoyage.internal.logger import AppLogger
 
 
 class RollbackDomain:
-    def __init__(self, config: MigrateConfig, *, logger: Logger) -> None:
+    def __init__(self, config: MigrateConfig, *, logger: AppLogger) -> None:
         self._config = config
         self._logger = logger
         self.usecase = RollbackUsecase(config=self._config, logger=self._logger)

@@ -6,14 +6,13 @@ from chronovoyage.internal.exception.database import DatabaseUnknownVendorError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
-    from logging import Logger
-
     from chronovoyage.internal.interface.database import IDatabaseConnection
+    from chronovoyage.internal.logger import AppLogger
     from chronovoyage.internal.type.database import ConnectionInfo
 
 
 class DatabaseConnector:
-    def __init__(self, *, logger: Logger) -> None:
+    def __init__(self, *, logger: AppLogger) -> None:
         self._logger = logger
 
     # noinspection PyMethodMayBeStatic

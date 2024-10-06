@@ -6,14 +6,13 @@ from chronovoyage.internal.database.connection import DatabaseConnector
 from chronovoyage.internal.exception.migrate import MigratePastTargetError
 
 if TYPE_CHECKING:
-    from logging import Logger
-
     from chronovoyage.internal.config import MigrateConfig, MigratePeriod
     from chronovoyage.internal.interface.database import IDatabaseConnectionWrapper
+    from chronovoyage.internal.logger import AppLogger
 
 
 class MigrateUsecase:
-    def __init__(self, *, config: MigrateConfig, logger: Logger) -> None:
+    def __init__(self, *, config: MigrateConfig, logger: AppLogger) -> None:
         self._config = config
         self._logger = logger
 

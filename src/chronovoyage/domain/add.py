@@ -1,19 +1,19 @@
 import os
 import re
 from datetime import datetime
-from logging import Logger
 
 from chronovoyage.internal.exception.add_domain import (
     AddDomainInvalidDescriptionError,
     AddDomainTargetDirectoryNotFoundError,
 )
+from chronovoyage.internal.logger import AppLogger
 from chronovoyage.internal.type.config import MigratePeriodCreateParam
 from chronovoyage.internal.type.enum import MigratePeriodLanguageEnum
 from chronovoyage.usecase.init import InitUsecase
 
 
 class AddDomain:
-    def __init__(self, cwd: str, *, logger: Logger) -> None:
+    def __init__(self, cwd: str, *, logger: AppLogger) -> None:
         self._cwd = cwd
         self._logger = logger
         self.usecase = InitUsecase(logger=self._logger)

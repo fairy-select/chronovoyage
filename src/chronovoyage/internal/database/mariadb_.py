@@ -11,13 +11,12 @@ from chronovoyage.internal.interface.database import (
 )
 
 if TYPE_CHECKING:
-    from logging import Logger
-
     from chronovoyage.internal.config import MigratePeriod
+    from chronovoyage.internal.logger import AppLogger
     from chronovoyage.internal.type.database import ConnectionInfo
 
 
-def connect(connection_info: ConnectionInfo, *, logger: Logger):
+def connect(connection_info: ConnectionInfo, *, logger: AppLogger):
     try:
         conn = mariadb.connect(
             host=connection_info.host,

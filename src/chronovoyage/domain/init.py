@@ -1,13 +1,13 @@
 import os.path
-from logging import Logger
 
 from chronovoyage.internal.exception.init import InitDomainTargetDirectoryNotFoundError
+from chronovoyage.internal.logger import AppLogger
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 from chronovoyage.usecase.init import InitUsecase
 
 
 class InitDomain:
-    def __init__(self, cwd: str, *, logger: Logger) -> None:
+    def __init__(self, cwd: str, *, logger: AppLogger) -> None:
         self._cwd = cwd
         self._logger = logger
         self.usecase = InitUsecase(logger=self._logger)
