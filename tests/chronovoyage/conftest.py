@@ -2,9 +2,7 @@ import re
 
 import pytest
 from _pytest.fixtures import SubRequest
-from support import DEFAULT_TEST_ENV, RESOURCE_DIR
-
-from chronovoyage.internal.config import MigrateConfigFactory
+from support import RESOURCE_DIR
 
 
 class NoMariadbResourcesFoundError(FileNotFoundError):
@@ -20,11 +18,3 @@ def mariadb_resource_dir(request: SubRequest) -> str:
         raise NoMariadbResourcesFoundError(request.node.name)
     test_name = matched.group("test_name")
     return f"{RESOURCE_DIR}/mariadb/{test_name}"
-
-
-@pytest.fixture
-def mariadb_migrate_domain_config(mariadb_resource_dir):
-    migrate_domain_config = MigrateConfigFactory().create_from_directory(mariadb_resource_dir)
-    if migrate_domain_config.connection_info.database != DEFAULT_TEST_ENV["MARIADB_DATABASE"]:
-        pytest.fail(f'設定ファイルの database は {DEFAULT_TEST_ENV["MARIADB_DATABASE"]} にしてください')
-    return migrate_domain_config
