@@ -17,6 +17,7 @@ class StrEnum(Enum):
 
 class DatabaseVendorEnum(StrEnum):
     MARIADB = "mariadb"
+    MYSQL = "mysql"
 
     @classmethod
     def _missing_(cls, _):

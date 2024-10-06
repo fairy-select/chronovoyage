@@ -13,3 +13,18 @@ services:
       start_period: 3s
       interval: 2s
       retries: 10
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+    env_file:
+      - test.env
+    ports:
+      - "3308:3306"
+    healthcheck:
+      test: mysql -u$$MYSQL_USER -p$$MYSQL_PASSWORD -e "SELECT 1;"
+      start_period: 3s
+      interval: 2s
+      retries: 10

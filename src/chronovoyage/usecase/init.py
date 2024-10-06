@@ -25,6 +25,17 @@ config_templates: Mapping[DatabaseVendorEnum, Mapping[str, Any]] = {
             "database": "test",
         },
     },
+    DatabaseVendorEnum.MYSQL: {
+        "$schema": "https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/schema/config.schema.json",
+        "vendor": "mysql",
+        "connection_info": {
+            "host": "127.0.0.1",
+            "port": 3306,
+            "user": "mysql",
+            "password": "password",
+            "database": "test",
+        },
+    },
 }
 
 
