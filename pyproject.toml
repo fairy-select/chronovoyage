@@ -39,7 +39,7 @@ mariadb = [
 ]
 
 [project.urls]
-Documentation = "https://gitlab.com/technical-study/chronovoyage/-/blob/main/README.md"
+Documentation = "https://chronovoyagemigration.net/"
 Issues = "https://gitlab.com/technical-study/chronovoyage/-/issues"
 Source = "https://gitlab.com/technical-study/chronovoyage"
 
