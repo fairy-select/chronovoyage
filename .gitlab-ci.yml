@@ -47,6 +47,10 @@ test:
     - java -jar wrs-checker.jar report.json $INSTANCE
 
 assume-role:
+  stage: test
+  image:
+    name: amazon/aws-cli
+    entrypoint: [ "" ]
   id_tokens:
     GITLAB_OIDC_TOKEN:
       aud: https://gitlab.com
