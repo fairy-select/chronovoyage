@@ -115,6 +115,7 @@ ignore_missing_imports = true
 ignore-vcs = true
 exclude = [
   "/tests",
+  "/Writerside",
 ]
 
 [tool.hatch.build.targets.wheel]
