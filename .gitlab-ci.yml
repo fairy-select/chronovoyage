@@ -31,8 +31,10 @@ build:
     - echo "Testing existence of $ARTIFACT..."
     - test -e public/$ARTIFACT
     - cp -va public/$ARTIFACT $ARTIFACT
+    - echo $CI_JOB_ID > build_job_id.txt
   artifacts:
     paths:
+      - build_job_id.txt
       - $ARTIFACT
       - public/report.json
     expire_in: 1 week
@@ -76,4 +78,6 @@ deploy-to-amplify:
       --output text))
     - aws sts get-caller-identity
   script:
+    - export BUILD_JOB_ID=$(cat build_job_id.txt)
+    - export SOURCE_URL=$CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$BUILD_JOB_ID/artifacts/$ARTIFACT?job=build&job_token=$CI_JOB_TOKEN
     - aws amplify start-deployment --app-id $APP_ID --branch-name $BRANCH_NAME --source-url $SOURCE_URL
