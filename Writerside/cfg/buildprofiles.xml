@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE buildprofiles SYSTEM "https://resources.jetbrains.com/writerside/1.0/build-profiles.dtd">
+<buildprofiles xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <variables>
+        <header-logo>logo.png</header-logo>
+    </variables>
+    <sitemap priority="0.35" change-frequency="monthly"/>
+    <build-profile instance="chronovoyage-docs">
+        <variables>
+            <primary-color>aqua</primary-color>
+            <color-preset>vivid</color-preset>
+            <custom-css>custom.css</custom-css>
+            <noindex-content>false</noindex-content>
+        </variables>
+    </build-profile>
+
+</buildprofiles>

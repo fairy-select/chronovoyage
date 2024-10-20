@@ -1,0 +1,15 @@
+@font-face {
+    font-family: "M PLUS 1";
+    src: url("MPLUS1-VariableFont_wght.ttf");
+}
+
+@font-face {
+    font-family: "M PLUS 1 Code";
+    src: url("MPLUS1Code-VariableFont_wght.ttf");
+}
+
+:root {
+    --rs-font-family-ui: "M PLUS 1", "JetBrains Sans Bundled", sans-serif;
+    --rs-font-family-headers: "M PLUS 1", "JetBrains Sans Bundled", sans-serif;
+    --rs-font-family-mono: "M PLUS 1 Code", "JetBrains Sans Bundled", sans-serif;
+}
