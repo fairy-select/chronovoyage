@@ -46,7 +46,7 @@ test:
     - curl -o wrs-checker.jar -L https://packages.jetbrains.team/maven/p/writerside/maven/com/jetbrains/writerside/writerside-ci-checker/1.0/writerside-ci-checker-1.0.jar
     - java -jar wrs-checker.jar report.json $INSTANCE
 
-assume role:
+assume-role:
   id_tokens:
     GITLAB_OIDC_TOKEN:
       aud: https://gitlab.com
@@ -68,8 +68,10 @@ deploy-to-amplify:
   stage: deploy
   only:
     - main
-  needs: [ build, test, assume_role ]
-  image: ubuntu:latest
+  needs: [ build, test, assume-role ]
+  image:
+    name: amazon/aws-cli
+    entrypoint: [ "" ]
 
   variables:
     APP_ID: $amplify_app_id
