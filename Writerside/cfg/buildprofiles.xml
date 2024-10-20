@@ -7,7 +7,7 @@
         <header-logo>logo.png</header-logo>
     </variables>
     <sitemap priority="0.35" change-frequency="monthly"/>
-    <build-profile instance="chronovoyage-docs">
+    <build-profile instance="cd">
         <variables>
             <primary-color>aqua</primary-color>
             <color-preset>vivid</color-preset>
