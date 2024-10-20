@@ -67,7 +67,7 @@ deploy-to-amplify:
     AWS_REGION: $aws_region
     APP_ID: $amplify_app_id
     BRANCH_NAME: main
-    SOURCE_URL: $CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$build_job_id/artifacts/$ARTIFACT?job=build&job_token=build_job_token
+    SOURCE_URL: $CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$build_job_id/artifacts/$ARTIFACT?job=build&job_token=$build_job_token
   before_script:
     - >
       export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s"
