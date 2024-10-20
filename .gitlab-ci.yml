@@ -46,18 +46,35 @@ test:
     - curl -o wrs-checker.jar -L https://packages.jetbrains.team/maven/p/writerside/maven/com/jetbrains/writerside/writerside-ci-checker/1.0/writerside-ci-checker-1.0.jar
     - java -jar wrs-checker.jar report.json $INSTANCE
 
-pages:
+assume role:
+  id_tokens:
+    GITLAB_OIDC_TOKEN:
+      aud: https://gitlab.com
+  variables:
+    ROLE_ARN: $aws_oidc_role_arn
+  script:
+    - >
+      export $(printf "AWS_ACCESS_KEY_ID=%s AWS_SECRET_ACCESS_KEY=%s AWS_SESSION_TOKEN=%s"
+      $(aws sts assume-role-with-web-identity
+      --role-arn ${ROLE_ARN}
+      --role-session-name "GitLabRunner-${CI_PROJECT_ID}-${CI_PIPELINE_ID}"
+      --web-identity-token ${GITLAB_OIDC_TOKEN}
+      --duration-seconds 300
+      --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]'
+      --output text))
+    - aws sts get-caller-identity
+
+deploy-to-amplify:
   stage: deploy
-  needs: [ build, test ]
+  only:
+    - main
+  needs: [ build, test, assume_role ]
   image: ubuntu:latest
-  before_script:
-    - apt-get update -y && apt-get install unzip -y
+
+  variables:
+    APP_ID: $amplify_app_id
+    BRANCH_NAME: main
+    SOURCE_URL: $CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$JOB_ID/artifacts/public/$ARTIFACT?job=build&job_token=$CI_JOB_TOKEN
 
   script:
-    - cd public
-    - unzip -O UTF-8 $ARTIFACT
-    - ls -l
-
-  artifacts:
-    paths:
-      - public
+    - aws amplify start-deployment --app-id $APP_ID --branch-name $BRANCH_NAME --source-url $SOURCE_URL
