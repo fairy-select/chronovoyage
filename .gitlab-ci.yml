@@ -59,6 +59,7 @@ deploy-to-amplify:
       aud: https://gitlab.com
   variables:
     ROLE_ARN: $aws_oidc_role_arn
+    AWS_REGION: $aws_region
     APP_ID: $amplify_app_id
     BRANCH_NAME: main
     SOURCE_URL: $CI_API_V4_URL/projects/$CI_PROJECT_ID/jobs/$JOB_ID/artifacts/public/$ARTIFACT?job=build&job_token=$CI_JOB_TOKEN
