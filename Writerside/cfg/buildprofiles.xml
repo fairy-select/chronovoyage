@@ -13,6 +13,7 @@
             <color-preset>vivid</color-preset>
             <custom-css>custom.css</custom-css>
             <noindex-content>false</noindex-content>
+            <custom-favicons>icon32.png</custom-favicons>
         </variables>
     </build-profile>
 
