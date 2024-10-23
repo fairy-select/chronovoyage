@@ -1,0 +1,26 @@
+name: Test
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Hatch
+        uses: pypa/hatch@install
+
+      - name: Up Test DB Containers
+        run: |
+          pushd tests
+          docker compose up -d --wait
+          popd
+
+      - name: Test App
+        run: hatch test --all
+
+      - name: Check Types
+        run: hatch run types:check
