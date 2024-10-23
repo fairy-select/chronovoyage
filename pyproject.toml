@@ -131,4 +131,4 @@ packages = [
 [tool.poe.tasks]
 lint = ["fmt", "types"]
 fmt = "hatch fmt"
-types = "hatch -e types run check"
+types = "hatch run types:check"
