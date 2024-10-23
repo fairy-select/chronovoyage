@@ -26,7 +26,7 @@ class TestAddCommand:
             # when
             runner.invoke(chronovoyage, ["add", language, "sample_description"])
             # then
-            assert os.listdir(f"19991231235901_{language}_sample_description") == ["go.sql", "return.sql"]
+            assert set(os.listdir(f"19991231235901_{language}_sample_description")) == {"go.sql", "return.sql"}
 
     @pytest.mark.parametrize(
         "description",
