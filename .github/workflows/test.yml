@@ -10,6 +10,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Install Dependencies
+        run: |
+          apt install -y libmariadb-dev
+
       - name: Install Hatch
         uses: pypa/hatch@install
 
