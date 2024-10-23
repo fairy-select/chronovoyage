@@ -73,6 +73,11 @@ dependencies = [
   "poethepoet",
 ]
 
+[tool.hatch.envs.hatch-test]
+features = [
+  "mariadb",
+]
+
 [tool.coverage.run]
 source_pkgs = ["chronovoyage", "tests"]
 branch = true
