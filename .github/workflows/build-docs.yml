@@ -79,5 +79,10 @@ jobs:
       - name: Upload artifact to S3
         run: aws s3api put-object --bucket ${{ secrets.AWS_S3_BUCKET }} --key ${{ env.ARTIFACT }} --body ${{ env.ARTIFACT }}
 
-#      - name: Deploy artifact to Amplify
-#        run: aws amplify start-deployment --app-id ${{ secrets.AMPLIFY_APP_ID }} --branch-name ${{ env.BRANCH_NAME }} --source-url $SOURCE_URL
+      - name: Deploy artifact to Amplify
+        run: |
+          aws amplify start-deployment \
+            --app-id ${{ secrets.AMPLIFY_APP_ID }} \
+            --branch-name ${{ env.BRANCH_NAME }} \
+            --source-url s3://${{ secrets.AWS_S3_BUCKET }}/${{ env.ARTIFACT }} \
+            --source-url-type BUCKET_PREFIX
