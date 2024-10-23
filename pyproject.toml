@@ -40,8 +40,8 @@ mariadb = [
 
 [project.urls]
 Documentation = "https://chronovoyagemigration.net/"
-Issues = "https://gitlab.com/technical-study/chronovoyage/-/issues"
-Source = "https://gitlab.com/technical-study/chronovoyage"
+Issues = "https://github.com/noritakaIzumi/chronovoyage/issues"
+Source = "https://github.com/noritakaIzumi/chronovoyage"
 
 [project.scripts]
 chronovoyage = "chronovoyage.cli:chronovoyage"

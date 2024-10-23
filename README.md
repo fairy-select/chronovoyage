@@ -65,6 +65,12 @@ Then, migrate.
 chronovoyage migrate
 ```
 
+## For more information
+
+We have a documentation for more details.
+
+https://chronovoyagemigration.net/
+
 ## License
 
 `chronovoyage` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
