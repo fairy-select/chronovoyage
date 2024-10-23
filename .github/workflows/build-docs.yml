@@ -84,5 +84,4 @@ jobs:
           aws amplify start-deployment \
             --app-id ${{ secrets.AMPLIFY_APP_ID }} \
             --branch-name ${{ env.BRANCH_NAME }} \
-            --source-url s3://${{ secrets.AWS_S3_BUCKET }}/ \
-            --source-url-type BUCKET_PREFIX
+            --source-url https://s3.${{ env.AWS_REGION }}.amazonaws.com/${{ secrets.AWS_S3_BUCKET }}/${{ env.ARTIFACT }}
