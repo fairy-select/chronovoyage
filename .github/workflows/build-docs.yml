@@ -8,6 +8,7 @@ on:
 
 permissions:
   id-token: write
+  contents: read
 
 env:
   INSTANCE: 'Writerside/cd'
@@ -55,9 +56,6 @@ jobs:
           instance: ${{ env.INSTANCE }}
 
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     env:
       AWS_REGION: 'us-east-1'
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
