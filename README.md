@@ -3,9 +3,67 @@
 [![PyPI - Version](https://img.shields.io/pypi/v/chronovoyage.svg)](https://pypi.org/project/chronovoyage)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chronovoyage.svg)](https://pypi.org/project/chronovoyage)
 
+![logo](https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/assets/images/logo.jpeg)
+
 -----
 
-Documentation is [here](https://chronovoyagemigration.net/).
+## Table of Contents
+
+- [Installation](#Installation)
+- [License](#License)
+
+## Installation
+
+To use MariaDB version, you need the MariaDB development package (`libmariadb-dev` in apt).
+
+```shell
+pip install chronovoyage[mariadb]
+```
+
+## Usage
+
+First, you should name and initialize a directory.
+
+```shell
+chronovoyage init my-project --vendor mariadb
+cd my-project
+```
+
+Edit `config.json`.
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/schema/config.schema.json",
+  "vendor": "mariadb",
+  "connection_info": {
+    "host": "127.0.0.1",
+    "port": 3306,
+    "user": "mariadb",
+    "password": "password",
+    "database": "test"
+  }
+}
+```
+
+Create migration template directory.
+
+```shell
+chronovoyage add ddl initial_migration
+```
+
+If you create DML,
+
+```shell
+chronovoyage add dml second_migration
+```
+
+Write up sql to `go.sql`, and rollback sql to `return.sql`.
+
+Then, migrate.
+
+```shell
+chronovoyage migrate
+```
 
 ## License
 
