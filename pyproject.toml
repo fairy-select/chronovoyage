@@ -8,6 +8,7 @@ dynamic = ["version"]
 description = 'My database migration framework.'
 readme = {"file" = "README.md", "content-type" = "text/markdown"}
 requires-python = ">=3.8"
+license = "MIT"
 license-files = { paths = ["LICENSE.txt"] }
 authors = [
   { name = "Noritaka IZUMI", email = "noritaka.izumi@gmail.com" },
