@@ -2,6 +2,9 @@
 
 [![PyPI - Version](https://img.shields.io/pypi/v/chronovoyage.svg)](https://pypi.org/project/chronovoyage)
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chronovoyage.svg)](https://pypi.org/project/chronovoyage)
+![Python Version from PEP 621 TOML](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FnoritakaIzumi%2Fchronovoyage%2Frefs%2Fheads%2Fmain%2Fpyproject.toml)
+![PyPI - License](https://img.shields.io/pypi/l/chronovoyage)
+[![Package Health | Snyk](https://snyk.io/advisor/python/chronovoyage/badge.svg)](https://snyk.io/advisor/python/chronovoyage)
 
 ![logo](https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/assets/images/logo.jpeg)
 
