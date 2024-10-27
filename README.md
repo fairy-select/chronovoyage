@@ -11,6 +11,7 @@
 
 - [Installation](#Installation)
 - [License](#License)
+- [Contributing](#Contributing)
 
 ## Installation
 
@@ -70,6 +71,13 @@ chronovoyage migrate
 We have a documentation for more details.
 
 https://chronovoyagemigration.net/
+
+## Contributing
+
+Please read the following docs before you contribute to this repo:
+
+- [Contributing](CONTRIBUTING.md)
+- [Code Of Conduct](CODE_OF_CONDUCT.md)
 
 ## License
 
