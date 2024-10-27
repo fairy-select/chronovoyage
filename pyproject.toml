@@ -31,9 +31,6 @@ dependencies = [
   "typing-extensions",
   "pyyaml",
 ]
-features = [
-  "mariadb",
-]
 [project.optional-dependencies]
 mariadb = [
   "mariadb",
@@ -50,12 +47,19 @@ chronovoyage = "chronovoyage.cli:chronovoyage"
 [tool.hatch.version]
 path = "src/chronovoyage/__about__.py"
 
+[tool.hatch.envs.default]
+# include all features here.
+features = [
+  "mariadb",
+]
+
 [tool.hatch.envs.mariadb]
 features = [
   "mariadb",
 ]
 
 [tool.hatch.envs.types]
+features = []
 extra-dependencies = [
   "mypy>=1.0.0",
 ]
@@ -64,9 +68,6 @@ extra-dependencies = [
 check = "mypy --install-types --non-interactive {args:src/chronovoyage tests}"
 
 [tool.hatch.envs.test]
-features = [
-  "mariadb",
-]
 dependencies = [
   "pytest",
   "pytest-cov",
