@@ -22,7 +22,7 @@ The title should summarize the issue and the description should include the foll
 - You have installed Python >= 3.8.
 - You have installed Docker.
 
-## Set up your environment (first time only)
+### Set up your environment (first time only)
 
 Clone your fork.
 
@@ -68,7 +68,7 @@ The prompt shows the prefix if you are in the environment.
 
 You can leave the environment by typing `exit`.
 
-## Code
+### Code
 
 Create your branch from `origin/main`.
 
@@ -95,7 +95,7 @@ Then, push you code.
 git push --set-upstream origin {branch name}
 ```
 
-## Test your code
+### Test your code
 
 Create the testing database via Docker.
 
@@ -111,7 +111,7 @@ The testing environment will be created automatically.
 hatch test
 ```
 
-## (Optional) Lint your code manually
+### (Optional) Lint your code manually
 
 Formatting and checking types are executed automatically when you commit.
 If you want to lint your code manually, type the following:
@@ -128,7 +128,7 @@ hatch fmt
 hatch run types:check
 ```
 
-## Create a pull request
+### Create a pull request
 
 Create a pull request at GitHub.
 
