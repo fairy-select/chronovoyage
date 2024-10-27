@@ -5,15 +5,20 @@
 
 ![logo](https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/assets/images/logo.jpeg)
 
+Chronovoyage is a simple database migration framework.
+
+[Visit Documentation](https://chronovoyagemigration.net/)
+
 -----
 
 ## Table of Contents
 
-- [Installation](#Installation)
-- [License](#License)
-- [Contributing](#Contributing)
+- [Simple Usage](#simple-usage)
+- [Contributing](#contributing)
+- [Security Policy](#security-policy)
+- [License](#license)
 
-## Installation
+## Simple Usage
 
 To use MariaDB version, you need the MariaDB development package (`libmariadb-dev` in apt).
 
@@ -66,12 +71,6 @@ Then, migrate.
 chronovoyage migrate
 ```
 
-## For more information
-
-We have a documentation for more details.
-
-https://chronovoyagemigration.net/
-
 ## Contributing
 
 Please read the following docs before you contribute to this repo:
@@ -79,9 +78,17 @@ Please read the following docs before you contribute to this repo:
 - [Contributing](CONTRIBUTING.md)
 - [Code Of Conduct](CODE_OF_CONDUCT.md)
 
+## Security Policy
+
+We support the latest version based on GitHub's vulnerability alerts.
+
+[Security Policy](SECURITY.md)
+
 ## License
 
 `chronovoyage` is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
+
+[License](LICENSE.txt)
 
 ## Roadmap
 
