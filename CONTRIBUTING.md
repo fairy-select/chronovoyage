@@ -4,7 +4,7 @@
 
 Create an issue at GitHub.
 
-https://github.com/noritakaIzumi/chronovoyage/issues
+https://github.com/fairy-select/chronovoyage/issues
 
 The title should summarize the issue and the description should include the following information:
 
@@ -132,7 +132,7 @@ hatch run types:check
 
 Create a pull request at GitHub.
 
-https://github.com/noritakaIzumi/chronovoyage/pulls
+https://github.com/fairy-select/chronovoyage/pulls
 
 The title should summarize the request and the description should include the following information:
 

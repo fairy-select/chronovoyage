@@ -14,7 +14,7 @@ def _want_config(vendor: DatabaseVendorEnum) -> str:
     vendor_to_config: Mapping[DatabaseVendorEnum, str] = {
         DatabaseVendorEnum.MARIADB: """
 {
-  "$schema": "https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/schema/config.schema.json",
+  "$schema": "https://raw.githubusercontent.com/fairy-select/chronovoyage/main/schema/config.schema.json",
   "vendor": "mariadb",
   "connection_info": {
     "host": "127.0.0.1",
@@ -28,7 +28,7 @@ def _want_config(vendor: DatabaseVendorEnum) -> str:
         + "\n",
         DatabaseVendorEnum.MYSQL: """
 {
-  "$schema": "https://raw.githubusercontent.com/noritakaIzumi/chronovoyage/main/schema/config.schema.json",
+  "$schema": "https://raw.githubusercontent.com/fairy-select/chronovoyage/main/schema/config.schema.json",
   "vendor": "mysql",
   "connection_info": {
     "host": "127.0.0.1",
