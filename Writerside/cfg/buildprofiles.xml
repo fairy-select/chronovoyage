@@ -4,7 +4,7 @@
                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <variables>
-        <header-logo>logo.png</header-logo>
+        <header-logo>icon32.png</header-logo>
     </variables>
     <sitemap priority="0.35" change-frequency="monthly"/>
     <build-profile instance="cd">
