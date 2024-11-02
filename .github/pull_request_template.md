@@ -1,12 +1,10 @@
 ## Description
 
+A summary of the pull request.
+
 ## Impact on users using Chronovoyage
 
 A description of changes in specifications and user experience.
-
-## Summary of the code changes
-
-A description of added features, bug fixes, performance improvements, etc.
 
 ## Evidence of tests (such as operation of command, added testcases, behavior of built documentation, and so on)
 
