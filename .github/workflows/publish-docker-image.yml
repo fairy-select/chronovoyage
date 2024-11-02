@@ -4,12 +4,6 @@ on:
   push:
     branches:
       - 3-using-chronovoyage-via-docker
-    paths:
-      - Dockerfile
-      - pyproject.toml
-      - src
-      - LICENSE.txt
-      - README.md
 
 env:
   REGISTRY: ghcr.io
