@@ -94,36 +94,36 @@ We support the latest version based on GitHub's vulnerability alerts.
 
 ## Roadmap
 
-- Support for Python
-    - [x] 3.8
-    - [x] 3.9 or later
+- Support for
+    - [x] Python 3.8 or later
+    - [ ] Docker
 - Database support
-    - [ ] MySQL
     - [x] MariaDB
+    - [ ] MySQL
     - [ ] PostgreSQL
 - Migration file support
     - [x] SQL (.sql)
     - [ ] Shell script (.sh)
 - Commands
     - ~~new~~ init
-        - [x] create migration directory and config file
+        - [x] Create migration directory and config file
     - ~~generate~~ add
-        - [x] create migration files from template
+        - [x] Create migration files from template
     - migrate
-        - [x] to latest
-        - [x] to specific version
-        - [x] from the beginning
-        - [x] from the middle
+        - [x] To latest
+        - [x] To specific version
+        - [x] From the beginning
+        - [x] From the middle
         - --dry-run
-            - [ ] show executing SQL
-        - [ ] detect ddl or dml
+            - [ ] Show executing SQL
+        - [ ] Detect ddl or dml
     - ~~status~~ current
-        - [x] show current migration status
+        - [x] Show current migration status
     - rollback
-        - [x] to version
+        - [x] To version
     - test
-        - [ ] check if every "migrate -> rollback" operation means do nothing for schema
-        - [ ] if dml, the operation means do nothing for data (including autoincrement num)
+        - [ ] Check if every "migrate -> rollback" operation means do nothing for schema
+        - [ ] If dml, the operation means do nothing for data (including autoincrement num)
 - Other
     - [x] CLI logging
     - [x] Documentation
