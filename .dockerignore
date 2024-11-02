@@ -1,0 +1,7 @@
+*
+
+# sources
+!/src/chronovoyage/*
+!/pyproject.toml
+!/LICENSE.txt
+!/README.md
