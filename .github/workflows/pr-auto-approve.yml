@@ -1,21 +1,23 @@
 name: Auto approve
 
 on:
-  pull_request:
-    branches:
-      - main
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - ready_for_review
+  workflow_dispatch:
+    inputs:
+      pull_request_number:
+        description: Pull request number to auto-approve
+        required: true
+      confirm_pull_request_number:
+        description: Type again.
+        required: true
 
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: ${{ github.event.pull_request.user.login == github.repository_owner && ! github.event.pull_request.draft }}
+    if: ${{ github.event.inputs.pull_request_number == github.event.inputs.confirm_pull_request_number }}
     steps:
       - # noinspection SpellCheckingInspection
         uses: hmarr/auto-approve-action@v4
+        with:
+          pull-request-number: ${{ github.event.inputs.pull_request_number }}
