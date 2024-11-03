@@ -32,6 +32,18 @@ class TestMigrateCommandMariadb:
         yield
         self.support_db.truncate_test_db()
 
+    def test_migrate_db_connect_fails(self, resource_dir_factory) -> None:
+        # given
+        resource_dir = resource_dir_factory.get_directory(self.vendor)
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(resource_dir)
+            # when
+            result = CliRunner().invoke(chronovoyage, ["migrate"])
+        # then
+        assert result.stdout is not None, "explicitly log exceptions"
+        assert result.exit_code == 1
+
     def test_ddl_only(self, resource_dir_factory) -> None:
         # given
         resource_dir = resource_dir_factory.get_directory(self.vendor)

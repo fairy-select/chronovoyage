@@ -11,7 +11,7 @@ from chronovoyage import SRC_ROOT
 
 
 class BaseAppLogger:
-    __available_log_level: ClassVar[set[str]] = {"debug", "info", "warning", "error"}
+    __available_log_level: ClassVar[set[str]] = {"debug", "info", "warning", "error", "exception"}
     __logger = None
 
     def __init__(self) -> None:
@@ -22,7 +22,7 @@ class BaseAppLogger:
     def __getattr__(self, item):
         if item in self.__available_log_level:
             return getattr(self._logger, item)
-        return getattr(self, item)
+        return None
 
 
 class AppLogger(BaseAppLogger):
