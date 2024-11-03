@@ -4,13 +4,18 @@ on:
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: ${{ github.actor == github.repository_owner }}
+    if: ${{ github.event.pull_request.user.login == github.repository_owner && ! github.event.pull_request.draft }}
     steps:
       - # noinspection SpellCheckingInspection
         uses: hmarr/auto-approve-action@v4
