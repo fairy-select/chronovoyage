@@ -20,4 +20,5 @@ jobs:
       - # noinspection SpellCheckingInspection
         uses: hmarr/auto-approve-action@v4
         with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           pull-request-number: ${{ github.event.inputs.pull_request_number }}
