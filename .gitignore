@@ -9,3 +9,6 @@
 
 # pytest coverage database
 .coverage
+
+# python cache
+__pycache__

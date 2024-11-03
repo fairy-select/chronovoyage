@@ -22,6 +22,18 @@ class TestCurrentCommandMariadb:
         yield
         self.support_db.truncate_test_db()
 
+    def test_current_without_migration_periods(self, resource_dir_factory) -> None:
+        # given
+        resource_dir = resource_dir_factory.get_directory(self.vendor)
+        runner = CliRunner()
+        with runner.isolated_filesystem():
+            os.chdir(resource_dir)
+            runner.invoke(chronovoyage, ["migrate"])
+            # when
+            result = runner.invoke(chronovoyage, ["current"])
+        # then
+        assert "No migration periods." in result.stdout.splitlines()
+
     def test_current_is_latest(self, resource_dir_factory) -> None:
         # given
         resource_dir = resource_dir_factory.get_directory(self.vendor)
