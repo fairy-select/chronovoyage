@@ -62,7 +62,10 @@ def current():
     period = CurrentDomain(
         MigrateConfigFactory.create_from_directory(os.getcwd()), logger=get_default_logger()
     ).execute()
-    click.echo(f"Current period: {period.period_name} {period.language} {period.description}")
+    if period is None:
+        click.echo("No migration periods.")
+    else:
+        click.echo(f"Current period: {period.period_name} {period.language} {period.description}")
     return period
 
 
