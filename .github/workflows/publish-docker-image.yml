@@ -1,9 +1,7 @@
 name: Publish Docker image
 
 on:
-  push:
-    branches:
-      - 3-using-chronovoyage-via-docker
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
