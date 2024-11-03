@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Install Hatch
         uses: pypa/hatch@install
@@ -35,7 +37,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
       - name: Create branch
-        run: git checkout -b ${{ env.branch-name }} origin/main
+        run: git checkout -b ${{ env.branch-name }} main
 
       - name: Update version
         run: hatch version micro
