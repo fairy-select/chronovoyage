@@ -1,0 +1,16 @@
+name: Auto approve
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    if: ${{ github.actor == github.repository_owner }}
+    steps:
+      - # noinspection SpellCheckingInspection
+        uses: hmarr/auto-approve-action@v4
