@@ -11,7 +11,10 @@ env:
 
 jobs:
   publish-docker-image:
+#    if: ${{ github.event.release.tag_name != '' }}
     uses: ./.github/workflows/publish-docker-image.yml
+    with:
+      tag: v0.2.0.dev2  # ${{ github.event.release.tag_name }}
     permissions:
       contents: read
       packages: write
