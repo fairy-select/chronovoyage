@@ -5,6 +5,10 @@ on:
     secrets:
       AWS_OIDC_ROLE_ARN:
         required: true
+      AWS_S3_BUCKET:
+        required: true
+      AMPLIFY_APP_ID:
+        required: true
 
 permissions:
   contents: read

@@ -40,6 +40,8 @@ jobs:
     uses: ./.github/workflows/publish-docs.yml
     secrets:
       AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      AMPLIFY_APP_ID: ${{ secrets.AMPLIFY_APP_ID }}
     permissions:
       contents: read
       id-token: write
