@@ -3,6 +3,10 @@ name: Publish documentation
 on:
   workflow_call:
 
+permissions:
+  contents: read
+  id-token: write
+
 env:
   INSTANCE: 'Writerside/cd'
   ARTIFACT: 'webHelpCD2-all.zip'
@@ -52,9 +56,6 @@ jobs:
     env:
       AWS_REGION: 'us-east-1'
       BRANCH_NAME: main
-    permissions:
-      contents: read
-      id-token: write
     needs:
       - build
       - test
