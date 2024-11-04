@@ -1,0 +1,89 @@
+name: Create PR (for new release)
+
+on:
+  workflow_dispatch:
+    inputs:
+      segment:
+        description: increment version method
+        type: string
+        required: true
+        options:
+          - major  # 1.0.0 to 2.0.0
+          - minor  # 1.0.0 to 1.1.0
+          - micro  # 1.0.0 to 1.0.1
+          - dev  # 1.0.0 to 1.0.0dev0
+
+env:
+  branch-name: "version-update"
+  base-branch: "main"
+  reviewers: "noritakaIzumi"
+
+jobs:
+  commit-and-push:
+    name: Commit and push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      new-version: ${{ steps.new-version.outputs.version }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.base-branch }}
+
+      - name: Install Hatch
+        uses: pypa/hatch@install
+
+      - name: Configure git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Create branch (after clean)
+        run: |
+          git push -d origin ${{ env.branch-name }} || true
+          git checkout -b ${{ env.branch-name }} ${{ env.base-branch }}
+
+      - name: Update version
+        run: hatch version ${{ inputs.segment }}
+
+      - name: Get new version number
+        id: new-version
+        run: echo "version=$(hatch version)" >> $GITHUB_OUTPUT
+
+      - name: Commit and push
+        run: |
+          git commit -am "build: update version to ${{ steps.new-version.outputs.version }}"
+          git push --set-upstream origin ${{ env.branch-name }}
+
+  create-pr:
+    name: Create a PR
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    needs:
+      - commit-and-push
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/create-github-app-token@v1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.REPOSITORY_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_APP_PRIVATE_KEY }}
+
+      - name: Create PR (after clean)
+        run: |
+          gh pr close ${{ env.branch-name }} --comment "This PR is deprecated." || true
+          gh pr create \
+            --base ${{ env.base-branch }} \
+            --head ${{ env.branch-name }} \
+            --title "Update version to ${{ needs.commit-and-push.outputs.new-version }}" \
+            --body "New release is created after you merge the PR." \
+            --reviewer ${{ env.reviewers }} \
+            --assignee ${{ github.actor }} \
+            --label "new release"
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
