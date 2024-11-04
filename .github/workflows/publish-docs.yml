@@ -1,11 +1,7 @@
-name: Build documentation
+name: Publish documentation
 
 on:
-  workflow_dispatch:
-
-permissions:
-  id-token: write
-  contents: read
+  workflow_call:
 
 env:
   INSTANCE: 'Writerside/cd'
@@ -55,7 +51,10 @@ jobs:
   deploy:
     env:
       AWS_REGION: 'us-east-1'
-      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      BRANCH_NAME: main
+    permissions:
+      contents: read
+      id-token: write
     needs:
       - build
       - test

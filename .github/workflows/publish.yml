@@ -1,26 +1,43 @@
 name: Publish to PyPI
 
 on:
-  workflow_dispatch:
+  release:
+    types:
+      - published
 
-permissions:
-  contents: read
+env:
+  app-name: "chronovoyage"
 
 jobs:
-  publish:
+  check-tag-name-exists:
     runs-on: ubuntu-latest
-    environment: release
-    permissions:
-      id-token: write
+    if: ${{ github.event.release.tag_name != '' }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - run: "true"
 
-      - name: Install Hatch
-        uses: pypa/hatch@install
+  publish-pip-package:
+    needs: check-tag-name-exists
+    uses: ./.github/workflows/publish-pip-package.yml
+    with:
+      tag: ${{ github.event.release.tag_name }}
+    permissions:
+      contents: read
+      id-token: write
 
-      - name: Build Package
-        run: hatch build -c
+  publish-docker-image:
+    needs: check-tag-name-exists
+    uses: ./.github/workflows/publish-docker-image.yml
+    with:
+      tag: ${{ github.event.release.tag_name }}
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
 
-      - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+  publish-docs:
+    needs: check-tag-name-exists
+    uses: ./.github/workflows/publish-docs.yml
+    permissions:
+      contents: read
+      id-token: write
