@@ -6,7 +6,6 @@ on:
       - main
     types:
       - closed
-  push:
 
 env:
   tag-prefix: "v"
@@ -14,7 +13,7 @@ env:
 jobs:
   push-tag:
     name: Push a tag
-#    if: ${{ contains(github.event.pull_request.labels.*.name, 'new release') && github.event.pull_request.merged }}
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'new release') && github.event.pull_request.merged }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
