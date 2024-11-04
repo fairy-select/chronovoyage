@@ -60,6 +60,7 @@ jobs:
       - build
       - test
     runs-on: ubuntu-latest
+    environment: release
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v4
