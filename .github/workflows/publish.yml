@@ -5,6 +5,10 @@ on:
     types:
       - published
 
+permissions:
+  contents: read
+  id-token: write
+
 env:
   app-name: "chronovoyage"
 
@@ -38,6 +42,3 @@ jobs:
   publish-docs:
     needs: check-tag-name-exists
     uses: ./.github/workflows/publish-docs.yml
-    permissions:
-      contents: read
-      id-token: write
