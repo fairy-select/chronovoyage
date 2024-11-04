@@ -20,6 +20,7 @@ jobs:
     permissions:
       contents: write
     outputs:
+      old-version: ${{ steps.old-version.outputs.version }}
       new-version: ${{ steps.new-version.outputs.version }}
     steps:
       - name: Checkout repository
@@ -39,6 +40,10 @@ jobs:
         run: |
           git push -d origin ${{ env.branch-name }} || true
           git checkout -b ${{ env.branch-name }} ${{ env.base-branch }}
+
+      - name: Get old version number
+        id: old-version
+        run: echo "version=$(hatch version)" >> $GITHUB_OUTPUT
 
       - name: Update version
         run: hatch version ${{ inputs.segment }}
@@ -75,7 +80,7 @@ jobs:
           gh pr create \
             --base ${{ env.base-branch }} \
             --head ${{ env.branch-name }} \
-            --title "Update version to ${{ needs.commit-and-push.outputs.new-version }}" \
+            --title "Update version from ${{ needs.commit-and-push.outputs.old-version }} to ${{ needs.commit-and-push.outputs.new-version }}" \
             --body "New release is created after you merge the PR." \
             --reviewer ${{ env.reviewers }} \
             --assignee ${{ github.actor }} \
