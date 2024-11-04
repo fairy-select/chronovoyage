@@ -29,10 +29,9 @@ jobs:
           gh pr create \
             --base ${{ env.base-branch }} \
             --head ${{ github.event.ref }} \
-            --body "New release is created after you merge the PR." \
+            --template ".github/pull_request_template.md" \
             --reviewer ${{ env.reviewers }} \
             --assignee ${{ github.actor }} \
-            --label "new release" \
             --draft
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
