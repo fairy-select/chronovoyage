@@ -75,3 +75,6 @@ jobs:
             --label "new release"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Manually trigger the workflow "test"
+        run: gh workflow run test.yml

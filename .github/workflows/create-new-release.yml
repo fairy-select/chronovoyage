@@ -47,6 +47,3 @@ jobs:
         with:
           title: ${{ steps.tag.outputs.value }}
           tag: ${{ steps.tag.outputs.value }}
-
-      - name: Manually trigger the workflow "test"
-        run: gh workflow run test.yml
