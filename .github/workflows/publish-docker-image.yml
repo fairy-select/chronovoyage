@@ -1,11 +1,7 @@
 name: Publish Docker image
 
 on:
-  workflow_call:
-    inputs:
-      tag:
-        type: string
-        required: true
+  workflow_dispatch:
 
 env:
   REGISTRY: ghcr.io
@@ -14,13 +10,12 @@ env:
 jobs:
   main:
     runs-on: ubuntu-latest
-
+    environment: release
     permissions:
       contents: read
       packages: write
       attestations: write
       id-token: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -43,7 +38,7 @@ jobs:
           flavor: |
             latest=true
           tags: |
-            type=raw,value=${{ inputs.tag }}
+            type=ref,event=tag
 
       - name: Build and push Docker image
         id: push
@@ -59,6 +54,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true

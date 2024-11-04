@@ -1,11 +1,7 @@
 name: Publish Pip Package
 
 on:
-  workflow_call:
-    inputs:
-      tag:
-        type: string
-        required: true
+  workflow_dispatch:
 
 env:
   app-name: "chronovoyage"
