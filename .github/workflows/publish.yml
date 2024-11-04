@@ -21,7 +21,7 @@ jobs:
       attestations: write
       id-token: write
 
-  publish:
+  publish-pip-package:
 #    if: ${{ github.event.release.tag_name != '' }}
     runs-on: ubuntu-latest
     environment: release
@@ -39,8 +39,12 @@ jobs:
           fileName: ${{ env.app-name }}-*
           out-file-path: dist
 
-      - name: stop
-        run: exit 1
-
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+
+  publish-docs:
+#    if: ${{ github.event.release.tag_name != '' }}
+    uses: ./.github/workflows/publish-docs.yml
+    permissions:
+      contents: read
+      id-token: write
