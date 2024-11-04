@@ -1,0 +1,32 @@
+name: Publish Pip Package
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
+
+env:
+  app-name: "chronovoyage"
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download assets
+        uses: robinraju/release-downloader@v1
+        with:
+          tag: ${{ inputs.tag }}
+          fileName: ${{ env.app-name }}-*
+          out-file-path: dist
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
