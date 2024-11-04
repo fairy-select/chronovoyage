@@ -15,6 +15,7 @@ on:
 
 env:
   branch-name: "version-update"
+  base-branch: "main"
   reviewers: "noritakaIzumi"
 
 jobs:
@@ -29,7 +30,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: ${{ env.base-branch }}
 
       - name: Install Hatch
         uses: pypa/hatch@install
@@ -42,7 +43,7 @@ jobs:
       - name: Create branch (after clean)
         run: |
           git push -d origin ${{ env.branch-name }} || true
-          git checkout -b ${{ env.branch-name }} main
+          git checkout -b ${{ env.branch-name }} ${{ env.base-branch }}
 
       - name: Update version
         run: hatch version micro
@@ -77,7 +78,8 @@ jobs:
         run: |
           gh pr close ${{ env.branch-name }} --comment "This PR is deprecated." || true
           gh pr create \
-            --base main --head ${{ env.branch-name }} \
+            --base ${{ env.base-branch }} \
+            --head ${{ env.branch-name }} \
             --title "Update version to ${{ needs.commit-and-push.outputs.new-version }}" \
             --body "New release is created after you merge the PR." \
             --reviewer ${{ env.reviewers }}
