@@ -13,6 +13,8 @@ jobs:
   check-tag-name-exists:
     runs-on: ubuntu-latest
     if: ${{ github.event.release.tag_name != '' }}
+    steps:
+      - run: "true"
 
   publish-pip-package:
     needs: check-tag-name-exists
