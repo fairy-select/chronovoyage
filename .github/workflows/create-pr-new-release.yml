@@ -1,18 +1,17 @@
 name: Create PR (for new release)
 
 on:
-  push:
-#  workflow_dispatch:
-#    inputs:
-#      segment:
-#        description: increment version method
-#        type: string
-#        required: true
-#        options:
-#          - major  # 1.0.0 to 2.0.0
-#          - minor  # 1.0.0 to 1.1.0
-#          - micro  # 1.0.0 to 1.0.1
-#          - dev  # 1.0.0 to 1.0.0dev0
+  workflow_dispatch:
+    inputs:
+      segment:
+        description: increment version method
+        type: string
+        required: true
+        options:
+          - major  # 1.0.0 to 2.0.0
+          - minor  # 1.0.0 to 1.1.0
+          - micro  # 1.0.0 to 1.0.1
+          - dev  # 1.0.0 to 1.0.0dev0
 
 env:
   branch-name: "version-update"
@@ -47,7 +46,7 @@ jobs:
           git checkout -b ${{ env.branch-name }} ${{ env.base-branch }}
 
       - name: Update version
-        run: hatch version dev
+        run: hatch version ${{ inputs.segment }}
 
       - name: Get new version number
         id: new-version
