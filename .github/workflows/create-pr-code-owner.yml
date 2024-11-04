@@ -30,8 +30,7 @@ jobs:
           gh pr create \
             --base ${{ env.base-branch }} \
             --head ${{ github.event.ref }} \
-            --title ${{ github.event.ref }} \
-            --template "pull_request_template.md" \
+            --fill \
             --reviewer ${{ env.reviewers }} \
             --assignee ${{ github.actor }} \
             --draft
