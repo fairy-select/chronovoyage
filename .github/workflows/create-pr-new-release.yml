@@ -12,6 +12,7 @@ on:
 #          - major  # 1.0.0 to 2.0.0
 #          - minor  # 1.0.0 to 1.1.0
 #          - micro  # 1.0.0 to 1.0.1
+#          - dev  # 1.0.0 to 1.0.0dev0
 
 env:
   branch-name: "version-update"
@@ -46,7 +47,7 @@ jobs:
           git checkout -b ${{ env.branch-name }} ${{ env.base-branch }}
 
       - name: Update version
-        run: hatch version micro
+        run: hatch version dev
 
       - name: Get new version number
         id: new-version
