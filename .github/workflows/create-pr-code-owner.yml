@@ -24,13 +24,14 @@ jobs:
           private-key: ${{ secrets.REPOSITORY_APP_PRIVATE_KEY }}
 
       - name: Create PR (after clean)
+        working-directory: .github
         run: |
           gh pr close ${{ github.event.ref }} --comment "This PR is deprecated." || true
           gh pr create \
             --base ${{ env.base-branch }} \
             --head ${{ github.event.ref }} \
-            --fill \
-            --template ".github/pull_request_template.md" \
+            --title ${{ github.event.ref }} \
+            --template "pull_request_template.md" \
             --reviewer ${{ env.reviewers }} \
             --assignee ${{ github.actor }} \
             --draft
