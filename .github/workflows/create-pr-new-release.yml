@@ -79,6 +79,6 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Manually trigger the workflow "test"
-        run: gh workflow run test.yml
+        run: gh workflow run test.yml --ref ${{ env.branch-name }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
