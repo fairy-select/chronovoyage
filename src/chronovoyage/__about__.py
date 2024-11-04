@@ -1,4 +1,4 @@
 # SPDX-FileCopyrightText: 2024-present Noritaka IZUMI <noritaka.izumi@gmail.com>
 #
 # SPDX-License-Identifier: MIT
-__version__ = "0.2.0.dev6"
+__version__ = "0.2.0.dev7"
