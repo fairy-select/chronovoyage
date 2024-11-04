@@ -60,7 +60,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-      actions: write
     needs:
       - commit-and-push
     steps:
@@ -83,8 +82,3 @@ jobs:
             --label "new release"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-
-#      - name: Manually trigger the workflow "test"
-#        run: gh workflow run test.yml --ref ${{ env.branch-name }}
-#        env:
-#          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
