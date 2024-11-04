@@ -20,6 +20,8 @@ jobs:
   commit-and-push:
     name: Commit and push
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     outputs:
       new-version: ${{ steps.new-version.outputs.version }}
     steps:
