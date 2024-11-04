@@ -49,12 +49,20 @@ jobs:
     with:
       version: ${{ needs.push-tag.outputs.version }}
 
+  build-docs:
+    needs:
+      - push-tag
+    uses: ./.github/workflows/build-docs.yml
+    with:
+      version: ${{ needs.push-tag.outputs.version }}
+
   create-release:
     name: Create a release
     runs-on: ubuntu-latest
     needs:
       - push-tag
       - build-package
+      - build-docs
     permissions:
       contents: write
     steps:
@@ -65,7 +73,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: dist
-          pattern: pip-package--*
           merge-multiple: true
 
       - name: Create a release

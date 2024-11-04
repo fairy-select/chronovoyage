@@ -15,7 +15,7 @@ jobs:
     steps:
       - run: "true"
 
-  main:
+  publish:
     needs: check-tag-name-exists
     runs-on: ubuntu-latest
     environment: release
