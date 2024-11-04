@@ -17,6 +17,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Extract branch name
+        id: extract_branch
+        shell: bash
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
       - uses: actions/create-github-app-token@v1
         id: generate-token
         with:
@@ -26,10 +31,10 @@ jobs:
       - name: Create PR (after clean)
         working-directory: .github
         run: |
-          gh pr close ${{ github.event.ref }} --comment "This PR is deprecated." || true
+          gh pr close ${{ steps.extract_branch.outputs.branch }} --comment "This PR is deprecated." || true
           gh pr create \
             --base ${{ env.base-branch }} \
-            --head ${{ github.event.ref }} \
+            --head ${{ steps.extract_branch.outputs.branch }} \
             --fill \
             --reviewer ${{ env.reviewers }} \
             --assignee ${{ github.actor }} \
