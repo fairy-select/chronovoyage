@@ -35,7 +35,8 @@ jobs:
           gh pr create \
             --base ${{ env.base-branch }} \
             --head ${{ steps.extract_branch.outputs.branch }} \
-            --fill \
+            --title ${{ steps.extract_branch.outputs.branch }} \
+            --body-file "pull_request_template.md" \
             --reviewer ${{ env.reviewers }} \
             --assignee ${{ github.actor }} \
             --draft
