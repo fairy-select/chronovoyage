@@ -27,11 +27,11 @@ jobs:
       - name: Upload artifacts (sdist)
         uses: actions/upload-artifact@v4
         with:
-          name: pip-package--sdist
+          name: release--pip-package--sdist
           path: dist/${{ env.app-name }}-${{ inputs.version }}.tar.gz
 
       - name: Upload artifacts (wheel)
         uses: actions/upload-artifact@v4
         with:
-          name: pip-package--wheel
+          name: release--pip-package--wheel
           path: dist/${{ env.app-name }}-${{ inputs.version }}-py3-none-any.whl

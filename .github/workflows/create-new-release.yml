@@ -71,6 +71,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: dist
+          pattern: release--*
           merge-multiple: true
 
       - name: Create a release
