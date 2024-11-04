@@ -79,3 +79,5 @@ jobs:
 
       - name: Manually trigger the workflow "test"
         run: gh workflow run test.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
