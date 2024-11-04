@@ -54,7 +54,10 @@ jobs:
           git push --set-upstream origin ${{ env.branch-name }}
 
   create-pr:
+    name: Create a PR
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     needs:
       - commit-and-push
     steps:
@@ -64,3 +67,5 @@ jobs:
             --base main --head ${{ env.branch-name }} \
             --title "Update version to ${{ needs.commit-and-push.outputs.new-version }}" \
             --label "update version"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
