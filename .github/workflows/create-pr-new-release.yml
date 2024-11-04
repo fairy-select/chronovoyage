@@ -1,4 +1,4 @@
-name: Create PR (update version)
+name: Create PR (for new release)
 
 on:
   push:
@@ -72,6 +72,6 @@ jobs:
             --base main --head ${{ env.branch-name }} \
             --title "Update version to ${{ needs.commit-and-push.outputs.new-version }}" \
             --body "New release is created after you merge the PR." \
-            --label "update version"
+            --label "new release"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
