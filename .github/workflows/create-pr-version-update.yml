@@ -63,6 +63,9 @@ jobs:
     needs:
       - commit-and-push
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Create PR
         run: |
           gh pr create \
