@@ -31,14 +31,13 @@ jobs:
       - name: Create PR (after clean)
         working-directory: .github
         run: |
-          gh pr close ${{ steps.extract_branch.outputs.branch }} --comment "This PR is deprecated." || true
+          gh pr close ${{ github.event.ref }} --comment "This PR is deprecated." || true
           gh pr create \
             --base ${{ env.base-branch }} \
-            --head ${{ steps.extract_branch.outputs.branch }} \
-            --title ${{ steps.extract_branch.outputs.branch }} \
+            --head ${{ github.event.ref }} \
+            --title ${{ github.event.ref }} \
             --body-file "pull_request_template.md" \
             --reviewer ${{ env.reviewers }} \
-            --assignee ${{ github.actor }} \
-            --draft
+            --assignee ${{ github.actor }}
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
