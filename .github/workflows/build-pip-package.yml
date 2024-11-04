@@ -1,0 +1,37 @@
+name: Build pip package
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: Version string from hatch
+        type: string
+        required: true
+
+env:
+  app-name: "chronovoyage"
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Hatch
+        uses: pypa/hatch@install
+
+      - name: Build Package
+        run: hatch build -c
+
+      - name: Upload artifacts (sdist)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-package--sdist
+          path: dist/${{ env.app-name }}-${{ inputs.version }}.tar.gz
+
+      - name: Upload artifacts (wheel)
+        uses: actions/upload-artifact@v4
+        with:
+          name: pip-package--wheel
+          path: dist/${{ env.app-name }}-${{ inputs.version }}-py3-none-any.whl
