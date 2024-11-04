@@ -2,6 +2,10 @@ name: Publish Docker image
 
 on:
   workflow_call:
+    inputs:
+      tag:
+        type: string
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -36,8 +40,10 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=true
           tags: |
-            type=ref,event=tag
+            type=raw,value=${{ inputs.tag }}
 
       - name: Build and push Docker image
         id: push
