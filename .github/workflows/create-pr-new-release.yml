@@ -82,7 +82,8 @@ jobs:
             --head ${{ env.branch-name }} \
             --title "Update version to ${{ needs.commit-and-push.outputs.new-version }}" \
             --body "New release is created after you merge the PR." \
-            --reviewer ${{ env.reviewers }}
+            --reviewer ${{ env.reviewers }} \
+            --assignee ${{ github.event.pull_request.user.login }}
             --label "new release"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
