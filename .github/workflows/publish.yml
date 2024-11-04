@@ -10,20 +10,24 @@ env:
   app-name: "chronovoyage"
 
 jobs:
+  check-tag-name-exists:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.release.tag_name != '' }}
+
   publish-pip-package:
-#    if: ${{ github.event.release.tag_name != '' }}
+    needs: check-tag-name-exists
     uses: ./.github/workflows/publish-pip-package.yml
     with:
-      tag: v0.2.0.dev2  # ${{ github.event.release.tag_name }}
+      tag: ${{ github.event.release.tag_name }}
     permissions:
       contents: read
       id-token: write
 
   publish-docker-image:
-#    if: ${{ github.event.release.tag_name != '' }}
+    needs: check-tag-name-exists
     uses: ./.github/workflows/publish-docker-image.yml
     with:
-      tag: v0.2.0.dev2  # ${{ github.event.release.tag_name }}
+      tag: ${{ github.event.release.tag_name }}
     permissions:
       contents: read
       packages: write
@@ -31,7 +35,7 @@ jobs:
       id-token: write
 
   publish-docs:
-#    if: ${{ github.event.release.tag_name != '' }}
+    needs: check-tag-name-exists
     uses: ./.github/workflows/publish-docs.yml
     permissions:
       contents: read
