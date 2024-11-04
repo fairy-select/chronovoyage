@@ -10,8 +10,13 @@ env:
   app-name: "chronovoyage"
 
 jobs:
-  download-assets:
+  publish:
+#    if: ${{ github.event.release.tag_name != '' }}
     runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -22,27 +27,6 @@ jobs:
           tag: v0.2.0.dev2  # ${{ github.event.release.tag_name }}
           fileName: ${{ env.app-name }}-*
           out-file-path: dist
-
-      - name: List files
-        run: |
-          ls -la dist
-
-  publish:
-    if: false
-    runs-on: ubuntu-latest
-    environment: release
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Hatch
-        uses: pypa/hatch@install
-
-      - name: Build Package
-        run: hatch build -c
 
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
