@@ -1,7 +1,9 @@
 name: Publish documentation
 
 on:
-  workflow_dispatch:
+  release:
+    types:
+      - published
 
 permissions:
   contents: read
@@ -13,7 +15,14 @@ env:
   DOCKER_VERSION: '242.21870'
 
 jobs:
+  check-tag-name-exists:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.release.tag_name != '' }}
+    steps:
+      - run: "true"
+
   build:
+    needs: check-tag-name-exists
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository

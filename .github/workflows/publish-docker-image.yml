@@ -1,14 +1,23 @@
 name: Publish Docker image
 
 on:
-  workflow_dispatch:
+  release:
+    types:
+      - published
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  check-tag-name-exists:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.release.tag_name != '' }}
+    steps:
+      - run: "true"
+
   main:
+    needs: check-tag-name-exists
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -38,7 +47,7 @@ jobs:
           flavor: |
             latest=true
           tags: |
-            type=ref,event=tag
+            type=raw,value=${{ github.event.release.tag_name }}
 
       - name: Build and push Docker image
         id: push
