@@ -37,15 +37,49 @@ jobs:
           git push origin ${tag}
           echo "value=${tag}" >> $GITHUB_OUTPUT
 
+  test:
+    uses: ./.github/workflows/test.yml
+
+  build-package:
+    runs-on: ubuntu-latest
+    needs:
+      - test
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Hatch
+        uses: pypa/hatch@install
+
+      - name: Build Package
+        run: hatch build -c
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: 'dist/*'
+
   create-release:
     name: Create a release
     runs-on: ubuntu-latest
-    needs: push-tag
+    needs:
+      - push-tag
+      - build-package
     permissions:
       contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+
+      - name: List dist directory
+        run: |
+          ls -la dist
+          exit 1
 
       - name: Create a release
         uses: softprops/action-gh-release@v2
