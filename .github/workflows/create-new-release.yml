@@ -47,6 +47,8 @@ jobs:
     needs:
       - push-tag
     uses: ./.github/workflows/build-pip-package.yml
+    with:
+      version: ${{ needs.push-tag.outputs.version }}
 
   create-release:
     name: Create a release
