@@ -38,8 +38,10 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
-      - name: Create branch
-        run: git checkout -b ${{ env.branch-name }} main
+      - name: Create branch (after clean)
+        run: |
+          git push -d origin ${{ env.branch-name }} || true
+          git checkout -b ${{ env.branch-name }} main
 
       - name: Update version
         run: hatch version micro
