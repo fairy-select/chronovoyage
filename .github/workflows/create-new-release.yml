@@ -48,9 +48,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create a release
-        uses: elgohr/Github-Release-Action@v5
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          title: ${{ steps.tag.outputs.value }}
-          tag: ${{ steps.tag.outputs.value }}
+          draft: true
+          tag_name: ${{ steps.tag.outputs.value }}
+          generate_release_notes: true
