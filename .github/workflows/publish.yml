@@ -38,6 +38,8 @@ jobs:
   publish-docs:
     needs: check-tag-name-exists
     uses: ./.github/workflows/publish-docs.yml
+    secrets:
+      AWS_OIDC_ROLE_ARN: ${{ secrets.AWS_OIDC_ROLE_ARN }}
     permissions:
       contents: read
       id-token: write
