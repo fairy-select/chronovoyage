@@ -9,7 +9,7 @@ on:
 
 jobs:
   push-tag:
-    if: ${{ contains(github.event.pull_request.labels.*.name, 'version update') && github.event.pull_request.merged }}
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'new release') && github.event.pull_request.merged }}
     runs-on: ubuntu-latest
     outputs:
       tag: ${{ steps.tag.outputs.value }}
