@@ -60,6 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+      actions: write
     needs:
       - commit-and-push
     steps:
