@@ -66,8 +66,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Create PR
+      - name: Create PR (after clean)
         run: |
+          gh pr close ${{ env.branch-name }} --comment "This PR is deprecated." || true
           gh pr create \
             --base main --head ${{ env.branch-name }} \
             --title "Update version to ${{ needs.commit-and-push.outputs.new-version }}" \
