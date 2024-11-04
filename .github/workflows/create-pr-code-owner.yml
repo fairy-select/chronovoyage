@@ -1,0 +1,38 @@
+name: Create PR (for code owner)
+
+on:
+  workflow_dispatch:
+
+env:
+  base-branch: "main"
+  reviewers: "noritakaIzumi"
+
+jobs:
+  create-pr:
+    name: Create a PR
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/create-github-app-token@v1
+        id: generate-token
+        with:
+          app-id: ${{ secrets.REPOSITORY_APP_ID }}
+          private-key: ${{ secrets.REPOSITORY_APP_PRIVATE_KEY }}
+
+      - name: Create PR (after clean)
+        run: |
+          gh pr close ${{ github.event.ref }} --comment "This PR is deprecated." || true
+          gh pr create \
+            --base ${{ env.base-branch }} \
+            --head ${{ github.event.ref }} \
+            --body "New release is created after you merge the PR." \
+            --reviewer ${{ env.reviewers }} \
+            --assignee ${{ github.actor }} \
+            --label "new release" \
+            --draft
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
