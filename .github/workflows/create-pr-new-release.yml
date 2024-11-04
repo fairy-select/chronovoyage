@@ -5,7 +5,7 @@ on:
     inputs:
       segment:
         description: increment version method
-        type: string
+        type: choice
         required: true
         options:
           - major  # 1.0.0 to 2.0.0
