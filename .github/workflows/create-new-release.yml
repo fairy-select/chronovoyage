@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.tag.outputs.version }}
+      tag: ${{ steps.tag.outputs.tag }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -68,6 +69,7 @@ jobs:
       - name: Push a tag
         id: tag
         run: |
+          tag=${{ needs.get-tag-name.outputs.tag }}
           git tag -a ${tag} -m "New release ${tag} (tagged by github-actions[bot])"
           git push origin ${tag}
           echo "tag=${tag}" >> $GITHUB_OUTPUT
