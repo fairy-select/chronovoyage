@@ -1,9 +1,6 @@
 name: Create new release
 
 on:
-  push:
-    branches:
-      - 58-push-a-tag-after-testing-artifacts
   pull_request:
     branches:
       - main
@@ -15,7 +12,7 @@ env:
 
 jobs:
   get-tag-name:
-    if: ${{ true || contains(github.event.pull_request.labels.*.name, 'new release') && github.event.pull_request.merged }}
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'new release') && github.event.pull_request.merged }}
     name: Get current version
     runs-on: ubuntu-latest
     outputs:
