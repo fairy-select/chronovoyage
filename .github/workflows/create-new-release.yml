@@ -11,12 +11,10 @@ env:
   tag-prefix: "v"
 
 jobs:
-  push-tag:
-    name: Push a tag
+  get-tag-name:
     if: ${{ contains(github.event.pull_request.labels.*.name, 'new release') && github.event.pull_request.merged }}
+    name: Get current version
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     outputs:
       version: ${{ steps.tag.outputs.version }}
       tag: ${{ steps.tag.outputs.tag }}
@@ -27,6 +25,39 @@ jobs:
       - name: Install Hatch
         uses: pypa/hatch@install
 
+      - name: Get current version and create tag name
+        id: tag
+        run: |
+          version="$(hatch version)"
+          tag="${{ env.tag-prefix }}${version}"
+          echo "version=${version}" >> $GITHUB_OUTPUT
+          echo "tag=${tag}" >> $GITHUB_OUTPUT
+
+  build-package:
+    needs:
+      - get-tag-name
+    uses: ./.github/workflows/build-pip-package.yml
+    with:
+      version: ${{ needs.get-tag-name.outputs.version }}
+
+  build-docs:
+    needs:
+      - get-tag-name
+    uses: ./.github/workflows/build-docs.yml
+
+  push-tag:
+    name: Push a tag
+    needs:
+      - get-tag-name
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.tag.outputs.tag }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Configure git
         run: |
           git config user.name 'github-actions[bot]'
@@ -35,32 +66,18 @@ jobs:
       - name: Push a tag
         id: tag
         run: |
-          version="$(hatch version)"
-          tag="${{ env.tag-prefix }}${version}"
+          tag=${{ needs.get-tag-name.outputs.tag }}
           git tag -a ${tag} -m "New release ${tag} (tagged by github-actions[bot])"
           git push origin ${tag}
-          echo "version=${version}" >> $GITHUB_OUTPUT
           echo "tag=${tag}" >> $GITHUB_OUTPUT
-
-  build-package:
-    needs:
-      - push-tag
-    uses: ./.github/workflows/build-pip-package.yml
-    with:
-      version: ${{ needs.push-tag.outputs.version }}
-
-  build-docs:
-    needs:
-      - push-tag
-    uses: ./.github/workflows/build-docs.yml
 
   create-release:
     name: Create a release
     runs-on: ubuntu-latest
     needs:
-      - push-tag
       - build-package
       - build-docs
+      - push-tag
     permissions:
       contents: write
     steps:
