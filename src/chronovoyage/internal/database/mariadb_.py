@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import sys
-from typing import TYPE_CHECKING, Any, Generator, Iterable
+from typing import TYPE_CHECKING, Any
 
 import mariadb
 
@@ -11,6 +11,8 @@ from chronovoyage.internal.interface.database import (
 )
 
 if TYPE_CHECKING:
+    from collections.abc import Generator, Iterable
+
     from chronovoyage.internal.config import MigratePeriod
     from chronovoyage.internal.logger.logger import AppLogger
     from chronovoyage.internal.type.database import ConnectionInfo

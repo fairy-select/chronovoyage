@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from abc import ABCMeta, abstractmethod
-from typing import TYPE_CHECKING, Any, Generator, Iterable, Protocol, TypeVar
+from typing import TYPE_CHECKING, Any, Protocol, TypeVar
 
 if TYPE_CHECKING:
+    from collections.abc import Generator, Iterable
+
     from chronovoyage.internal.config import MigratePeriod
 
 T = TypeVar("T")

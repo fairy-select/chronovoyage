@@ -18,7 +18,7 @@ class DatabaseConnector:
     # noinspection PyMethodMayBeStatic
     def get_connection(self, vendor: DatabaseVendorEnum, connection_info: ConnectionInfo) -> IDatabaseConnection:
         if vendor == DatabaseVendorEnum.MARIADB:
-            from chronovoyage.internal.database import mariadb_
+            from chronovoyage.internal.database import mariadb_  # noqa: PLC0415
 
             return mariadb_.connect(connection_info, logger=self._logger)
 

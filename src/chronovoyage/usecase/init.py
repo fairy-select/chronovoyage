@@ -3,13 +3,15 @@ from __future__ import annotations
 import json
 import os
 import string
-from typing import TYPE_CHECKING, Any, Mapping
+from typing import TYPE_CHECKING, Any
 
 from chronovoyage.internal.config import MigrateConfigFactory
 from chronovoyage.internal.exception import DirectoryAlreadyExistsError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from chronovoyage.internal.logger.logger import AppLogger
     from chronovoyage.internal.type.config import MigratePeriodCreateParam
 
