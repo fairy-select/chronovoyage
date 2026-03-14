@@ -7,7 +7,7 @@ name = "chronovoyage"
 dynamic = ["version"]
 description = 'Simple database migration framework.'
 readme = {"file" = "README.md", "content-type" = "text/markdown"}
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 license = { file = "LICENSE.txt" }
 authors = [
   { name = "Noritaka IZUMI", email = "noritaka.izumi@gmail.com" },
@@ -16,8 +16,6 @@ keywords = ["database", "migration"]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.8",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -83,7 +81,7 @@ features = [
 ]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.8", "3.9", "3.10", "3.11", "3.12", "3.13"]
+python = ["3.10", "3.11", "3.12", "3.13"]
 
 [tool.coverage.run]
 source_pkgs = ["chronovoyage", "tests"]
