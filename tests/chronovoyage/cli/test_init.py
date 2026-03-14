@@ -1,13 +1,16 @@
 import json
 import os.path
 import subprocess
-from typing import Mapping
+from typing import TYPE_CHECKING
 
 import pytest
 from click.testing import CliRunner
 
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
+
+if TYPE_CHECKING:
+    from collections.abc import Mapping
 
 
 def _want_config(vendor: DatabaseVendorEnum) -> str:

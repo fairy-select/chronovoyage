@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Mapping
+from typing import TYPE_CHECKING, Any
 
 from support.database.mariadb_ import SupportMariadb
 
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
+    from collections.abc import Mapping
+
     from support.interface.database import ISupportDb
 
 

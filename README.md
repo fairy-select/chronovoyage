@@ -9,7 +9,7 @@
 
 Chronovoyage is a simple database migration framework.
 
-[Visit Documentation](https://chronovoyagemigration.net/)
+[Visit Documentation](https://main.d4odiey55rpd9.amplifyapp.com/)
 
 -----
 

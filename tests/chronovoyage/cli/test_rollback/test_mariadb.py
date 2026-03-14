@@ -1,6 +1,7 @@
 import os
 import shutil
-from typing import TYPE_CHECKING, Any, Generator
+from collections.abc import Generator
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from click.testing import CliRunner

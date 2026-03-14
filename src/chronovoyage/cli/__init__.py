@@ -26,11 +26,16 @@ migrate_period_languages = [e.value for e in MigratePeriodLanguageEnum]
 chronovoyage: Group
 
 
-@click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=False)  # type: ignore[no-redef]
+@click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=True)  # type: ignore[no-redef]
 @click.version_option(version=__version__, prog_name="chronovoyage")
 @click.option("-v", "--verbose", is_flag=True, default=False, help="Enable verbose log.")
 def chronovoyage(*, verbose: bool):
     AppLoggerFactory.set_verbose(verbose=verbose)
+
+    # Show help when invoked without a command
+    ctx = click.get_current_context()
+    if ctx.invoked_subcommand is None:
+        click.echo(ctx.get_help())
 
 
 @chronovoyage.command()

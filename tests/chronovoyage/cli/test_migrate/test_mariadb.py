@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import os
-from typing import TYPE_CHECKING, Any, Generator
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from click.testing import CliRunner
@@ -18,6 +18,8 @@ from chronovoyage.internal.exception.domain import MigrateDomainInvalidTargetErr
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     from chronovoyage.internal.config import MigratePeriod
 
 

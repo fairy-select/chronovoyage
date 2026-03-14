@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import shutil
-from typing import Any, Generator
+from typing import TYPE_CHECKING, Any
 
 import pytest
 from click.testing import CliRunner
@@ -11,6 +11,9 @@ from support.database import SupportDbClass
 from chronovoyage.cli import chronovoyage
 from chronovoyage.internal.exception.domain import CurrentDomainDbCurrentPeriodNotInMigrateConfigError
 from chronovoyage.internal.type.enum import DatabaseVendorEnum
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
 
 
 class TestCurrentCommandMariadb:

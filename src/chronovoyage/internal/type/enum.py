@@ -4,7 +4,7 @@ from chronovoyage.internal.exception.enum import InvalidDatabaseVendorValueError
 
 
 class StrEnum(Enum):
-    def __eq__(self, __value):
+    def __eq__(self, __value, /):
         if isinstance(__value, self.__class__):
             return self.value == __value.value
         if isinstance(__value, str):
